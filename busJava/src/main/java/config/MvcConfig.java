@@ -11,7 +11,7 @@ public class MvcConfig implements WebMvcConfigurer {
 	}
 	
 	public void configureViewResolvers(ViewResolverRegistry registry) {
-		registry.jsp("/WEB-INF/view", ".jsp");
+		registry.jsp("/WEB-INF/view/", ".jsp");
 		// view 파일들의 기본 위치와 확장자를 지정
 	}
 

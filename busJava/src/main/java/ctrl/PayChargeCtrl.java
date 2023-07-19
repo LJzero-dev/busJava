@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.*;
 public class PayChargeCtrl {
 	@GetMapping("/test2")
 	public String payCharge() {
-		return "paymoney_charge";
+		return "/popup/paymoney_charge";
 	}
 }

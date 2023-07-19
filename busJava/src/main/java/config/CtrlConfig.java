@@ -5,7 +5,7 @@ import ctrl.*;
 
 @Configuration
 public class CtrlConfig {
-// ±¸ÇöÇØ ³õÀº ÄÁÆ®·Ñ·¯µéÀ» ½ºÇÁ¸µ ºóÀ¸·Î µî·Ï½ÃÅ°´Â Å¬·¡½º
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ï½ï¿½Å°ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
 	@Bean
 	public IndexCtrl indexCtrl() {
 		return new IndexCtrl();
@@ -14,5 +14,10 @@ public class CtrlConfig {
 	@Bean
 	public PayChargeCtrl payChargeCtrl() {
 		return new PayChargeCtrl();
+	}
+	
+	@Bean
+	public LoginCtrl loginCtrl() {
+		return new LoginCtrl();
 	}
 }
