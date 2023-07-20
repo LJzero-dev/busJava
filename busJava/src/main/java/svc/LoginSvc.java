@@ -3,15 +3,15 @@ package svc;
 import dao.*;
 import vo.*;
 
-public class LoginSvcSpr {
-	private LoginDaoSpr loginDaoSpr;
+public class LoginSvc {
+	private LoginDao loginDao;
 
-	public void setLoginDaoSpr(LoginDaoSpr loginDaoSpr) {
-		this.loginDaoSpr = loginDaoSpr;
+	public void setLoginDao(LoginDao loginDao) {
+		this.loginDao = loginDao;
 	}
 
-	public MemberInfo getLoginInfo(String uid, String pwd) {
-		MemberInfo mi = loginDaoSpr.getLoginInfo(uid, pwd);
+	public MemberInfo getLoginInfo(String mi_id, String mi_pw) {
+		MemberInfo mi = loginDao.getLoginInfo(mi_id, mi_pw);
 		return mi;
 	}
 }

@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="vo.*" %>
+<%
+MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
 <html lang="ko">
 <head>
 	<meta charset="utf-8">
@@ -37,7 +40,7 @@
            <li class="nav-item"><a class="nav-link" href="contact.html">고객지원</a></li>
          </ul>
          <div class="d-flex align-items-center">
-           <button class="btn btn-primary text-800 me-2" type="button">로그인</button>
+           <button class="btn btn-primary text-800 me-2" type="button" onclick="location.href='login'">로그인</button>
            <button class="btn order-0" type="submit"><span class="text-primary">회원가입</span></button>
          </div>
          <!-- 로그인 상태 -->

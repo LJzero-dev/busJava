@@ -1,11 +1,17 @@
 package config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import ctrl.*;
+import svc.*;
 
 @Configuration
 public class CtrlConfig {
 // ������ ���� ��Ʈ�ѷ����� ������ ������ ��Ͻ�Ű�� Ŭ����
+	@Autowired
+	private LoginSvc loginSvc;
+	
+	
 	@Bean
 	public IndexCtrl indexCtrl() {
 		return new IndexCtrl();
@@ -18,6 +24,9 @@ public class CtrlConfig {
 	
 	@Bean
 	public LoginCtrl loginCtrl() {
-		return new LoginCtrl();
+		LoginCtrl loginCtrl = new LoginCtrl();
+		loginCtrl.setLoginSvc(loginSvc);
+		return loginCtrl;
 	}
+
 }

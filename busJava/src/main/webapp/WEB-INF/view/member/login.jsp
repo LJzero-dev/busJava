@@ -31,7 +31,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark probootstrap_navbar" id="probootstrap-navbar">
       <div class="container">
-        <h1><a class="navbar-brand" href="/"><img src="${pageContext.request.contextPath}/resources/images/logo.png" /></a></h1>
+        <h1><a class="navbar-brand" href="/"><img src="assets/images/사용자로고.png" /></a></h1>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
           <span><i class="ion-navicon"></i></span>
         </button>
@@ -63,16 +63,16 @@
         </div>
         <div class="row mb-4">
           <div class="col-md-4 m-auto">
-            <form>
+            <form name="frmLogin" action="login" method="post">
               <div class="form-group">
-                <label for="exampleInputEmail1">아이디</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <label for="mi_id">아이디</label>
+                <input type="text" class="form-control" id="mi_id" name="mi_id" value="test1">
               </div>
               <div class="form-group">
-                <label for="exampleInputPassword1">비밀번호</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
+                <label for="mi_pw">비밀번호</label>
+                <input type="password" class="form-control" id="mi_pw" name="mi_pw" value="1234" >
               </div>
-              <button type="submit" class="btn btn-primary btn-block">로그인</button>
+              <button type="submit" class="btn btn-primary btn-block" >로그인</button>
             </form>
           </div>
         </div>
