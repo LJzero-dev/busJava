@@ -1,6 +1,6 @@
 package ctrl;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 
 @Controller

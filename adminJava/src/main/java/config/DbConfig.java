@@ -2,7 +2,9 @@ package config;
 
 import org.apache.tomcat.jdbc.pool.*;
 import org.springframework.context.annotation.*;
+import org.springframework.beans.factory.annotation.*;
 import dao.*;
+import svc.*;
 
 @Configuration
 public class DbConfig {
@@ -19,5 +21,17 @@ public class DbConfig {
 		ds.setMinEvictableIdleTimeMillis(60000 * 3);
 		ds.setMinEvictableIdleTimeMillis(10 * 1000);
 		return ds;
+	}
+	
+	@Bean
+	public TerminalDao terminalDao() {
+		return new TerminalDao(dataSource());
+	}
+	
+	@Bean
+	public TerminalSvc terminalSvc() {
+		TerminalSvc terminalSvc = new TerminalSvc();
+		terminalSvc.setTerminalDao(terminalDao());
+		return terminalSvc;
 	}
 }
