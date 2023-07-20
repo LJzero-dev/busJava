@@ -40,7 +40,7 @@ MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
            <li class="nav-item"><a class="nav-link" href="contact.html">고객지원</a></li>
          </ul>
          <div class="d-flex align-items-center">
-           <button class="btn btn-primary text-800 me-2" type="button" onclick="location.href='login'">로그인</button>
+           <button class="btn btn-primary text-800 me-2" type="button" onclick="location.href='memberLogin'">로그인</button>
            <button class="btn order-0" type="submit"><span class="text-primary">회원가입</span></button>
          </div>
          <!-- 로그인 상태 -->

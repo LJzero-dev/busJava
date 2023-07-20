@@ -9,7 +9,7 @@ import svc.*;
 public class CtrlConfig {
 // ������ ���� ��Ʈ�ѷ����� ������ ������ ��Ͻ�Ű�� Ŭ����
 	@Autowired
-	private LoginSvc loginSvc;
+	private MemberSvc memberSvc;
 	
 	
 	@Bean
@@ -23,10 +23,10 @@ public class CtrlConfig {
 	}
 	
 	@Bean
-	public LoginCtrl loginCtrl() {
-		LoginCtrl loginCtrl = new LoginCtrl();
-		loginCtrl.setLoginSvc(loginSvc);
-		return loginCtrl;
+	public MemberCtrl loginCtrl() {
+		MemberCtrl memberCtrl = new MemberCtrl();
+		memberCtrl.setMemberSvc(memberSvc);
+		return memberCtrl;
 	}
 
 }

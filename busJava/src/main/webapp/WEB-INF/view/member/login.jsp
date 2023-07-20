@@ -63,7 +63,7 @@
         </div>
         <div class="row mb-4">
           <div class="col-md-4 m-auto">
-            <form name="frmLogin" action="login" method="post">
+            <form name="frmLogin" action="memberLogin" method="post">
               <div class="form-group">
                 <label for="mi_id">아이디</label>
                 <input type="text" class="form-control" id="mi_id" name="mi_id" value="test1">
