@@ -25,7 +25,6 @@ MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark probootstrap_navbar" id="probootstrap-navbar">
-<<<<<<< HEAD
 <div class="container">
 <h1><a class="navbar-brand" href="/"><img src="${pageContext.request.contextPath}/resources/images/logo.png" /></a></h1>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,25 +67,6 @@ MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
 			<button class="btn btn-primary text-800 me-2" type="button" onclick="location.href='memeberLogin'">로그인</button>
 			<button class="btn order-0" type="button"><span class="text-primary" onclick="location.href='memeberJoin'">회원가입</span></button>
 <%} %>
-=======
-	<div class="container">
-		<h1><a class="navbar-brand" href="/"><img src="${pageContext.request.contextPath}/resources/images/logo.png" /></a></h1>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
-		<span><i class="ion-navicon"></i></span>
-       </button>
-       <div class="collapse navbar-collapse justify-content-between" id="probootstrap-menu">
-         <ul class="navbar-nav">
-           <li class="nav-item active"><a class="nav-link" href="index.html">버스 예매</a></li>
-           <li class="nav-item"><a class="nav-link" href="city-guides.html">예매 내역</a></li>
-           <li class="nav-item"><a class="nav-link" href="services.html">운행 정보</a></li>
-           <li class="nav-item"><a class="nav-link" href="travel.html">추천 여행지</a></li>
-           <li class="nav-item"><a class="nav-link" href="contact.html">페이머니 구매</a></li>
-           <li class="nav-item"><a class="nav-link" href="contact.html">고객지원</a></li>
-         </ul>
-         <div class="d-flex align-items-center">
-           <button class="btn btn-primary text-800 me-2" type="button" onclick="location.href='memberLogin'">로그인</button>
-           <button class="btn order-0" type="submit"><span class="text-primary">회원가입</span></button>
->>>>>>> 9fdbf60b7934c1f6af41813935a4f93b479e0106
          </div>
          <!-- 로그인 상태 -->
          <!-- <div class="d-flex align-items-center">
