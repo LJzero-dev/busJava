@@ -31,7 +31,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark probootstrap_navbar" id="probootstrap-navbar">
       <div class="container">
-        <h1><a class="navbar-brand" href="/"><img src="assets/images/사용자로고.png" /></a></h1>
+        <h1><a class="navbar-brand" href="/"><img src="${pageContext.request.contextPath}/resources/images/logo.png" /></a></h1>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
           <span><i class="ion-navicon"></i></span>
         </button>
