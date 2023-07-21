@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="_inc/head.jsp" %>
-    <section class="probootstrap_section">
+<%@ include file="../_inc/head.jsp" %>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<section class="probootstrap_section">
       <div class="container">
         <div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated">
           <div class="col-md-12">
@@ -149,41 +150,38 @@
     </section>
     <script>
     $(document).ready(function() {
-      $(".progress-bar-custom.2").hide();
-      $(".nav-item").click(function() {
-        var navLink = $(this).find(".nav-link");
-        $(navLink).tab('show');
-        var tabIndex = $(this).index();
-        // 편도 클릭 시
-        if (tabIndex === 0) {
-            $("#mode").val("p");
-        }
-       // 왕복 클릭 시
-        else if (tabIndex === 1) {
-          $("#mode").val("w");
-        }
+        $(".progress-bar-custom.2").hide();
+        $(".nav-item").click(function() {
+          var navLink = $(this).find(".nav-link");
+          var tabIndex = $(this).index();
+          
+          // active 상태에서 클릭시 아무런 변화없음
+          if (navLink.hasClass("active")) {
+            return;
+          }
 
-        // active 상태에서 클릭시 아무련 변화없음
-        if (navLink.hasClass("active")) {
-          return;
-        }
+          navLink.toggleClass("active");
+          var progressBarCustom = $(".progress-bar-custom." + (tabIndex + 1));
+          if (navLink.hasClass("active")) {
+            // 편도 클릭 시
+            if (tabIndex === 0) {
+              $("#mode").val("o");
+             
+              $(".progress-bar-custom.1").css("display","");
+              $(".progress-bar-custom.2").css("display","none");
+            }
+            // 왕복 클릭 시
+            else if (tabIndex === 1) {
+              $("#mode").val("p");
+              $(".progress-bar-custom.1").css("display","none");
+              $(".progress-bar-custom.2").css("display","");
+            }
+          } 
 
-        navLink.toggleClass("active");
-        var progressBarCustom = $(".progress-bar-custom." + (tabIndex + 1));
-        if (navLink.hasClass("active")) {
-            progressBarCustom.show();
-        } else {
-            progressBarCustom.hide();
-        }
-
-        $(".nav-item").not(this).find(".nav-link").removeClass("active");
-        $(".progress-bar-custom").not(".progress-bar-custom." + (tabIndex + 1)).hide();
-
+          $(".nav-item").not(this).find(".nav-link").removeClass("active");
+        });
       });
-    
-    });
     </script>
-	</body>
-</html>
-<%@ include file="_inc/foot.jsp" %>
+<%@ include file="../_inc/foot.jsp" %>
+
     

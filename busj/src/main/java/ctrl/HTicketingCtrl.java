@@ -9,11 +9,11 @@ import vo.*;
 
 @Controller
 public class HTicketingCtrl {
-	private HTicketingSvc hTicketingSvc;
-	
-	public void sethTicketingSvc(HTicketingSvc hTicketingSvc) {
-		this.hTicketingSvc = hTicketingSvc;
-	}
+//	private HTicketingSvc hTicketingSvc;
+//	
+//	public void sethTicketingSvc(HTicketingSvc hTicketingSvc) {
+//		this.hTicketingSvc = hTicketingSvc;
+//	}
 
 	@GetMapping("/hTicketing")
 	public String goTicketing() {
