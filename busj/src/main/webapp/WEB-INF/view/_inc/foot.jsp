@@ -8,5 +8,7 @@
 	  <script src="${pageContext.request.contextPath}/resources/js/jquery.easing.1.3.js"></script>
 	  <script src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>
 	  <script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+	  <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.4.js"></script>
+	  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	</body>
 </html>

@@ -23,11 +23,13 @@ function chkDupId(uid) {
 			success : function(chkRs){
 				var msg = "";
 				if (chkRs == 0) {
-					msg = "<span id='fontBlue'>사용하실 수 있는 아이디 입니다.</span>";
+					msg = "<div class='valid-feedback text-left'>사용가능한 아이디 입니다.</div>";
 					$("#idChk").val("y");
+					$("#mi_id").removeClass("is-invalid").addClass("is-valid");
 				} else {
-					msg = "<span id='fontRed'>사용할 수 없는 아이디 입니다.</span>";
+					msg = "<div class='valid-feedback text-left' style='color: red;''>이미 사용중인 아이디 입니다.</div>";
 					$("#idChk").val("n");
+					$("#mi_id").removeClass("is-valid").addClass("is-invalid");
 				}
 				$("#idMsg").html(msg); // .html : ()안의 태그를 바꿔라
 			}
@@ -36,8 +38,11 @@ function chkDupId(uid) {
 	} else {
 		$("#idMsg").text("아이디는 4 ~ 20자로 입력하세요."); // .text :()안의 내용을 바꿔라
 		$("#idChk").val("n"); //기본적으로 val값이 "n"이지만  4자 이상 입력했다가 지웠을 경우를 대비해서 넣어줌
+		$("#mi_id").removeClass("is-valid").addClass("is-invalid");
 	}
 }
+
+
 </script>
 <section class="probootstrap_section" id="section-city-guides">
 <div class="container">
@@ -75,15 +80,16 @@ function chkDupId(uid) {
 		<tbody>
 		<tr>
 			<th>이름</th>
-			<td><input type="text" class="form-control" id="validationServer01" required /></td>
+			<td><input type="text" class="form-control" id="mi_name" required /></td>
 		</tr>
 		<tr>
 		<th>아이디</th>
+		<%  %>
 			<td><!-- form-control class가 is-valid => 성공, in-invalid => 실패 (테두리 색변화) -->
-				<input type="text" class="form-control is-invalid" name="mi_id" id="validationServer01" 
+				<input type="text" class="form-control is-invalid" name="mi_id" id="mi_id" 
 				placeholder="4-15자의 영문, 숫자로 입력해주세요." onkeyup="chkDupId(this.value);"
 				required>
-				<div class="valid-feedback text-left" id="idMsg" >사용가능한 아이디 입니다.</div>
+				<div class="valid-feedback text-left" id="idMsg" ></div>
 				<!-- <div class="invalid-feedback text-left">이미 사용중인 아이디 입니다.</div> -->
 			</td>
 		</tr>
@@ -92,7 +98,7 @@ function chkDupId(uid) {
 			<td>
 				<!--if조건줘야함 form-control class가 is-valid => 성공, in-invalid => 실패 (테두리 색변화) -->
 				<input type="password" class="form-control is-invalid"
-				id="validationServer01" name="mi_pw"
+				id="mi_pw" name="mi_pw"
 				placeholder="4-15자의 영문, 숫자, 특수문자로 입력해주세요." required>
 			</td>
 		</tr>
@@ -101,7 +107,7 @@ function chkDupId(uid) {
 			<td>
 			<!-- form-control class가 is-valid => 성공, in-invalid => 실패 (테두리 색변화) -->
 				<input type="password" class="form-control is-invalid"
-				id="validationServer01" name="mi_pw2"
+				id="mi_pw2" name="mi_pw2"
 				placeholder="4-15자의 영문, 숫자, 특수문자로 입력해주세요." required>
 				<div class="valid-feedback text-left">비밀번호가 일치합니다</div>
 				<!-- <div class="invalid-feedback text-left">비밀번호가 일치하지 않습니다</div> -->

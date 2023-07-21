@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../_inc/head.jsp" %>
+
     <section class="probootstrap_section" id="section-city-guides">
       <div class="container">
         <div class="row text-center mb-5 probootstrap-animate">
@@ -167,8 +168,8 @@
               본 약관은 2019년 10월 1일부터 시행합니다.
             </div>
               <div class="form-check custom ml-0 mt-2">
-                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" name="chk">
-                <label class="form-check-label" for="defaultCheck1">
+                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2" name="chk">
+                <label class="form-check-label" for="defaultCheck2">
                   동의합니다
                 </label>
               </div>
@@ -188,74 +189,65 @@
     </section>
 
 <script>
-	function chkAgree() {
-		  var checkboxes = document.getElementsByName("chk");
-		  var allCheckbox = document.getElementById("all");
-	
-		  var allChecked = true;
-		  for (var i = 0; i < checkboxes.length; i++) {
-		    if (!checkboxes[i].checked) {
-		      allChecked = false;
-		      break;
-		    }
-		  }
-	
-		  if (allChecked) {
-		    window.location.href = "memberJoinStep2";
-		  } else {
-		    alert("약관에 동의해주세요.");
-		    allCheckbox.focus();
-		  }
+function chkAgree() {
+  var checkboxes = document.getElementsByName("chk");
+  var allCheckbox = document.getElementById("all");
+
+  var allChecked = true;
+  for (var i = 0; i < checkboxes.length; i++) {
+    if (!checkboxes[i].checked) {
+      allChecked = false;
+      break;
+    }
+  }
+
+  if (allChecked) {
+    window.location.href = "memberJoinStep2";
+  } else {
+    alert("약관에 동의해주세요.");
+    allCheckbox.focus();
+  }
+}
+  
+function chkAll() {
+	  var allCheckbox = document.getElementById("all");
+	  var checkboxes = document.getElementsByName("chk");
+
+	  if (allCheckbox.checked) {
+	    for (var i = 0; i < checkboxes.length; i++) {
+	      checkboxes[i].checked = true;
+	    }
+	    allCheckbox.closest(".allchkbox").classList.add("active");
+	  } else {
+	    for (var i = 0; i < checkboxes.length; i++) {
+	      checkboxes[i].checked = false;
+	    }
+	    allCheckbox.closest(".allchkbox").classList.remove("active");
+	  }
 	}
-	
-	function callConfirm() {
-		 if (confirm('해당 게시글의 게시여부를 미게시로 변경하시겠습니까?')) {
-		    document.frmchk.action = 'notice_proc.jsp?kind=del';
-		    document.frmchk.submit();
-		 }
-	}	
-   
-   function chkAll() {
-   	   var allCheckbox = document.getElementById("all");
-   	   var checkboxes = document.getElementsByName("chk");
 
-   	   if (allCheckbox.checked) {
-   	      for (var i = 0; i < checkboxes.length; i++) {
-   	          checkboxes[i].checked = true;
-   	       }
-   	   } else {
-   	      for (var i = 0; i < checkboxes.length; i++) {
-   	          checkboxes[i].checked = false;
-   	      }
-   	   }
-   	}
-   	document.addEventListener("click", function(e) {
-   	   if (e.target && e.target.name === "chk") {
-   	       var checkboxes = document.getElementsByName("chk");
-   	       var chksChecked = 0;
-   	       for (var i = 0; i < checkboxes.length; i++) {
-   	           var checkbox = checkboxes[i];
-   	           if (checkbox.checked) {
-   	               chksChecked++;
-   	            }
-   	         }
-   	         var allCheckbox = document.getElementById("all");
+document.addEventListener("click", function(e) {
+   if (e.target && e.target.name === "chk") {
+       var checkboxes = document.getElementsByName("chk");
+       var chksChecked = 0;
+       for (var i = 0; i < checkboxes.length; i++) {
+           var checkbox = checkboxes[i];
+           if (checkbox.checked) {
+               chksChecked++;
+            }
+         }
+         var allCheckbox = document.getElementById("all");
 
-   	         if (checkboxes.length === chksChecked) {
-   	           allCheckbox.checked = true;
-   	         } else {
-   	            allCheckbox.checked = false;
-   	         }
-   	      }
-   	});
-   	
-     $('#all').on('click',function(){
-    	$(this).focus();
-        if ( $(this).is(":checked") ){
-        $(this).parents('.allchkbox').addClass('active');
-      } else {
-        $(this).parents('.allchkbox').removeClass('active');
+         if (checkboxes.length === chksChecked) {
+           allCheckbox.checked = true;
+           allCheckbox.closest(".allchkbox").classList.add("active");
+         } else {
+           allCheckbox.checked = false;
+           allCheckbox.closest(".allchkbox").classList.remove("active");
+         }
       }
-     });
+});
+
+
 </script>
 <%@ include file="../_inc/foot.jsp" %>
