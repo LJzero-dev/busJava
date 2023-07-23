@@ -21,7 +21,7 @@ body { font-weight: 500 ;}
 .modal-body  .nav-link {padding: 0.5rem;}
 
 .scroll-box { height: 200px; overflow-y: auto;}
-.scroll-box a { color: black ;}
+.scroll-box a { color: black ; display: block;}
 .scroll-box a:hover { color: #007e2f;}
 
 input[type=radio] { width: 20px; height: 20px;}
@@ -135,7 +135,7 @@ button.btn-sm { padding: 0.25rem 0.5rem; font-size: 0.875rem;}
     font-size: 0.8rem;
 }
 
-/* Î≤ÑÏä§ Í∏∞Î≥∏ */
+/* πˆΩ∫ ±‚∫ª */
 .seat-bg {
     background: url(/assets/images/bg_bus.png) 50% 33px no-repeat; 
     width: 382px;
@@ -179,7 +179,7 @@ button.btn-sm { padding: 0.25rem 0.5rem; font-size: 0.875rem;}
     background-position: 0 -144px;
 }
 
-/* 3Îã®Í≥Ñ Î≤ÑÏä§ (Í≥†ÏÜç)*/
+/* 3¥‹∞Ë πˆΩ∫ (∞Ìº”)*/
 .seat28 .seat-list {
     width: 235px;
     margin: 0 auto;
@@ -224,3 +224,22 @@ button.w-120p {width: 120px;}
 .table.stamp td { height: 88px;}
 
 .navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover { color: #333;}
+
+.datepicker {padding: 10px;}
+
+.datepicker-switch, .datepicker table tr td {font-size: 15px;}
+.datepicker table tr td.active.active {
+    border-radius: 50%;
+    background-color: #7db249 !important;
+    background-image: none;
+}
+
+#sPoint.active {
+    color: #495057;
+    border: 2px solid #00CA4C;
+    outline: none;
+}
+
+.form-control.focus-none:focus {
+    border-color : #ccc;
+}

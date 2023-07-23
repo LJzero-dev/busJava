@@ -24,6 +24,7 @@
             config.CtrlConfig
             config.MemberConfig
             config.DbConfig
+            config.HTicketingConfig
          </param-value>
       </init-param>
       <load-on-startup>1</load-on-startup>
@@ -66,5 +67,4 @@
       <url-pattern>*.jspx</url-pattern>
    </servlet-mapping>
 <!-- js, jq, css 파일등 맵핑 끝 -->
-
 </web-app>

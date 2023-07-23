@@ -28,7 +28,7 @@ if (loginInfo != null)	isLogin = true;
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark probootstrap_navbar" id="probootstrap-navbar">
 <div class="container">
-<h1><a class="navbar-brand" href="/"><img src="${pageContext.request.contextPath}/resources/images/logo.png" /></a></h1>
+<h1><a class="navbar-brand" href="/busj"><img src="${pageContext.request.contextPath}/resources/images/logo.png" /></a></h1>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
 	<span><i class="ion-navicon"></i></span>
 	</button>
@@ -37,7 +37,7 @@ if (loginInfo != null)	isLogin = true;
 			<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">버스예매</a>
         	<div class="dropdown-menu">
-				<a class="dropdown-item" href="hTicketing">고속버스 예매</a>
+				<a class="dropdown-item" href="hTicketingStep01">고속버스 예매</a>
 				<a class="dropdown-item" href="sTicketing">시외버스 예매</a>
 			</div>
 			</li>
