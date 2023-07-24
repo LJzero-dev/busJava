@@ -18,8 +18,7 @@ public class MemberDao {
 	
 	public MemberInfo getLoginInfo(String mi_id, String mi_pw) {
 		String sql = "select * from t_member_info where mi_id = ? and mi_pw = ?";
-		
-System.out.println("here");
+
 		List<MemberInfo> results = jdbc.query(sql, new RowMapper<MemberInfo>() {
 			public MemberInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 				MemberInfo mi = new MemberInfo();
@@ -44,14 +43,36 @@ System.out.println("here");
 	}
 
 	public int memberInsert(MemberInfo mi) {
-		String sql = "insert into t_member_info values (?, ?, ?, ?, ?, ?, ?, ?, 0,'a', now(), null) ";
-		int result = jdbc.update(sql, mi.getMi_id(), mi.getMi_pw(), mi.getMi_name(), mi.getMi_gender(), mi.getMi_phone(), mi.getMi_email(), 
-				mi.getMi_pmoney(), mi.getMi_stamp());
+		String sql = "insert into t_member_info values ('" + mi.getMi_id() + "', '" + mi.getMi_pw() + 
+				"', '" + mi.getMi_name() + "', '" + mi.getMi_gender() + "', '" + mi.getMi_phone() + 
+				"', '" + mi.getMi_email() + "', 0, 0, 0, 'a', now(), null) ";
+		int result = jdbc.update(sql);
+		
+		System.out.println(sql);
+		
 		return result;
 	}
 
 	public int chkDupId(String mi_id) {
 		String sql = "select count(*) from t_member_info where mi_id = '" + mi_id + "' ";
+		int result = jdbc.queryForObject(sql, Integer.class);
+		return result;
+	}
+	
+	public int chkDupMail(String mi_email) {
+		String sql = "select count(*) from t_member_info where mi_email = '" + mi_email + "' ";
+		int result = jdbc.queryForObject(sql, Integer.class);
+		return result;
+	}
+	
+	public int chkDupPhone(String mi_phone) {
+		String sql = "select count(*) from t_member_info where mi_phone = '" + mi_phone + "' ";
+		int result = jdbc.queryForObject(sql, Integer.class);
+		return result;
+	} 
+
+	public int chkDupIdMail(String mi_id, String mi_email) {
+		String sql = "select count(*) from t_member_info where mi_id = '" + mi_id + "' and mi_email= '" + mi_email + "' ";
 		int result = jdbc.queryForObject(sql, Integer.class);
 		return result;
 	}
