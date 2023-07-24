@@ -197,7 +197,7 @@ public class MemberCtrl {
 		PrintWriter out = response.getWriter();
 		out.println("<script>");
 		out.println("alert('회원님께서 입력하신 이메일 주소로 아이디를 발송했습니다.');");
-		out.println("location.href='/busjava/memberLogin';");
+		out.println("location.href='/busj/memberLogin';");
 		out.println("</script>");
 		out.close();
 		
@@ -237,7 +237,7 @@ public class MemberCtrl {
 		PrintWriter out = response.getWriter();
 		out.println("<script>");
 		out.println("alert('회원님께서 입력하신 이메일 주소로 임시 비밀번호를 발송했습니다.');");
-		out.println("location.href='/busjava/memberLogin';");
+		out.println("location.href='/busj/memberLogin';");
 		out.println("</script>");
 		out.close();
 		
