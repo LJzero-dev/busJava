@@ -16,7 +16,7 @@
             </div>
             <ul class="mypage">
               <li>
-                <a href="/busjava/pwChk">
+                <a href="/busj/pwChk">
                   <div class="h-100 d-flex justify-content-center align-items-center flex-column">
                   <img src="/assets/images/User.svg" />
                   <p class="h5 mt-3">내 정보</p>
@@ -24,7 +24,7 @@
                 </a>
               </li>
               <li>
-                <a href="/busjava/booking">
+                <a href="/busj/booking">
                   <div class="h-100 d-flex justify-content-center align-items-center flex-column">
                   <img src="/assets/images/Newspaper.svg" />
                   <p class="h5 mt-3">예매 내역</p>
@@ -32,7 +32,7 @@
                 </a>
               </li>
               <li>
-                <a href="/busjava/payMoney">
+                <a href="/busj/payMoney">
                   <div class="h-100 d-flex justify-content-center align-items-center flex-column">
                   <img src="/assets/images/Copyright.svg" />
                   <p class="h5 mt-3">내 페이머니</p>
@@ -40,7 +40,7 @@
                 </a>
               </li>
               <li>
-                <a href="/busjava/coupon">
+                <a href="/busj/coupon">
                   <div class="h-100 d-flex justify-content-center align-items-center flex-column">
                   <img src="/assets/images/Money.svg" />
                   <p class="h5 mt-3">내 쿠폰</p>
@@ -48,7 +48,7 @@
                 </a>
               </li>
               <li>
-                <a href="/busjava/stamp">
+                <a href="/busj/stamp">
                   <div class="h-100 d-flex justify-content-center align-items-center flex-column">
                   <img src="/assets/images/Gift.svg" />
                   <p class="h5 mt-3">내 스탬프</p>

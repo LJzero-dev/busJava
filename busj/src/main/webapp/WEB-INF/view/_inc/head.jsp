@@ -64,10 +64,10 @@ if (loginInfo != null)	isLogin = true;
 <% if (isLogin) { %> <!-- 로그인 상태 -->
 		<p class="mb-0"><%=loginInfo.getMi_id() %>님</p>
 			<button class="btn btn-primary text-800 me-2" type="button" onclick="location.href='memberLogout'">로그아웃</button>
-			<button class="btn order-0" type="submit"><span class="text-primary" onclick="location.href='myPage'">마이페이지</span></button>
+			<button class="btn order-0" type="submit"><span class="text-primary" onclick="location.href='memberMypage'">마이페이지</span></button>
 <%} else { %>
 			<button class="btn btn-primary text-800 me-2" type="button" onclick="location.href='memberLogin'">로그인</button>
-			<button class="btn order-0" type="button"><span class="text-primary" onclick="location.href='memberJoin'">회원가입</span></button>
+			<button class="btn order-0" type="button"><span class="text-primary" onclick="location.href='memberJoinStep1'">회원가입</span></button>
 <%} %>
          </div>
          <!-- 로그인 상태 -->
