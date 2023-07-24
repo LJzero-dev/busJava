@@ -25,6 +25,7 @@
             config.MemberConfig
             config.DbConfig
             config.HTicketingConfig
+            config.STicketingConfig
          </param-value>
       </init-param>
       <load-on-startup>1</load-on-startup>

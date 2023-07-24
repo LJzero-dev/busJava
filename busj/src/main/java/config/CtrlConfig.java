@@ -13,6 +13,8 @@ public class CtrlConfig {
 	@Autowired
 	private HTicketingSvc hTicketingSvc;
 	
+	@Autowired
+	private STicketingSvc sTicketingSvc;
 	
 	@Bean
 	public IndexCtrl indexCtrl() {
@@ -36,6 +38,13 @@ public class CtrlConfig {
 		HTicketingCtrl hTicketingCtrl = new HTicketingCtrl();
 		hTicketingCtrl.sethTicketingSvc(hTicketingSvc);
 		return hTicketingCtrl;
+	}
+	
+	@Bean
+	public STicketingCtrl sTicketingCtrl() {
+		STicketingCtrl sTicketingCtrl = new STicketingCtrl();
+		sTicketingCtrl.setSTicketingSvc(sTicketingSvc);
+		return sTicketingCtrl;
 	}
 
 }

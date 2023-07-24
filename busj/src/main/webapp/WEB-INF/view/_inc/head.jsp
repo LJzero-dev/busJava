@@ -38,7 +38,7 @@ if (loginInfo != null)	isLogin = true;
 			<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">버스예매</a>
         	<div class="dropdown-menu">
 				<a class="dropdown-item" href="hTicketingStep01">고속버스 예매</a>
-				<a class="dropdown-item" href="sTicketing">시외버스 예매</a>
+				<a class="dropdown-item" href="sTicketingStep01">시외버스 예매</a>
 			</div>
 			</li>
 			<li class="nav-item"><a class="nav-link" href="bookingList">예매 내역</a></li>
