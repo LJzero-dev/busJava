@@ -84,7 +84,7 @@ $(document).ready(function() { // .ready : 문서가 다 읽힌 다음에 작동
 		if ($(this).val() == "") {
 			$("#e3").val("");
 		} else if ($(this).val() == "direct") {
-			$("#e3").val($(this).val()).prop("disabled", false).focus();
+			$("#e3").val("").prop("disabled", false).focus();
 		} else {
 			$("#e3").val($(this).val()).prop("disabled", true);
 		}
