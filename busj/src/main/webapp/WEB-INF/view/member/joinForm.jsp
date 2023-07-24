@@ -27,7 +27,7 @@ function chkDupId(uid) {
 					$("#idChk").val("y");
 					$("#mi_id").removeClass("is-invalid").addClass("is-valid");
 				} else {
-					msg = "<div class='valid-feedback text-left' style='color: red;''>이미 사용중인 아이디 입니다.</div>";
+					msg = "<div class='valid-feedback text-left' style='color: red;'>이미 사용중인 아이디 입니다.</div>";
 					$("#idChk").val("n");
 					$("#mi_id").removeClass("is-valid").addClass("is-invalid");
 				}
@@ -42,7 +42,40 @@ function chkDupId(uid) {
 	}
 }
 
+function restrictId(input) {
+	input.value = input.value.replace(/[^a-zA-Z0-9]/g, '');
+}
 
+function restrictPw(input) {
+	input.value = input.value.replace(/[^a-zA-Z0-9!@#$%^&*()_+=\-[\]{}|\\:;"'<>,.?/~`]/g, '');
+}
+
+function checkPassword() {
+	var passwordInput = document.getElementById("mi_pw");
+	var passwordchkInput = document.getElementById("mi_pw2");
+	var pwDup = document.getElementById("pwDup");
+	
+	var mi_pw = passwordInput.value;
+	var mi_pw2 = passwordchkInput.value;
+	var pwRed = document.getElementById("pwRed");
+
+	if (mi_pw === mi_pw2) {
+		if(mi_pw.length < 4 || mi_pw.length > 15) {
+			
+			pwDup.value = "n";
+			passwordInput.focus();
+		}else {
+			pwRed.innerHTML = "<div class='valid-feedback text-left' >비밀번호가 일치합니다.</div>";
+			pwDup.value = "y";
+		}
+	} else if (mi_pw.length < 4 || mi_pw2.length < 4 ){
+		 pwRed.innerHTML = "<div class='valid-feedback text-left' style='color: red;' >4-15자의 영문, 숫자, 특수문자로 입력해주세요.</div>";
+		 pwDup.value = "n";
+	} else {
+		 pwRed.innerHTML = "<div class='valid-feedback text-left' style='color: red;' >비밀번호가 일치하지않습니다.</div>";
+		 pwDup.value = "n";
+	}
+}
 </script>
 <section class="probootstrap_section" id="section-city-guides">
 <div class="container">
@@ -87,8 +120,8 @@ function chkDupId(uid) {
 		<%  %>
 			<td><!-- form-control class가 is-valid => 성공, in-invalid => 실패 (테두리 색변화) -->
 				<input type="text" class="form-control is-invalid" name="mi_id" id="mi_id" 
-				placeholder="4-15자의 영문, 숫자로 입력해주세요." onkeyup="chkDupId(this.value);"
-				required>
+				placeholder="4-15자의 영문, 숫자로 입력해주세요." onkeyup="chkDupId(this.value);" 
+				oninput="restrictId(this)" required>
 				<div class="valid-feedback text-left" id="idMsg" ></div>
 				<!-- <div class="invalid-feedback text-left">이미 사용중인 아이디 입니다.</div> -->
 			</td>
@@ -97,19 +130,20 @@ function chkDupId(uid) {
 			<th>비밀번호</th>
 			<td>
 				<!--if조건줘야함 form-control class가 is-valid => 성공, in-invalid => 실패 (테두리 색변화) -->
-				<input type="password" class="form-control is-invalid"
-				id="mi_pw" name="mi_pw"
+				<input type="password" class="form-control is-invalid" oninput="restrictPw(this)"
+				onkeyup="checkPassword()" id="mi_pw" name="mi_pw"
 				placeholder="4-15자의 영문, 숫자, 특수문자로 입력해주세요." required>
+				<input type="hidden" id="pwDup" name="pwDup" value="n" />
 			</td>
 		</tr>
 		<tr>
 			<th>비밀번호확인</th>
 			<td>
 			<!-- form-control class가 is-valid => 성공, in-invalid => 실패 (테두리 색변화) -->
-				<input type="password" class="form-control is-invalid"
-				id="mi_pw2" name="mi_pw2"
+				<input type="password" class="form-control is-invalid" oninput="restrictPw(this)"
+				onkeyup="checkPassword()" id="mi_pw2" name="mi_pw2"
 				placeholder="4-15자의 영문, 숫자, 특수문자로 입력해주세요." required>
-				<div class="valid-feedback text-left">비밀번호가 일치합니다</div>
+				<div id="pwRed" class="valid-feedback text-left"></div>
 				<!-- <div class="invalid-feedback text-left">비밀번호가 일치하지 않습니다</div> -->
 			</td>
 		</tr>
