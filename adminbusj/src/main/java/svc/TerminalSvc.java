@@ -11,9 +11,13 @@ public class TerminalSvc {
 		this.terminalDao = terminalDao;
 	}
 
-	public ArrayList<TerminalInfo> getTerminalList() {
-		ArrayList<TerminalInfo> terminalList = new ArrayList<TerminalInfo>();
-		terminalList = terminalDao.getTerminalList();
+	public List<TerminalInfo> getTerminalList() {
+		List<TerminalInfo> terminalList = terminalDao.getTerminalList();
 		return terminalList;
+	}
+
+	public int chkTerminal(String name) {
+		int result = terminalDao.chkTerminal(name);
+		return result;
 	}
 }
