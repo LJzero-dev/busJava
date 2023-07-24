@@ -55,4 +55,9 @@ public class MemberSvc {
 		return resultUp;
 	}
 
+	public int memberPwChk(String mi_id, String mi_pw) {
+		int result = memberDao.memberPwChk(mi_id, mi_pw);
+		return result;
+	}
+
 }

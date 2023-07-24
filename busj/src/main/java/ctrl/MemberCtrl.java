@@ -2,10 +2,8 @@ package ctrl;
 
 import java.io.*;
 import java.util.Random;
-
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -175,6 +173,7 @@ public class MemberCtrl {
 	public String find() {
 		return "/member/find";
 	}
+	
 	@PostMapping("/memberFindId")
 	// 비동기 통신(ajax)시 서버에서 클라이언트로 응답 메세지를 보낼 떄 데이터를 담아서 보낼 해당 본문을 의미
 	public String memberFindId(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -359,5 +358,36 @@ public class MemberCtrl {
 	}
 
 	/* 회원 마이페이지 부분 */
+	
+	/* 회원 정보 수정 부분 */
+	@PostMapping("/memberPwChk")
+	// 비동기 통신(ajax)시 서버에서 클라이언트로 응답 메세지를 보낼 떄 데이터를 담아서 보낼 해당 본문을 의미
+	public String memberUpdate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		HttpSession session = request.getSession();
+		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
+		
+		String mi_id = loginInfo.getMi_id();
+		String mi_pw = request.getParameter("mi_pw");
+		
+		/*
+		  System.out.println(mi_id); 
+		  System.out.println(mi_pw);
+		 */
+		int result = memberSvc.memberPwChk(mi_id, mi_pw);
+		
+		if (result != 1) {
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('비밀번호가 잘못되었습니다.');");
+			out.println("history.back();");
+			out.println("</script>");
+			out.close();
+		} 
+		
+		return "/member/modify";
+		
+	}
 	
 }

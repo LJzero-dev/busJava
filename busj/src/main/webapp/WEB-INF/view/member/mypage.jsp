@@ -1,6 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../_inc/head.jsp" %>
+<%
+if (!isLogin) {		// 로그인이 되어 있지 않다면
+	out.println("<script>");
+	out.println("alert('로그인 후 이용해 주세요.'); location.href='/busj/memberLogin' ");
+	out.println("</script>");
+	out.close();
+}
 
+request.setCharacterEncoding("utf-8");
+MemberInfo mi = (MemberInfo)session.getAttribute("loginInfo");
+String mi_id = mi.getMi_id();
+%>
 <section class="probootstrap_section">
       <div class="container">
         <div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated">
@@ -11,7 +22,7 @@
         <div class="row">
           <div class="col-md-10 text-center mb-5 m-auto">
             <div class="d-flex align-items-end">
-              <h3 class="text-left text-primary">유저 이름</h3>
+              <h3 class="text-left text-primary"><%=mi_id %></h3>
               <h5 class="text-left">님 반갑습니다.</h5>
             </div>
             <ul class="mypage">

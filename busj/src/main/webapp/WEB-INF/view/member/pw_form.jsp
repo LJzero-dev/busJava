@@ -10,13 +10,13 @@
         </div>
         <div class="row mb-4">
           <div class="col-md-4 m-auto">
-            <form name="" id="" action="" method="">
+            <form name="frmPwChk" id="frmPwChk" action="memberPwChk" method="post">
               <div class="form-group">
                 <label for="exampleInputPassword1">비밀번호</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
+                <input type="password" class="form-control" id="mi_pw" name=mi_pw>
               </div>
               <div class="btn-wrap">
-                <button type="button" class="btn btn-secondary w-120p ">취소</button>
+                <button type="button" class="btn btn-secondary w-120p " onclick="history.back();">취소</button>
                 <button type="submit" class="btn btn-primary w-120p ">확인</button>
               </div>
             </form>

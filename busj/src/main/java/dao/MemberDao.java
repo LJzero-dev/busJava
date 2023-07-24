@@ -89,5 +89,11 @@ public class MemberDao {
 		return resultUp;
 	}
 
+	public int memberPwChk(String mi_id, String mi_pw) {
+		String sql = "select count(*) from t_member_info where mi_id = '" + mi_id + "' and mi_pw= '" + mi_pw + "' ";
+		int result = jdbc.queryForObject(sql, Integer.class);
+		return result;
+	}
+
 }
 
