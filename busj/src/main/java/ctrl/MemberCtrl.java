@@ -1,7 +1,14 @@
 package ctrl;
 
 import java.io.*;
+import java.util.Random;
+
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +19,10 @@ import vo.*;
 
 @Controller
 public class MemberCtrl {
+	
+	@Autowired
+	private JavaMailSender mailSender;
+	
 	private MemberSvc memberSvc;
 	
 	public void setMemberSvc(MemberSvc memberSvc) {
@@ -164,10 +175,10 @@ public class MemberCtrl {
 	public String find() {
 		return "/member/find";
 	}
-	
 	@PostMapping("/memberFindId")
 	// 비동기 통신(ajax)시 서버에서 클라이언트로 응답 메세지를 보낼 떄 데이터를 담아서 보낼 해당 본문을 의미
 	public String memberFindId(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
 		request.setCharacterEncoding("utf-8");
 		String idE1 = request.getParameter("idE1").trim();
 		String idE2 = request.getParameter("idE2");
@@ -181,6 +192,10 @@ public class MemberCtrl {
 			email = (idE1 + "@" + idE3);
 		}
 		
+		String setfrom = "jeenworks@naver.com";		
+		String title = "busjava"; // 제목
+		String content = "회원님의 아이디는 : "; // 내용
+
 		int result = memberSvc.chkDupMail(email);
 		
 		if (result != 1) {
@@ -193,6 +208,25 @@ public class MemberCtrl {
 			out.close();
 		}
 		
+		String mi_id = memberSvc.passDupMail(email);
+		content += mi_id + "입니다.";
+			
+		try {
+				MimeMessage message = mailSender.createMimeMessage();
+				MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+	
+				messageHelper.setFrom(setfrom); // 보내는사람 생략하면 정상작동을 안함
+				messageHelper.setTo(email); // 받는사람 이메일
+				messageHelper.setSubject(title); // 메일제목은 생략이 가능하다
+				messageHelper.setText(content); // 메일 내용
+	
+				mailSender.send(message);
+				
+			} catch (Exception e) {
+				System.out.println(e);
+		}
+		
+		
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
 		out.println("<script>");
@@ -203,6 +237,8 @@ public class MemberCtrl {
 		
 		return "/member/login";
 	}
+
+/* 비밀번호 찾기 */
 	
 	@PostMapping("/memberFindPw")
 	// 비동기 통신(ajax)시 서버에서 클라이언트로 응답 메세지를 보낼 떄 데이터를 담아서 보낼 해당 본문을 의미
@@ -221,6 +257,11 @@ public class MemberCtrl {
 			email = (pwE1 + "@" + pwE3);
 		}
 		
+		String setfrom = "jeenworks@naver.com";		
+		String title = "busjava"; // 제목
+		String newPw = getRandomPassword();
+		String content = "회원님의 임시비밀번호는 : " + newPw; // 내용
+		
 		int result = memberSvc.chkDupIdMail(mi_id, email);
 		
 		
@@ -233,6 +274,36 @@ public class MemberCtrl {
 			out.println("</script>");
 			out.close();
 		} 
+			
+
+		 int resultUp = memberSvc.passDupIdMail(mi_id, email, newPw);
+		 
+		 if (resultUp != 1) { 
+			 response.setContentType("text/html; charset=utf-8");
+			 PrintWriter out = response.getWriter(); 
+			 out.println("<script>");
+			 out.println("alert('임시비밀번호 전송이 실패하였습니다.');"); 
+			 out.println("history.back();");
+			 out.println("</script>"); 
+			 out.close();
+		 }
+		 
+		
+		try {
+				MimeMessage message = mailSender.createMimeMessage();
+				MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+	
+				messageHelper.setFrom(setfrom); // 보내는사람 생략하면 정상작동을 안함
+				messageHelper.setTo(email); // 받는사람 이메일
+				messageHelper.setSubject(title); // 메일제목은 생략이 가능하다
+				messageHelper.setText(content); // 메일 내용
+	
+				mailSender.send(message);
+				
+			} catch (Exception e) {
+				System.out.println(e);
+		}
+		
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
 		out.println("<script>");
@@ -241,10 +312,24 @@ public class MemberCtrl {
 		out.println("</script>");
 		out.close();
 		
+		
 		return "/member/login";
 		
 	}
+	
+	private String getRandomPassword() {
+		Random rnd = new Random();
+		char[] arr = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
+				'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+		StringBuilder pwBuilder = new StringBuilder();
+		pwBuilder.append(arr[rnd.nextInt(26)]); // 첫 글자는 영문
+		for (int i = 1; i < 10; i++) {
+			pwBuilder.append(arr[rnd.nextInt(arr.length)]);
+		}
+		return pwBuilder.toString().toUpperCase();
+	}
 	/* 회원 아이디 / 비밀번호 찾기 부분 */
+
 
 	/* 회원 마이페이지 부분 */
 	@GetMapping("/memberMypage")

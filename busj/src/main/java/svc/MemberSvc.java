@@ -44,4 +44,15 @@ public class MemberSvc {
 		
 		return result;
 	}
+
+	public String passDupMail(String email) {
+		String mi_id = memberDao.passDupMail(email);
+		return mi_id;
+	}
+
+	public int passDupIdMail(String mi_id, String email, String newPw) {
+		int resultUp = memberDao.passDupIdMail(mi_id, email, newPw);
+		return resultUp;
+	}
+
 }

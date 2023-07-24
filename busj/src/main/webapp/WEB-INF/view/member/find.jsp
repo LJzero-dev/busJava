@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../_inc/head.jsp"%>
+<script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.4.js"></script>
 <script>
 /* 아이디 찾기 */
 function restrictEm1(input) {

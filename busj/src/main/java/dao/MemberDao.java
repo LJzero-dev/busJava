@@ -76,5 +76,18 @@ public class MemberDao {
 		int result = jdbc.queryForObject(sql, Integer.class);
 		return result;
 	}
+
+	public String passDupMail(String email) {
+		String sql = "select mi_id from t_member_info where mi_email = '" + email + "'";
+		String mi_id = jdbc.queryForObject(sql, String.class);
+		return mi_id;
+	}
+
+	public int passDupIdMail(String mi_id, String email, String newPw) {
+		String sql = "update t_member_info set mi_pw = '" + newPw + "' where mi_id = '" + mi_id + "' and mi_email = '" + email + "' ";
+		int resultUp = jdbc.update(sql);
+		return resultUp;
+	}
+
 }
 
