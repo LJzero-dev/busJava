@@ -72,8 +72,11 @@
 	</div>
 	
 	<div class="col-md-8 probootstrap-animate fadeInUp probootstrap-animated m-auto">
-	<form action="#" class="probootstrap-form">
-	<input type="hidden" name="mode" id="mode" value="" />
+	<form name="frmStep1" action="" class="probootstrap-form">
+	<input type="hidden" name="mode" id="mode" value="" />	<!-- 편도: o / 왕복: p -->
+	<input type="hidden" name="ri_sday1" id="ri_sday1" value="" />	<!-- 편도 가는 날 -->
+	<input type="hidden" name="ri_sday2" id="ri_sday2" value="" />	<!-- 왕복 가는 날 -->
+	<input type="hidden" name="ri_sday3" id="ri_sday3" value="" />	<!-- 왕복 오는 날 -->
 		<div class="form-group">
 		<ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
 			<li class="nav-item" role="presentation">
@@ -90,10 +93,10 @@
 				<div class="row mb-3">
 				<div class="col-md">
 					<div class="form-group">
-					<label for="probootstrap-date-departure">가는날</label>
+					<label for="sday1">가는날</label>
 					<div class="probootstrap-date-wrap">
 						<span class="icon ion-calendar"></span> 
-						<input type="text" id="probootstrap-date-departure" class="form-control" placeholder="">
+						<input type="text" id="sday1" name="sday1" class="form-control" value="" readonly>
 					</div>
 					</div>
 				</div>
@@ -103,19 +106,19 @@
 				<div class="row mb-3">
 				<div class="col-md">
 					<div class="form-group">
-					<label for="probootstrap-date-departure">가는날</label>
+					<label for="sday2">가는날</label>
 					<div class="probootstrap-date-wrap">
 						<span class="icon ion-calendar"></span> 
-						<input type="text" id="probootstrap-date-departure" class="form-control" placeholder="">
+						<input type="text" id="sday2" name="sday2" class="form-control" value="" readonly>
 					</div>
 					</div>
 				</div>
 				<div class="col-md">
 					<div class="form-group">
-					<label for="probootstrap-date-arrival">오는날</label>
+					<label for="sday3">오는날</label>
 					<div class="probootstrap-date-wrap">
 						<span class="icon ion-calendar"></span> 
-						<input type="text" id="probootstrap-date-arrival" class="form-control" placeholder="">
+						<input type="text" id="sday3" name="sday3" class="form-control" value="" readonly>
 					</div>
 					</div>
 				</div>
@@ -127,13 +130,13 @@
 				<div class="col-md">
 					<div class="form-group">
 					<label for="exampleInputEmail1">출발지</label>
-					<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" onclick="openModal();">
+					<input type="text" class="form-control" id="bt_sidx" name="bt_sidx" data-target="#ViewModal" role="button" readonly onclick="openModal();">
 					</div>
 				</div>
 				<div class="col-md">
 					<div class="form-group">
 					<label for="exampleInputEmail1">도착지</label>
-					<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+					<input type="email" class="form-control" id="bt_eidx" name="bt_eidx" readonly>
 					</div>
 				</div>
 				</div>
@@ -147,6 +150,12 @@
 	</form>
 	</div>  
 </div>
+<div class="modal fade" id="ViewModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
 </section>
 <!-- END section -->
 
@@ -154,11 +163,9 @@
 <script>
 
 function openModal() {
-	$('#ViewModal .modal-content').load("/busj/pickSpotHigh");
+	$('#ViewModal .modal-content').load("/busj/pickSpotSlow");	// 시외버스 출/도착지 선택 팝업
 	$('#ViewModal').modal()
   }
-
-
 
 $(document).ready(function() {
     $(".progress-bar-custom.2").hide();
@@ -191,51 +198,50 @@ $(document).ready(function() {
       $(".nav-item").not(this).find(".nav-link").removeClass("show");
     });
     
-    $("#sDate1-2").datepicker({
-      format: "yyyy.mm.dd D",
-      autoclose: true,
-      startDate: "0d",
-      endDate: "+30d",
-      language: "kr",
-      showMonthAfterYear: true,
-      weekStart: 1,
-      })
-      .datepicker("setDate",'now')
-      .on('changeDate', function(e) {
-        $("#sDate2-2").val($(this).val());
-        $("#eDate1-2").val($(this).val());
+    $("#sday1").datepicker({	// 편도 가는 날
+      format: "yyyy.mm.dd D"
+      , autoclose: true
+      , startDate: "0d"	// 오늘 이후의 날짜만 선택할 수 있도록 시작 날짜를 오늘로 설정
+      , endDate: "+30d"	// 30일 이후의 날짜는 선택하지 못하도록 설정
+      , language: "kr"
+      , showMonthAfterYear: true	// 월, 년순의 셀렉트 박스를 년,월 순으로 변경
+      , weekStart: 1				// 주의 시작 요일을 월요일로 설정
+      , })
+      .datepicker("setDate",'now')		// 날짜 선택기를 현재 날짜로 설정
+      .on('changeDate', function(e) {	
+        $("#sday2").val($(this).val());	// 왕복 가는 날, 오는 날 값 설정
+        $("#sday3").val($(this).val());
       });
 
-      $("#sDate2-2").datepicker({
-      format: "yyyy.mm.dd D",
-      autoclose: true,
-      startDate: "0d",
-      endDate: ($("#eDate").val()),
-      language: "kr",
-      showMonthAfterYear: true,
-      weekStart: 1,
-      })
+      $("#sday2").datepicker({	// 왕복 가는 날
+      format: "yyyy.mm.dd D"
+      , autoclose: true
+      , startDate: "0d"
+      , endDate: ($("#eDate").val())
+      , language: "kr"
+      , showMonthAfterYear: true
+      , weekStart: 1
+      , })
       .datepicker("setDate",'now')
       .on('changeDate', function(e) {
-        $("#sDate2-1").val($( "#sDate2-2" ).datepicker("getDate"));
-        $("#eDate1-2").datepicker("setStartDate", new Date($( "#sDate2-2" ).datepicker("getDate")));
+        $("#ri_sday2").val($( "#sday2" ).datepicker("getDate"));	// 왕복 가는 날 날짜 설정
+        $("#sday3").datepicker("setStartDate", new Date($( "#sday2" ).datepicker("getDate")));	// 왕복 오는 날의 시작값을 왕복 가는 날 값으로 설정
       });
 
-    $("#eDate1-2").datepicker({
-      format: "yyyy.mm.dd D",
-      autoclose: true,
-      startDate: "0d",
-      endDate: "+30d",
-      language: "kr",
-      showMonthAfterYear: true,
-      weekStart: 1,
-      })
+    $("#sday3").datepicker({	// 왕복 오는 날
+      format: "yyyy.mm.dd D"
+      , autoclose: true
+      , startDate: "0d"
+      , endDate: "+30d"
+      , language: "kr"
+      , showMonthAfterYear: true
+      , weekStart: 1
+      , })
       .datepicker("setDate",'now')
       .on('changeDate', function(e) {
-        $("#eDate1-1").val($( "#eDate1-2" ).datepicker("getDate"));
-        $("#sDate2-2").datepicker("setEndDate", new Date($("#eDate1-2").datepicker("getDate")));
+        $("#ri_sday1").val($( "#sday1" ).datepicker("getDate"));	// 편도 가는 날 날짜 설정
+        $("#sday2").datepicker("setEndDate", new Date($("#sday3").datepicker("getDate")));	// 왕복 가는 날의 종료값을 왕복 오는 날 값으로 설정
       });
-
 
   });
 </script>
