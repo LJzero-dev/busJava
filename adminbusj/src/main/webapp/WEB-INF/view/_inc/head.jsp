@@ -65,7 +65,7 @@
                                 aria-expanded="false"><i data-feather="repeat" class="feather-icon"></i><span
                                     class="hide-menu">노선관리 </span></a>
                             <ul aria-expanded="false" class="collapse  first-level base-level-line">
-                                <li class="sidebar-item"><a href="form-inputs.html" class="sidebar-link"><span
+                                <li class="sidebar-item"><a href="terminal" class="sidebar-link"><span
                                             class="hide-menu"> 고속버스 관리
                                         </span></a>
                                 </li>

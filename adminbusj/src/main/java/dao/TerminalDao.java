@@ -13,23 +13,24 @@ public class TerminalDao {
 		 this.jdbc = new JdbcTemplate(dataSource);
 	}
 	
-	public ArrayList<TerminalInfo> getTerminalList() {
+	public List<TerminalInfo> getTerminalList() {
 		String sql = "select * from t_bus_terminal where bt_type != 'c'";
-		ArrayList<TerminalInfo> terminalList = new ArrayList<TerminalInfo>();
-		List<TerminalInfo> results = jdbc.query(sql, new RowMapper<TerminalInfo>() {
-			public TerminalInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-//				do {
+		List<TerminalInfo> terminalList = jdbc.query(sql, 
+				(ResultSet rs, int rowNum) -> {
 					TerminalInfo ti = new TerminalInfo();
 					ti.setBt_idx(rs.getInt("bt_idx"));
 					ti.setBt_name(rs.getString("bt_name"));
 					ti.setBt_area(rs.getString("bt_area"));
-					ti.setBt_status(rs.getString("bt_status"));
 					ti.setBt_type(rs.getString("bt_type"));
-//					ti.add(ti);
-//				} while(rs.next());
-				return null;
-			}
-		});
+					ti.setBt_status(rs.getString("bt_status"));
+					return ti;
+				});
 		return terminalList;
+	}
+
+	public int chkTerminal(String name) {
+		String sql = "select count(*) from t_bus_terminal where bt_name = '" + name + "' ";
+		int result = jdbc.queryForObject(sql, Integer.class);
+		return result;
 	}
 }
