@@ -1,0 +1,44 @@
+package vo;
+
+public class BusLineInfo {
+	private int bl_idx, bt_sidx, bt_eidx, bl_adult;
+	private String bl_type, bl_status;
+	
+	
+	public int getBl_idx() {
+		return bl_idx;
+	}
+	public void setBl_idx(int bl_idx) {
+		this.bl_idx = bl_idx;
+	}
+	public int getBt_sidx() {
+		return bt_sidx;
+	}
+	public void setBt_sidx(int bt_sidx) {
+		this.bt_sidx = bt_sidx;
+	}
+	public int getBt_eidx() {
+		return bt_eidx;
+	}
+	public void setBt_eidx(int bt_eidx) {
+		this.bt_eidx = bt_eidx;
+	}
+	public int getBl_adult() {
+		return bl_adult;
+	}
+	public void setBl_adult(int bl_adult) {
+		this.bl_adult = bl_adult;
+	}
+	public String getBl_type() {
+		return bl_type;
+	}
+	public void setBl_type(String bl_type) {
+		this.bl_type = bl_type;
+	}
+	public String getBl_status() {
+		return bl_status;
+	}
+	public void setBl_status(String bl_status) {
+		this.bl_status = bl_status;
+	}
+}

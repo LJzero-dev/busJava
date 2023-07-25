@@ -20,4 +20,14 @@ public class TerminalSvc {
 		int result = terminalDao.chkTerminal(name);
 		return result;
 	}
+
+	public int terminalInsert(String name, String area) {
+		int result = terminalDao.terminalInsert(name, area);
+		return result;
+	}
+
+	public List<TerminalLineInfo> getTerminalLine(String bt_name) {
+		List<TerminalLineInfo> terminalLine = terminalDao.getTerminalLine(bt_name);
+		return terminalLine;
+	}
 }
