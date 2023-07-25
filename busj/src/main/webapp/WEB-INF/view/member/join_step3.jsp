@@ -32,7 +32,7 @@ String mi_name = (String)request.getAttribute("mi_name");
                     </div>
                   </div>
                 </div>
-                <h1><a class="join" ><img src="resources/images/welcome.svg" /></a></h1>
+                <h1><a class="join" ><img src="${pageContext.request.contextPath}/resources/images/welcome.svg" /></a></h1>
                
                 <div class="col-md-12">
                   <h3><p><span><%=mi_name %>(<%=mi_id.substring(0,4) + "***" %>)님</span></p></h3>

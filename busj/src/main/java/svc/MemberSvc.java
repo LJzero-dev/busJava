@@ -60,4 +60,24 @@ public class MemberSvc {
 		return result;
 	}
 
+	public int memberUpPw(String mi_id, String mi_pw) {
+		int result = memberDao.memberUpPw(mi_id, mi_pw);
+		return result;
+	}
+
+	public int memberUpMail(String mi_id, String mi_email) {
+		int result = memberDao.memberUpMail(mi_id, mi_email);
+		return result;
+	}
+
+	public int memberUpPhone(String mi_id, String mi_phone) {
+		int result = memberDao.memberUpPhone(mi_id, mi_phone);
+		return result;
+	}
+
+	public int memberDel(String mi_id) {
+		int result = memberDao.memberDel(mi_id);
+		return result;
+	}
+
 }

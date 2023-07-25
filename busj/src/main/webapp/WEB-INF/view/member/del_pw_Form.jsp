@@ -10,7 +10,7 @@
         </div>
         <div class="row mb-4">
           <div class="col-md-4 m-auto">
-            <form name="frmPwChk" id="frmPwChk" action="memberModify" method="post">
+            <form name="frmDelPwChk" id="frmDelPwChk" action="memberDel" method="post">
               <div class="form-group">
                 <label for="exampleInputPassword1">비밀번호</label>
                 <input type="password" class="form-control" id="mi_pw" name=mi_pw>

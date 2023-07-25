@@ -17,7 +17,7 @@ public class MemberDao {
 	}
 	
 	public MemberInfo getLoginInfo(String mi_id, String mi_pw) {
-		String sql = "select * from t_member_info where mi_id = ? and mi_pw = ?";
+		String sql = "select * from t_member_info where mi_id = ? and mi_pw = ? and mi_status != '탈퇴'";
 
 		List<MemberInfo> results = jdbc.query(sql, new RowMapper<MemberInfo>() {
 			public MemberInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -45,7 +45,7 @@ public class MemberDao {
 	public int memberInsert(MemberInfo mi) {
 		String sql = "insert into t_member_info values ('" + mi.getMi_id() + "', '" + mi.getMi_pw() + 
 				"', '" + mi.getMi_name() + "', '" + mi.getMi_gender() + "', '" + mi.getMi_phone() + 
-				"', '" + mi.getMi_email() + "', 0, 0, 0, 'a', now(), null) ";
+				"', '" + mi.getMi_email() + "', 0, 0, 0, '정상', now(), null) ";
 		int result = jdbc.update(sql);
 		
 		System.out.println(sql);
@@ -92,6 +92,30 @@ public class MemberDao {
 	public int memberPwChk(String mi_id, String mi_pw) {
 		String sql = "select count(*) from t_member_info where mi_id = '" + mi_id + "' and mi_pw= '" + mi_pw + "' ";
 		int result = jdbc.queryForObject(sql, Integer.class);
+		return result;
+	}
+
+	public int memberUpPw(String mi_id, String mi_pw) {
+		String sql = "update t_member_info set mi_pw = '" + mi_pw + "' where mi_id = '" + mi_id + "' ";
+		int result = jdbc.update(sql);
+		return result;
+	}
+
+	public int memberUpMail(String mi_id, String mi_email) {
+		String sql = "update t_member_info set mi_email = '" + mi_email + "' where mi_id = '" + mi_id + "' ";
+		int result = jdbc.update(sql);
+		return result;
+	}
+
+	public int memberUpPhone(String mi_id, String mi_phone) {
+		String sql = "update t_member_info set mi_phone = '" + mi_phone + "' where mi_id = '" + mi_id + "' ";
+		int result = jdbc.update(sql);
+		return result;
+	}
+
+	public int memberDel(String mi_id) {
+		String sql = "update t_member_info set mi_status = '탈퇴' where mi_id = '" + mi_id + "' ";
+		int result = jdbc.update(sql);
 		return result;
 	}
 

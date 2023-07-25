@@ -359,8 +359,8 @@ public class MemberCtrl {
 
 	/* 회원 마이페이지 부분 */
 	
-	/* 회원 정보 수정 부분 */
-	@PostMapping("/memberPwChk")
+	/* 회원 내정보 비밀번호 체크 부분 */
+	@PostMapping("/memberModify")
 	// 비동기 통신(ajax)시 서버에서 클라이언트로 응답 메세지를 보낼 떄 데이터를 담아서 보낼 해당 본문을 의미
 	public String memberUpdate(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
@@ -390,4 +390,155 @@ public class MemberCtrl {
 		
 	}
 	
+	/* 회원 비밀번호 변경 */
+	@PostMapping("/memberUpPw")
+	// 비동기 통신(ajax)시 서버에서 클라이언트로 응답 메세지를 보낼 떄 데이터를 담아서 보낼 해당 본문을 의미
+	public String memberUpPw(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		HttpSession session = request.getSession();
+		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
+		
+		String mi_id = loginInfo.getMi_id();
+		String mi_pw = request.getParameter("mi_pw");
+		
+		/*
+		  System.out.println(mi_id); 
+		  System.out.println(mi_pw);
+		 */
+		
+		int result = memberSvc.memberUpPw(mi_id, mi_pw);
+		
+		if (result != 1) {
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('정보수정에 실패했습니다.');");
+			out.println("history.back();");
+			out.println("</script>");
+			out.close();
+		} else {
+		// 정보수정 성공시 세션에 들어있는 로그인 정보도 수정함
+			loginInfo.setMi_pw(mi_pw);
+			session.invalidate();
+		}
+		
+		return "redirect:/";
+		
+	}
+	
+	/* 회원 메일 변경 */
+	@PostMapping("/memberUpMail")
+	// 비동기 통신(ajax)시 서버에서 클라이언트로 응답 메세지를 보낼 떄 데이터를 담아서 보낼 해당 본문을 의미
+	public String memberUpMail(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		HttpSession session = request.getSession();
+		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
+		
+		String mi_id = loginInfo.getMi_id();
+		String e1 = request.getParameter("e1");
+		String e2 = request.getParameter("e2");
+		String e3 = request.getParameter("e3");
+		String mi_email = "";
+		if (e3 == null) {
+			mi_email = (e1 + "@" + e2);			
+		} else {
+			mi_email =(e1 + "@" + e3);	
+		}
+		
+		/*
+		  System.out.println(mi_id); 
+		  System.out.println(mi_pw);
+		 */
+		int result = memberSvc.memberUpMail(mi_id, mi_email);
+		
+		if (result != 1) {
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('정보수정에 실패했습니다.');");
+			out.println("history.back();");
+			out.println("</script>");
+			out.close();
+		} else {
+		// 정보수정 성공시 세션에 들어있는 로그인 정보도 수정함
+			loginInfo.setMi_pw(mi_email);
+			session.invalidate();
+		}
+		
+		return "redirect:/";
+		
+	}
+	
+	/* 회원 번호 변경 */
+	@PostMapping("/memberUpPhone")
+	// 비동기 통신(ajax)시 서버에서 클라이언트로 응답 메세지를 보낼 떄 데이터를 담아서 보낼 해당 본문을 의미
+	public String memberUpPhone(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		HttpSession session = request.getSession();
+		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
+		
+		String mi_id = loginInfo.getMi_id();
+		String p2 = request.getParameter("p2");
+		String p3 = request.getParameter("p3");
+		String mi_phone = "";
+		mi_phone = ("010-" + p2 + "-" + p3);
+		
+		/*
+		  System.out.println(mi_id); 
+		  System.out.println(mi_pw);
+		 */
+		int result = memberSvc.memberUpPhone(mi_id, mi_phone);
+		
+		if (result != 1) {
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('정보수정에 실패했습니다.');");
+			out.println("history.back();");
+			out.println("</script>");
+			out.close();
+		} else {
+		// 정보수정 성공시 세션에 들어있는 로그인 정보도 수정함
+			loginInfo.setMi_pw(mi_phone);
+			session.invalidate();
+		} 
+		
+		return "redirect:/";
+		
+	}
+	
+	@GetMapping("/memberDelPwChk")
+	public String delPwForm() {
+		return "/member/delPwForm";
+	}
+	
+	/* 회원 탈퇴 */
+	@PostMapping("/memberDel")
+	// 비동기 통신(ajax)시 서버에서 클라이언트로 응답 메세지를 보낼 떄 데이터를 담아서 보낼 해당 본문을 의미
+	public String memberDel(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		HttpSession session = request.getSession();
+		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
+		
+		String mi_id = loginInfo.getMi_id();
+	
+
+		int result = memberSvc.memberDel(mi_id);
+		
+		if (result != 1) {
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('회원탈퇴에 실패했습니다.');");
+			out.println("history.back();");
+			out.println("</script>");
+			out.close();
+		} else {
+		// 정보수정 성공시 세션에 들어있는 로그인 정보도 수정함
+			session.invalidate();
+		} 
+		
+		return "redirect:/";
+		
+	}
 }

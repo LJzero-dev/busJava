@@ -22,7 +22,10 @@
           </div>
           <button type="submit" class="btn btn-primary btn-block" >로그인</button>
         </form>
-	   <a href="memberJoinStep1" class="badge badge-success">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="memberFind" class="badge badge-success">아이디/비밀번호 찾기</a>
+        <div class="d-flex justify-content-center mT3">
+	   <a href="memberJoinStep1" class="mR1">회원가입</a>
+	   <a href="memberFind">아이디/비밀번호 찾기</a>
+	   </div>
       </div>
     </div>
   </div>
