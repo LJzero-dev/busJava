@@ -2,10 +2,11 @@ package ctrl;
 
 import java.util.*;
 import java.io.*;
+
 import javax.servlet.http.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.*;
 
 import svc.*;
 import vo.*;
@@ -24,7 +25,10 @@ public class HTicketingCtrl {
 	}
 	
 	@GetMapping("/pickSpotHigh")
-	public String pick_spot_high() {
+	public String pickSpotHigh(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		List<TerminalInfo> terminalList = hTicketingSvc.getTerminalList();
+		request.setAttribute("terminalList", terminalList);
+		
 		return "popup/pick_spot_high";
 	}
 	

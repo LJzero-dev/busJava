@@ -20,12 +20,7 @@ public class STicketingDao {
 		String sql = "select * from t_bus_terminal where bt_type != 'b' and bt_status = 'y'";
 
 		List<TerminalInfo> terminalList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
-			TerminalInfo ti = new TerminalInfo();
-			ti.setBt_idx(rs.getInt("bt_idx"));
-			ti.setBt_name(rs.getString("bt_name"));
-			ti.setBt_area(rs.getString("bt_area"));
-			ti.setBt_type(rs.getString("bt_type"));
-			ti.setBt_status(rs.getString("bt_status"));
+			TerminalInfo ti = new TerminalInfo(rs.getInt("bt_idx"), rs.getString("bt_name"), rs.getString("bt_area"), rs.getString("bt_type"), rs.getString("bt_status"));
 			return ti;
 		});
 		return terminalList;

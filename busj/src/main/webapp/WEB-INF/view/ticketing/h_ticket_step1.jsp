@@ -71,8 +71,8 @@
 
     </div>
     <div class="col-md-8 probootstrap-animate fadeInUp probootstrap-animated m-auto">
-      <form action="#" class="probootstrap-form">
-        <input type="hidden" name="mode" id="mode" value="" />
+      <form name="frmSchLine" action="" method="POST" class="probootstrap-form">
+        <input type="hidden" name="mode" id="mode" value="p" />
         <input type="hidden" name="sDate1-1" id="sDate1-1" value="" />
         <input type="hidden" name="sDate2-1" id="sDate2-1" value="" />
         <input type="hidden" name="eDate1-1" id="eDate1-1" value="" />
@@ -126,7 +126,6 @@
           
           
           <div class="row mb-3">
-            
             <div class="col-md">
               <div class="form-group">
                 <label for="sPoint">출발지</label>
@@ -143,7 +142,7 @@
 
           <div class="row mb-3">
             <div class="col-md">
-              <input type="submit" value="조회하기" class="btn btn-primary btn-block">
+              <input type="button" id="schBtn" value="조회하기" class="btn btn-primary btn-block">
             </div>
           </div>
         </div>
@@ -166,86 +165,103 @@ function openModal() {
 	$('#ViewModal').modal()
   }
 
+function getToday(){
+	const DATE = new Date();
+    const YEAR = DATE.getFullYear();
+    const MONTH = ("0" + (1 + DATE.getMonth())).slice(-2);
+    const DAY = ("0" + DATE.getDate()).slice(-2);
+
+    return YEAR + "." + MONTH + "." + DAY;
+}
 
 
 $(document).ready(function() {
+	$("#sDate1-1").val(getToday());
+	$("#sDate2-1").val(getToday());
+	
     $(".progress-bar-custom.2").hide();
     $(".nav-item").click(function() {
-      var navLink = $(this).find(".nav-link");
-      var tabIndex = $(this).index();
+		let navLink = $(this).find(".nav-link");
+		let tabIndex = $(this).index();
       
-      // active 상태에서 클릭시 아무런 변화없음
-      if (navLink.hasClass("active")) {
-        return;
-      }
+		// active 상태에서 클릭시 아무런 변화없음
+		if (navLink.hasClass("active"))	return;
 
-      navLink.toggleClass("show");
-      var progressBarCustom = $(".progress-bar-custom." + (tabIndex + 1));
-      if (navLink.hasClass("show")) {
-        // 편도 클릭 시
-        if (tabIndex === 0) {
-          $("#mode").val("o");
-          $(".progress-bar-custom.1").css("display","");
-          $(".progress-bar-custom.2").css("display","none");
-        }
-        // 왕복 클릭 시
-        else if (tabIndex === 1) {
-          $("#mode").val("p");
-          $(".progress-bar-custom.1").css("display","none");
-          $(".progress-bar-custom.2").css("display","");
-        }
-      } 
+		navLink.toggleClass("show");
+		let progressBarCustom = $(".progress-bar-custom." + (tabIndex + 1));
+		if (navLink.hasClass("show")) {
+			if (tabIndex === 0) {	// 편도 클릭 시
+				$("#mode").val("p");
+				$(".progress-bar-custom.1").css("display","");
+				$(".progress-bar-custom.2").css("display","none");
+	        } else if (tabIndex === 1) {	 // 왕복 클릭 시
+				$("#mode").val("w");
+				$(".progress-bar-custom.1").css("display","none");
+				$(".progress-bar-custom.2").css("display","");
+	        }
+		} 
 
-      $(".nav-item").not(this).find(".nav-link").removeClass("show");
+		$(".nav-item").not(this).find(".nav-link").removeClass("show");
     });
     
-    $("#sDate1-2").datepicker({
-      format: "yyyy.mm.dd D",
-      autoclose: true,
-      startDate: "0d",
-      endDate: "+30d",
-      language: "kr",
-      showMonthAfterYear: true,
-      weekStart: 1,
-      })
-      .datepicker("setDate",'now')
-      .on('changeDate', function(e) {
-        $("#sDate2-2").val($(this).val());
-        $("#eDate1-2").val($(this).val());
-      });
+	$("#sDate1-2").datepicker({
+		format: "yyyy.mm.dd",
+		autoclose: true,
+		startDate: "0d",
+		endDate: "+30d",
+		language: "kr",
+		showMonthAfterYear: true,
+		weekStart: 1,
+		}).datepicker("setDate",'now')
+		.on('changeDate', function(e) {
+		$("#sDate1-1").val($(this).val());
+		console.log($("#sDate1-1").val());
+	});
 
-      $("#sDate2-2").datepicker({
-      format: "yyyy.mm.dd D",
-      autoclose: true,
-      startDate: "0d",
-      endDate: ($("#eDate").val()),
-      language: "kr",
-      showMonthAfterYear: true,
-      weekStart: 1,
-      })
-      .datepicker("setDate",'now')
-      .on('changeDate', function(e) {
-        $("#sDate2-1").val($( "#sDate2-2" ).datepicker("getDate"));
-        $("#eDate1-2").datepicker("setStartDate", new Date($( "#sDate2-2" ).datepicker("getDate")));
-      });
+	$("#sDate2-2").datepicker({
+		format: "yyyy.mm.dd",
+		autoclose: true,
+		startDate: "0d",
+		endDate: "+30d",
+		language: "kr",
+		showMonthAfterYear: true,
+		weekStart: 1,
+	}).datepicker("setDate",'now')
+		.on('changeDate', function(e) {
+		$("#sDate2-1").val($(this).val());
+		$("#eDate1-2").datepicker("setStartDate", new Date($( "#sDate2-2" ).datepicker("getDate")));
+     	// 오는날 필드에서 가는날 필드의 이전날짜 선택을 막음
+	});
 
-    $("#eDate1-2").datepicker({
-      format: "yyyy.mm.dd D",
-      autoclose: true,
-      startDate: "0d",
-      endDate: "+30d",
-      language: "kr",
-      showMonthAfterYear: true,
-      weekStart: 1,
-      })
-      .datepicker("setDate",'now')
-      .on('changeDate', function(e) {
-        $("#eDate1-1").val($( "#eDate1-2" ).datepicker("getDate"));
+	$("#eDate1-2").datepicker({
+    	format: "yyyy.mm.dd",
+		autoclose: true,
+		startDate: "0d",
+		endDate: "+30d",
+		language: "kr",
+		showMonthAfterYear: true,
+		weekStart: 1,
+	}).on('changeDate', function(e) {
+        $("#eDate1-1").val($(this).val());
         $("#sDate2-2").datepicker("setEndDate", new Date($("#eDate1-2").datepicker("getDate")));
-      });
+     	// 가는날 필드에서 오는날 필드의 이후날짜 선택을 막음
+	});
 
-
-  });
+	$("#schBtn").click(function() {
+		if ($("#mode").val() == 'w' ) {	// 왕복인경우
+			if (!($("#eDate1-1").val() == "") || !($("#eDate1-2").val() == "")) {
+				// 통과 로직
+			} else {
+				alert("오는날을 선택해주세요.");
+				return false;
+			}
+		}
+		
+		if (!($("#sPoint") == "" && $("#ePoint") == "")) {
+			alert("출발지와 도착지를 선택해주세요.");
+		}
+	});
+});
 </script>
 
 

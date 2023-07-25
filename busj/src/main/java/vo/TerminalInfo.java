@@ -3,6 +3,13 @@ package vo;
 public class TerminalInfo {
 	private int bt_idx;
 	private String bt_name, bt_area, bt_type, bt_status;
+	public TerminalInfo(int bt_idx, String bt_name, String bt_area, String bt_type, String bt_status) {
+		this.bt_idx = bt_idx;
+		this.bt_name = bt_name;
+		this.bt_area = bt_area;
+		this.bt_type = bt_type;
+		this.bt_status = bt_status;
+	}
 	public int getBt_idx() {
 		return bt_idx;
 	}
