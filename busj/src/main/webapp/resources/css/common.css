@@ -234,7 +234,7 @@ button.w-120p {width: 120px;}
     background-image: none;
 }
 
-#sPoint.active {
+#sPoint.active, #sPointPop.active, #ePointPop.active {
     color: #495057;
     border: 2px solid #00CA4C;
     outline: none;
@@ -243,3 +243,9 @@ button.w-120p {width: 120px;}
 .form-control.focus-none:focus {
     border-color : #ccc;
 }
+
+/* 팝업 리스트 스타일 */
+.t-list {display: inline-block;}
+.t-list li { display: inline-block; width: 24%; flex-wrap: wrap;}
+.t-list li a{ width: 100%; padding: 10px 0; text-align: center; transition: none; font-size: 16px;}
+.t-list li a:hover {background: #dfdfdf; transition: none; border-radius: 10px;}

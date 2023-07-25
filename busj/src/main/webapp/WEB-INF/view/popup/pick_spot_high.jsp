@@ -33,122 +33,100 @@ List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("term
 	</button>
 </div>
 <div class="modal-body">
+<form name="frmSch">
 <div class="input-group mb-3">
-      <input type="text" name="schTField" class="form-control focus-none"  placeholder="터미널 이름을 검색하세요.">
-      <div class="input-group-append">
-        <button class="btn btn-outline-success" type="button" id="schBtn">검색</button>
-      </div>
-    </div>
-    <hr />
+	<input type="text" name="schTField" class="form-control focus-none"  placeholder="터미널 이름을 검색하세요.">
+	<div class="input-group-append"><button class="btn btn-outline-success" type="button" id="schBtn">검색</button></div>
+</div>
+</form>
+<hr />
     <div>
-    <button type="button" class="btn-success btn-sm">동서울</button>
-    <button type="button" class="btn-success btn-sm">동서울</button>
-    <button type="button" class="btn-success btn-sm">동서울</button>
-    <button type="button" class="btn-success btn-sm">동서울</button>
+	    <button type="button" class="btn-success btn-sm">동서울</button>
+	    <button type="button" class="btn-success btn-sm">동서울</button>
+	    <button type="button" class="btn-success btn-sm">동서울</button>
+	    <button type="button" class="btn-success btn-sm">동서울</button>
     </div>
-    <hr />
-    <form>
+<hr />
+    <form name="frmPoint">
       <div class="form-row">
         <div class="col-md-6 mb-3">
-          <label for="sPoint">출발지</label>
-          <input type="text" class="form-control form-control-lg focus-none active" id="sPoint" required readonly>
+          <label for="sPointPop">출발지</label>
+          <input type="text" class="form-control form-control-lg focus-none active" id="sPointPop" required readonly>
         </div>
         <div class="col-md-6 mb-3">
-          <label for="ePoint">도착지</label>
-          <input type="text" class="form-control form-control-lg focus-none" id="ePoint" required readonly>
+          <label for="ePointPop">도착지</label>
+          <input type="text" class="form-control form-control-lg focus-none" id="ePointPop" required readonly>
         </div>
       </div>
-    
+    </form>
     <div class="row">
       <div class="col-2">
         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-          <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">전체</button>
-          <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">서울/경기</button>
-          <button class="nav-link" id="v-pills-messages-tab" data-toggle="pill" data-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">강원</button>
-          <button class="nav-link" id="v-pills-settings-tab" data-toggle="pill" data-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">경상</button>
+          <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#all" type="button" role="tab">전체</button>
+          <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#seoulg" type="button" role="tab">서울/경기</button>
+          <button class="nav-link" id="v-pills-messages-tab" data-toggle="pill" data-target="#gang" type="button" role="tab">강원</button>
+          <button class="nav-link" id="v-pills-settings-tab" data-toggle="pill" data-target="#gyong" type="button" role="tab">경상</button>
         </div>
       </div>
       <div class="col-10">
         <div class="tab-content" id="v-pills-tabContent">
-          <div class="tab-pane show active scroll-box" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-            <table class="table text-center">
-              <colgroup>
-                <col width="25%">
-                <col width="25%">
-                <col width="25%">
-                <col width="25%">
-              </colgroup>
-              <tbody>
+			<ul class="tab-pane scroll-box t-list active t-list" id="all" role="tabpanel" aria-expanded="true">
 <%
 	if (terminalList.size() > 0) {	// 터미널 목록이 있는경우
-		int i = 0;
-		for (i = 0 ; i < terminalList.size() ; i++) {
+		for (int i = 0 ; i < terminalList.size() ; i++) {	// 전체목록
 			TerminalInfo ti = terminalList.get(i);	
-			if (i % 4 == 0) out.println("<tr>");
 %>
-	<td><a href="<%=ti.getBt_idx() %>"><%=ti.getBt_name() %></a></td>
+				<li><a href="lineSch?btidx=<%=ti.getBt_idx() %>" onclick="pickSpot('<%=ti.getBt_name()%>')"><%=ti.getBt_name() %></a></li>
 <%
-			if (i % 4 == 3) out.println("</tr>");
 		}
-		
-		if (i % 4 > 0) {
-			for (int j = 0 ; j < (4 - (i % 4)) ; j++) {
-				out.println("<td width='25%'></td>");
-			}
-			out.println("</tr>");
+%>
+			</ul>
+			<ul class="tab-pane scroll-box t-list" id="seoulg" role="tabpanel">
+<%
+	for (int i = 0 ; i < terminalList.size() ; i++) { // 서울경기
+		TerminalInfo ti = terminalList.get(i);
+		if (ti.getBt_area().startsWith("서울") || ti.getBt_area().startsWith("경기")) { %>
+			<li><a href="<%=ti.getBt_idx() %>" onclick=""><%=ti.getBt_name() %></a></li>
+<%
 		}
 	}
-			out.println("<tr>");
 %>
-
-              </tbody>
-            </table>
-          </div>
-          <div class="tab-pane scroll-box" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-            <table class="table text-center">
-              <colgroup>
-                <col width="25%">
-                <col width="25%">
-                <col width="25%">
-                <col width="25%">
-              </colgroup>
-              <tbody>
+			</ul>
+          	<ul class="tab-pane scroll-box t-list" id="gang" role="tabpanel">
 <%
-	if (terminalList.size() > 0) {	// 터미널 목록이 있는경우
-		int i = 0;
-		for (i = 0 ; i < terminalList.size() ; i++) {
-			TerminalInfo ti = terminalList.get(i);	
-			if (i % 4 == 0) out.println("<tr>");
-			if (ti.getBt_area().startsWith("서울") || ti.getBt_area().startsWith("경기")) {
-%>
-	<td><a href="<%=ti.getBt_idx() %>"><%=ti.getBt_name() %></a></td>
+	for (int i = 0 ; i < terminalList.size() ; i++) { // 강원
+		TerminalInfo ti = terminalList.get(i);
+		if (ti.getBt_area().startsWith("강원")) { %>
+			<li><a href="<%=ti.getBt_idx() %>" onclick=""><%=ti.getBt_name() %></a></li>
 <%
-			}
-			if (i % 4 == 3) out.println("</tr>");
-		}
-
-		if (i % 4 > 0) {
-			for (int j = 0 ; j < (4 - (i % 4)) ; j++) {
-				out.println("<td width='25%'></td>");
-			}
-			out.println("</tr>");
 		}
 	}
-			out.println("<tr>");
+%>
+          	</ul>
+          	<ul class="tab-pane scroll-box t-list" id="gyong" role="tabpanel">
+          	
+          	</ul>
+          
+		</div>
+<%
+	}
 %>
 
-              </tbody>
-            </table>
-          </div>
-          <div class="tab-pane scroll-box" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">...</div>
-          <div class="tab-pane scroll-box" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
+			
+
         </div> 
       </div>
-    </div>
-  </form>
+</div>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
   <button type="button" class="btn btn-primary">확인</button>
 </div>
+<script>
+	const pickSpot = function(btname) {
+		$("#sPointPop").val(btname);
+		$("#sPointPop").removeClass("active");
+		$("#ePointPop").addClass("active");
+	}
+</script>
 <%@ include file="../_inc/foot.jsp" %>

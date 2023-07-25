@@ -16,5 +16,10 @@ public class HTicketingSvc {
 		List<TerminalInfo> terminalList = hTicketingDao.getTerminalList();
 		return terminalList;
 	}
+
+	public List<LineInfo> getAvailableLineList(int btsidx) {
+		List<LineInfo> lineList = hTicketingDao.getAvailableLineList(btsidx);
+		return lineList;
+	}
 	
 }

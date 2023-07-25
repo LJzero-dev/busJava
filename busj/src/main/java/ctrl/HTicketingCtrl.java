@@ -32,5 +32,16 @@ public class HTicketingCtrl {
 		return "popup/pick_spot_high";
 	}
 	
+	@GetMapping("/lineSch")
+	public String lineSch(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("UTF-8");
+		int btsidx = Integer.parseInt(request.getParameter("btidx"));
+		List<LineInfo> lineList = hTicketingSvc.getAvailableLineList(btsidx);
+		request.setAttribute("lineList", lineList);
+		
+		// 수정하기기기기
+		return "popup/pick_spot_high";
+	}
+	
 	
 }
