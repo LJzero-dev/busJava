@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../_inc/head.jsp"%>
+<%@ page import="java.util.*" %>
+<%@ page import="vo.*" %>
+<%
+request.setCharacterEncoding("utf-8");
+List<BookInfo> bookList = (List<BookInfo>) request.getAttribute("bookList");
 
+for (BookInfo book : bookList) {
+%>
 <section class="probootstrap_section">
     <div class="container">
         <div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated mb-0">
@@ -38,7 +45,7 @@
               </thead>
               <tbody class="text-center">
               <tr>
-                  <td>230710AA1002</td>
+                  <td><%=book.getRi_idx() %></td>
                   <td>시외</td>
                   <td>동서울터미널</td>
                   <td>가천대</td>
@@ -143,5 +150,5 @@
    
 
 </section>
-
+<% } %>
 <%@ include file="../_inc/foot.jsp"%>

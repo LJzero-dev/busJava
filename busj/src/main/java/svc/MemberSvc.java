@@ -1,5 +1,7 @@
 package svc;
 
+import java.util.List;
+
 import dao.*;
 import vo.*;
 
@@ -75,9 +77,14 @@ public class MemberSvc {
 		return result;
 	}
 
-	public int memberDel(String mi_id) {
-		int result = memberDao.memberDel(mi_id);
+	public int memberDel(String mi_id, String mi_pw) {
+		int result = memberDao.memberDel(mi_id, mi_pw);
 		return result;
+	}
+
+	public List<BookInfo> getBookList(String mi_id) {
+		List<BookInfo> bookList = memberDao.getBookList(mi_id);
+		return bookList;
 	}
 
 }

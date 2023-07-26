@@ -1,6 +1,7 @@
 package ctrl;
 
 import java.io.*;
+import java.util.List;
 import java.util.Random;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.*;
@@ -341,9 +342,18 @@ public class MemberCtrl {
 		return "/member/pw_form";
 	}
 	@GetMapping("/booking")
-	public String bookingList() {
+	public String bookingList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		HttpSession session = request.getSession();
+		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
+		String mi_id = loginInfo.getMi_id();
+		
+		List<BookInfo> bookList = memberSvc.getBookList(mi_id);
+		request.setAttribute("bookList", bookList);
+			
 		return "/member/booking_list";
 	}
+
 	@GetMapping("/payMoney")
 	public String paymoney() {
 		return "/member/paymoney";
@@ -509,36 +519,36 @@ public class MemberCtrl {
 	
 	@GetMapping("/memberDelPwChk")
 	public String delPwForm() {
-		return "/member/delPwForm";
+		return "/member/del_pw_Form";
 	}
 	
 	/* 회원 탈퇴 */
 	@PostMapping("/memberDel")
 	// 비동기 통신(ajax)시 서버에서 클라이언트로 응답 메세지를 보낼 떄 데이터를 담아서 보낼 해당 본문을 의미
-	public String memberDel(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void memberDel(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
 		HttpSession session = request.getSession();
 		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
 		
 		String mi_id = loginInfo.getMi_id();
-	
+		String mi_pw = request.getParameter("mi_pw");
 
-		int result = memberSvc.memberDel(mi_id);
+		int result = memberSvc.memberDel(mi_id , mi_pw);
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.println("<script>");
 		
 		if (result != 1) {
-			response.setContentType("text/html; charset=utf-8");
-			PrintWriter out = response.getWriter();
-			out.println("<script>");
-			out.println("alert('회원탈퇴에 실패했습니다.');");
+			out.println("alert('비밀번호가 잘못되었습니다.');");
 			out.println("history.back();");
-			out.println("</script>");
-			out.close();
 		} else {
 		// 정보수정 성공시 세션에 들어있는 로그인 정보도 수정함
+			out.println("alert('회원탈퇴 되었습니다.');");
 			session.invalidate();
+			out.println("location.href='/busj'");
 		} 
-		
-		return "redirect:/";
-		
+		out.println("</script>");
+		out.close(); 
 	}
+	
 }
