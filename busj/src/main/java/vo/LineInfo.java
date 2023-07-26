@@ -1,22 +1,9 @@
 package vo;
 
 public class LineInfo {
-// ¹ö½º³ë¼±ÀÇ Á¤º¸¸¦ ´ãÀº ÀÎ½ºÅÏ½º (+ ÃâµµÂøÁöÀÇ ÀÌ¸§ : sname, ename / + ÃâµµÂøÁöÀÇ Áö¿ª : sarea, earea)
+// ë…¸ì„ ì˜ ì •ë³´ë¥¼ ë‹´ê³ ìˆëŠ” ì¸ìŠ¤í„´ìŠ¤ (+ ì¶œë°œì§€, ë„ì°©ì§€ : sname, ename / + ì¶œë°œì§€ì—­, ë„ì°©ì§€ì—­ : sarea, earea)
 	private int bl_idx, bt_sidx, bt_eidx, bl_adult;
 	private String sname, ename, sarea, earea, bl_type, bl_status;
-	public LineInfo(int bl_idx, int bt_sidx, String sname, String sarea, int bt_eidx, String ename, String earea,
-			int bl_adult, String bl_type, String bl_status) {
-		this.bl_idx = bl_idx;
-		this.bt_sidx = bt_sidx;
-		this.sname = sname;
-		this.sarea = sarea;
-		this.bt_eidx = bt_eidx;
-		this.ename = ename;
-		this.earea = earea;
-		this.bl_adult = bl_adult;
-		this.bl_type = bl_type;
-		this.bl_status = bl_status;
-	}
 	public int getBl_idx() {
 		return bl_idx;
 	}

@@ -33,15 +33,13 @@ public class HTicketingCtrl {
 	}
 	
 	@GetMapping("/lineSch")
-	public String lineSch(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		request.setCharacterEncoding("UTF-8");
-		int btsidx = Integer.parseInt(request.getParameter("btidx"));
-		List<LineInfo> lineList = hTicketingSvc.getAvailableLineList(btsidx);
-		request.setAttribute("lineList", lineList);
-		
-		// �����ϱ����
-		return "popup/pick_spot_high";
-	}
+	@ResponseBody
+	public List<LineInfo> lineSch(@RequestParam int btsidx) {
+		System.out.println("컨트롤 : " + btsidx);
+        // btidx에 해당하는 터미널 목록을 조회하는 비즈니스 로직을 수행하여 List<LineInfo>를 반환하는 예시
+        List<LineInfo> lineList = hTicketingSvc.getAvailableLineList(btsidx);
+        return lineList;
+    }
 	
 	
 }

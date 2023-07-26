@@ -59,74 +59,149 @@ List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("term
         </div>
       </div>
     </form>
-    <div class="row">
+    <div class="row" id="go">
       <div class="col-2">
         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-          <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#all" type="button" role="tab">전체</button>
-          <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#seoulg" type="button" role="tab">서울/경기</button>
-          <button class="nav-link" id="v-pills-messages-tab" data-toggle="pill" data-target="#gang" type="button" role="tab">강원</button>
-          <button class="nav-link" id="v-pills-settings-tab" data-toggle="pill" data-target="#gyong" type="button" role="tab">경상</button>
+          <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#all1" type="button" role="tab">전체</button>
+          <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#seoulg1" type="button" role="tab">서울/경기</button>
+          <button class="nav-link" id="v-pills-messages-tab" data-toggle="pill" data-target="#gang1" type="button" role="tab">강원</button>
+          <button class="nav-link" id="v-pills-settings-tab" data-toggle="pill" data-target="#gyong1" type="button" role="tab">경상</button>
         </div>
       </div>
       <div class="col-10">
         <div class="tab-content" id="v-pills-tabContent">
-			<ul class="tab-pane scroll-box t-list active t-list" id="all" role="tabpanel" aria-expanded="true">
+			<ul class="tab-pane scroll-box t-list active" id="all1" role="tabpanel" aria-expanded="true">
 <%
 	if (terminalList.size() > 0) {	// 터미널 목록이 있는경우
 		for (int i = 0 ; i < terminalList.size() ; i++) {	// 전체목록
 			TerminalInfo ti = terminalList.get(i);	
 %>
-				<li><a href="lineSch?btidx=<%=ti.getBt_idx() %>" onclick="pickSpot('<%=ti.getBt_name()%>')"><%=ti.getBt_name() %></a></li>
+				<li><a href="<%=ti.getBt_idx() %>" ><%=ti.getBt_name() %></a></li>
 <%
 		}
 %>
 			</ul>
-			<ul class="tab-pane scroll-box t-list" id="seoulg" role="tabpanel">
+			<ul class="tab-pane scroll-box t-list" id="seoulg1" role="tabpanel">
 <%
 	for (int i = 0 ; i < terminalList.size() ; i++) { // 서울경기
 		TerminalInfo ti = terminalList.get(i);
 		if (ti.getBt_area().startsWith("서울") || ti.getBt_area().startsWith("경기")) { %>
-			<li><a href="<%=ti.getBt_idx() %>" onclick=""><%=ti.getBt_name() %></a></li>
+			<li><a href="<%=ti.getBt_idx() %>"><%=ti.getBt_name() %></a></li>
 <%
 		}
 	}
 %>
 			</ul>
-          	<ul class="tab-pane scroll-box t-list" id="gang" role="tabpanel">
+          	<ul class="tab-pane scroll-box t-list" id="gang1" role="tabpanel">
 <%
 	for (int i = 0 ; i < terminalList.size() ; i++) { // 강원
 		TerminalInfo ti = terminalList.get(i);
 		if (ti.getBt_area().startsWith("강원")) { %>
-			<li><a href="<%=ti.getBt_idx() %>" onclick=""><%=ti.getBt_name() %></a></li>
+			<li><a href="<%=ti.getBt_idx() %>"><%=ti.getBt_name() %></a></li>
 <%
 		}
 	}
 %>
           	</ul>
-          	<ul class="tab-pane scroll-box t-list" id="gyong" role="tabpanel">
-          	
+          	<ul class="tab-pane scroll-box t-list" id="gyong1" role="tabpanel">
+<%
+	for (int i = 0 ; i < terminalList.size() ; i++) { // 경상
+		TerminalInfo ti = terminalList.get(i);
+		if (ti.getBt_area().startsWith("경상")) { %>
+			<li><a href="<%=ti.getBt_idx() %>"><%=ti.getBt_name() %></a></li>
+<%
+		}
+	}
+%>
           	</ul>
-          
 		</div>
 <%
 	}
 %>
-
-			
-
-        </div> 
+		</div> 
+	</div>
+	    <div class="row" id="arrival" style="display:none;">
+      <div class="col-2">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#all2" type="button" role="tab">전체</button>
+          <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#seoulg2" type="button" role="tab">서울/경기</button>
+          <button class="nav-link" id="v-pills-messages-tab" data-toggle="pill" data-target="#gang2" type="button" role="tab">강원</button>
+          <button class="nav-link" id="v-pills-settings-tab" data-toggle="pill" data-target="#gyong2" type="button" role="tab">경상</button>
+        </div>
       </div>
+      <div class="col-10">
+        <div class="tab-content" id="v-pills-tabContent">
+			<ul class="tab-pane scroll-box t-list active" id="all2" role="tabpanel" aria-expanded="true">
+			</ul>
+			<ul class="tab-pane scroll-box t-list" id="seoulg2" role="tabpanel">
+			</ul>
+          	<ul class="tab-pane scroll-box t-list" id="gang2" role="tabpanel">
+          	</ul>
+          	<ul class="tab-pane scroll-box t-list" id="gyong2" role="tabpanel">
+          	</ul>
+		</div>
+		</div> 
+	</div>
 </div>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
   <button type="button" class="btn btn-primary">확인</button>
 </div>
-<script>
-	const pickSpot = function(btname) {
-		$("#sPointPop").val(btname);
-		$("#sPointPop").removeClass("active");
-		$("#ePointPop").addClass("active");
-	}
-</script>
+
 <%@ include file="../_inc/foot.jsp" %>
+<script>
+	$('#go li a').each(function () {
+		$(this).on('click', function (event) {
+			event.preventDefault();
+			$("#sPointPop").val($(this).text());
+	  		$("#sPointPop").removeClass("active");
+	  		$("#ePointPop").addClass("active");
+	  		
+	  		var btsidx = parseInt($(this).attr('href'), 10); // a 태그의 href 속성으로 터미널 인덱스 가져오기
+
+			$.ajax({
+			  url: "lineSch",
+			  type: "GET",
+			  data: { btsidx : btsidx },
+			  dataType: "json",
+			  contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
+			  success: function (data) {
+				$("#arrival").show();
+			    let modalContent = '';
+			    
+			    data.forEach(function (terminal) {
+			    	$("#go").hide();
+			    	modalContent += '<li><span id="'+ terminal.bt_eidx +'">' + terminal.ename + '</span></li>';
+			    	console.log(modalContent);
+			    	$('#all2').html(modalContent);
+			    	
+			    	if (terminal.earea == '서울' || terminal.earea == '경기도') {
+			    		console.log((terminal.earea == '서울' || terminal.earea == '경기도').length);
+			    		$('#seoulg2').html(modalContent);
+			    	}
+			    	
+			    	if (terminal.earea == '강원도') {
+			    		$('#gang2').html(modalContent);
+			    	}
+			    	
+			    	if (terminal.earea == '경상남도' || terminal.earea == '경상북도') {
+			    		$('#gyong2').html(modalContent);
+			    	}
+			    });
+				
+			  },
+			  error: function (xhr, status, error) {
+			    console.error(error);
+			  }
+			});
+		});
+	});
+	
+	$('#arrival li span').on('click', function () {
+		alert(1);
+		$("#ePointPop").val($(this).val());
+		$(this).hide();
+	});
+	
+</script>

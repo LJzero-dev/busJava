@@ -32,13 +32,16 @@ public class HTicketingDao {
 		String sql = "SELECT bl.bt_sidx, bl.bt_eidx, bt.bt_name, bt.bt_area" + 
 				" FROM t_bus_line bl" + 
 				" JOIN t_bus_terminal bt ON bl.bt_eidx = bt.bt_idx WHERE bt_sidx = ? and bl_status = 'y'";
-		List<LineInfo> lineList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
-			LineInfo li = new LineInfo(rs.getInt("bl_idx"), rs.getInt("bt_sidx"), rs.getString("sname"), rs.getString("sarea"), rs.getInt("bt_eidx"),
-					rs.getString("ename"), rs.getString("earea"), rs.getInt("bl_adult"), rs.getString("bl_type"), rs.getString("bl_status"));
-			return li;
-		}, btsidx);
-		
-		return lineList;
+		RowMapper<LineInfo> rowMapper = (rs, rowNum) -> {
+            LineInfo li = new LineInfo();
+            li.setBt_sidx(rs.getInt("bt_sidx"));
+            li.setBt_eidx(rs.getInt("bt_eidx"));
+            li.setEname(rs.getString("bt_name"));
+            li.setEarea(rs.getString("bt_area"));
+            return li;
+        };
+
+        return jdbc.query(sql, rowMapper, btsidx);
 	}
 
 }
