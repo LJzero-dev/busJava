@@ -1,6 +1,8 @@
 package ctrl;
 
 import java.io.*;
+import java.net.URLEncoder;
+
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.*;
@@ -16,7 +18,7 @@ public class TerminalCtrl {
 		this.terminalSvc = terminalSvc;
 	}
 	@GetMapping("/terminal")
-	public String terminal(HttpServletRequest request, HttpServletResponse response)  {
+	public String terminal(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		List<TerminalInfo> terminalList = terminalSvc.getTerminalList();
 		
@@ -70,13 +72,36 @@ public class TerminalCtrl {
 	}
 	
 	@GetMapping("/terminalLine")
-	public String terminalLine(HttpServletRequest request, HttpServletResponse response)  {
-		/*
+	public String terminalLine(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		int bt_idx = Integer.parseInt(request.getParameter("bt_idx"));
 		String bt_name = request.getParameter("bt_name");
-		List<TerminalLineInfo> terminalLine = terminalSvc.getTerminalLine(bt_name);
+		List<BusLineInfo> busLineList = terminalSvc.getBusLine(bt_idx);
 		
-		request.setAttribute("terminalLine", terminalLine);
-		*/
+		request.setAttribute("busLineList", busLineList);
+		
 		return "/line/h_terminal_line";
+	}
+
+	@GetMapping("/LineDel")
+	public String LineDel(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		int bl_idx = Integer.parseInt(request.getParameter("lineNum"));
+		int bt_idx = Integer.parseInt(request.getParameter("bt_idx"));
+		String bt_name = request.getParameter("bt_name");
+		
+		int result = terminalSvc.LineDel(bl_idx);
+		
+		if (result != 1) {
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('노선 삭제에 실패했습니다.');");
+			out.println("history.back();");
+			out.println("</script>");
+			out.close();
+		}
+		
+		return "redirect:/terminalLine?bt_idx=" + bt_idx + "&bt_name=" + URLEncoder.encode(bt_name, "UTF-8");
 	}
 }

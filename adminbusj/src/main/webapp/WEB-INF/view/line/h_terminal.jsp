@@ -41,7 +41,7 @@ function openModal(area) {
 for (TerminalInfo terminal : terminalList) {
 	if (terminal.getBt_area().equals("서울")) {
 %>
-					<li><a href="javascript:void(0);"><%=terminal.getBt_name() %></a></li>
+<li><a href="terminalLine?bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
 <%
 	}
 }
@@ -58,7 +58,7 @@ for (TerminalInfo terminal : terminalList) {
 for (TerminalInfo terminal : terminalList) {
 	if (terminal.getBt_area().equals("경기도")) {
 %>
-					<li><a href="javascript:void(0);"><%=terminal.getBt_name() %></a></li>
+<li><a href="terminalLine?bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
 <%
 	}
 }
@@ -75,7 +75,7 @@ for (TerminalInfo terminal : terminalList) {
 for (TerminalInfo terminal : terminalList) {
 	if (terminal.getBt_area().equals("강원도")) {
 %>
-					<li><a href="javascript:void(0);"><%=terminal.getBt_name() %></a></li>
+<li><a href="terminalLine?bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
 <%
 	}
 }
@@ -92,7 +92,7 @@ for (TerminalInfo terminal : terminalList) {
 for (TerminalInfo terminal : terminalList) {
 	if (terminal.getBt_area().equals("경상북도")) {
 %>
-					<li><a href="javascript:void(0);"><%=terminal.getBt_name() %></a></li>
+<li><a href="terminalLine?bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
 <%
 	}
 }
@@ -109,7 +109,7 @@ for (TerminalInfo terminal : terminalList) {
 for (TerminalInfo terminal : terminalList) {
 	if (terminal.getBt_area().equals("경상남도")) {
 %>
-					<li><a href="javascript:void(0);"><%=terminal.getBt_name() %></a></li>
+<li><a href="terminalLine?bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
 <%
 	}
 }

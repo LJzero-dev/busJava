@@ -47,30 +47,36 @@ public class TerminalDao {
 		return result;
 	}
 
-	public List<TerminalLineInfo> getTerminalLine(String bt_name) {
-		String sql = "select * from t_bus_schedule where bt_name = '" + bt_name + "'";
-		List<TerminalLineInfo> terminalLine = jdbc.query(sql, 
+	public List<BusLineInfo> getBusLine(int bt_idx) {
+		String sql = "select a.*, b.bt_name from t_bus_line a, t_bus_terminal b where a.bt_eidx = b.bt_idx and bt_sidx = " + bt_idx + 
+				" and bl_type = '°í¼Ó' and bl_status = 'y'";
+		List<BusLineInfo> busLineList = jdbc.query(sql, 
 				(ResultSet rs, int rowNum) -> {
-					TerminalLineInfo tli = new TerminalLineInfo();
-					tli.setBs_idx(rs.getInt("bs_idx"));
-					tli.setBs_stime(rs.getString("bs_stime"));
-					tli.setBs_etime(rs.getString("bs_etime"));
-					tli.setBs_date(rs.getString("bs_date"));
-					
-					tli.setBusInfo(getBusInfoList(bt_name));
-					tli.setBusLineInfo(getBusLineInfoList(bt_name));
-					return tli;
+					BusLineInfo bl = new BusLineInfo(rs.getInt("bl_idx"), rs.getInt("bt_sidx"), rs.getInt("bt_eidx"), 
+							rs.getInt("bl_adult"), rs.getString("bl_type"), rs.getString("bl_status"), rs.getString("bt_name"), 
+							getBusScheduleInfo(rs.getInt("bl_idx")));
+					return bl;
 				});
-		return terminalLine;
+		return busLineList;
+		
 	}
 
-	private List<BusLineInfo> getBusLineInfoList(String bt_name) {
-		// TODO Auto-generated method stub
-		return null;
+	private List<BusScheduleInfo> getBusScheduleInfo(int bl_idx) {
+		String sql = "select a.bs_idx, c.bc_idx, bs_stime, bs_etime, a.bs_date, bi_level, bc_name "
+				+ "from t_bus_schedule a, t_bus_info b, t_bus_company c "
+				+ "where a.bi_idx = b.bi_idx and b.bc_idx = c.bc_idx and a.bl_idx = " + bl_idx;
+		List<BusScheduleInfo> busScheduleInfo = jdbc.query(sql, 
+				(ResultSet rs, int rowNum) -> {
+					BusScheduleInfo bs = new BusScheduleInfo(rs.getInt("bs_idx"), rs.getInt("bc_idx"), rs.getString("bs_stime"), 
+							rs.getString("bs_etime"), rs.getString("bs_date"), rs.getString("bi_level"), rs.getString("bc_name"));
+					return bs;
+				});
+		return busScheduleInfo;
 	}
 
-	private List<BusInfo> getBusInfoList(String bt_name) {
-		// TODO Auto-generated method stub
-		return null;
+	public int LineDel(int bl_idx) {
+		String sql = "update t_bus_line set bl_status = 'n' where bl_idx = " + bl_idx;
+		int result = jdbc.update(sql);
+		return result;
 	}
 }

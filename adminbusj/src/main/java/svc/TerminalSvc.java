@@ -26,8 +26,13 @@ public class TerminalSvc {
 		return result;
 	}
 
-	public List<TerminalLineInfo> getTerminalLine(String bt_name) {
-		List<TerminalLineInfo> terminalLine = terminalDao.getTerminalLine(bt_name);
-		return terminalLine;
+	public List<BusLineInfo> getBusLine(int bt_idx) {
+		List<BusLineInfo> busLineList = terminalDao.getBusLine(bt_idx);
+		return busLineList;
+	}
+
+	public int LineDel(int bl_idx) {
+		int result = terminalDao.LineDel(bl_idx);
+		return result;
 	}
 }
