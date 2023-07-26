@@ -17,7 +17,7 @@ public class MemberDao {
 	}
 	
 	public MemberInfo getLoginInfo(String mi_id, String mi_pw) {
-		String sql = "select * from t_member_info where mi_id = ? and mi_pw = ? and mi_status != '탈퇴'";
+		String sql = "select * from t_member_info where mi_id = ? and mi_pw = ? and mi_status != '탈퇴' ";
 
 		List<MemberInfo> results = jdbc.query(sql, new RowMapper<MemberInfo>() {
 			public MemberInfo mapRow(ResultSet rs, int rowNum) throws SQLException {

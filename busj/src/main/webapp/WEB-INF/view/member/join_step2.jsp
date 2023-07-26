@@ -187,20 +187,34 @@ function checkPlength(){
 }
 
 /* 전체 점검 */
-document.getElementById('signIn').addEventListener('click', function(event) {
+window.addEventListener('DOMContentLoaded', (event) => {
+	document.getElementById('signIn').addEventListener('click', function(event) {
+
+	    var idChk = document.getElementById('idChk').value;
+	    var pwDup = document.getElementById('pwDup').value;
+	    var mailChk = document.getElementById('mailChk').value;
+	    var phoneChk = document.getElementById('phoneChk').value;
+	    
+	    
+	 	if (!(idChk=== 'y' && pwDup === 'y' && mailChk === 'y' && phoneChk === 'y')) {
+	        alert('중복검사를 확인하여주세요.');
+	        event.preventDefault(); // 이벤트의 기본 동작(폼 제출)을 막음
+	    }
+	}); 
+}); 
+
+/* function joinIn() {
     var idChk = document.getElementById('idChk').value;
     var pwDup = document.getElementById('pwDup').value;
     var mailChk = document.getElementById('mailChk').value;
     var phoneChk = document.getElementById('phoneChk').value;
-    
-/*     var e3 = document.getElementById('e3').value; */
-    /* alert(e3); */
-    
- 	if (!(idChk=== 'y' && pwDup === 'y' && mailChk === 'y' && phoneChk === 'y')) {
+
+    if (!(idChk=== 'y' && pwDup === 'y' && mailChk === 'y' && phoneChk === 'y')) {
         alert('중복검사를 확인하여주세요.');
-        event.preventDefault(); // 이벤트의 기본 동작(폼 제출)을 막음
+        return false; // 이벤트의 기본 동작(폼 제출)을 막음
     }
-});
+    return 
+} */
 
 </script>
 
@@ -346,6 +360,7 @@ document.getElementById('signIn').addEventListener('click', function(event) {
 		</tr>
 		</tbody>
 	</table> 
+<!-- 	<button type="button" class="btn btn-primary btn-block" onclick="joinIn();">회원가입</button> -->
 	<button type="submit" class="btn btn-primary btn-block" id="signIn" name="signIn">회원가입</button>
 	</div>
 </div>
