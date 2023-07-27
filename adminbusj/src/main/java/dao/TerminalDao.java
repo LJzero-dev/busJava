@@ -49,7 +49,7 @@ public class TerminalDao {
 
 	public List<BusLineInfo> getBusLine(int bt_idx) {
 		String sql = "select a.*, b.bt_name from t_bus_line a, t_bus_terminal b where a.bt_eidx = b.bt_idx and bt_sidx = " + bt_idx + 
-				" and bl_type = '∞Ìº”' and bl_status = 'y'";
+				" and bl_type = 'Í≥†ÏÜç' and bl_status = 'y'";
 		List<BusLineInfo> busLineList = jdbc.query(sql, 
 				(ResultSet rs, int rowNum) -> {
 					BusLineInfo bl = new BusLineInfo(rs.getInt("bl_idx"), rs.getInt("bt_sidx"), rs.getInt("bt_eidx"), 
@@ -78,5 +78,21 @@ public class TerminalDao {
 		String sql = "update t_bus_line set bl_status = 'n' where bl_idx = " + bl_idx;
 		int result = jdbc.update(sql);
 		return result;
+	}
+
+	public List<TerminalInfo> getTerminalListPop(int bt_idx) {
+		String sql = "SELECT DISTINCT t1.* FROM t_bus_terminal t1 LEFT JOIN t_bus_line t2 ON t1.bt_idx = t2.bt_eidx " + 
+	"WHERE bt_status != 'c' AND bt_idx != " + bt_idx + " AND t2.bt_eidx IS NULL";
+		List<TerminalInfo> terminalList = jdbc.query(sql, 
+				(ResultSet rs, int rowNum) -> {
+					TerminalInfo ti = new TerminalInfo();
+					ti.setBt_idx(rs.getInt("bt_idx"));
+					ti.setBt_name(rs.getString("bt_name"));
+					ti.setBt_area(rs.getString("bt_area"));
+					ti.setBt_type(rs.getString("bt_type"));
+					ti.setBt_status(rs.getString("bt_status"));
+					return ti;
+				});
+		return terminalList;
 	}
 }
