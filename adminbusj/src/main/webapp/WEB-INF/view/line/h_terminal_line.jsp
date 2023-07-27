@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="vo.*" %>
 <%@ page import="java.util.*" %>
+<%@ page import="java.net.*" %>
 <%@ include file="../_inc/head.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
@@ -15,6 +16,14 @@ function delLine(lineNum) {
 		location.href="LineDel?bt_idx=" + bt_idx + "&bt_name=" + bt_name + "&lineNum=" + lineNum;
 	}
 }
+
+function openModal(area) {
+	var bt_name = "<%=request.getParameter("bt_name") %>";
+	$('#AddLine .modal-content').load("/adminbusj/popUpLineAdd?bt_idx=" + 
+	<%=request.getParameter("bt_idx")%> + "&bt_name=" + bt_name);
+	$('#AddLine').modal();
+}
+
 </script>
 <body>
 <section class="probootstrap_section">
@@ -28,7 +37,10 @@ function delLine(lineNum) {
 <div class="page-breadcrumb">
 	<div class="row">
 		<div class="col-7 align-self-center">
-			<h3 class="page-title text-truncate text-dark font-weight-medium mb-1"><%=request.getParameter("bt_name") %>고속버스 터미널 시간표 관리</h3>
+			<h3 class="page-title text-truncate text-dark font-weight-medium mb-1"><%=request.getParameter("bt_name") %>고속버스 터미널 시간표 관리
+			<button type="button" class="btn waves-effect waves-light btn-primary ml-5" 
+			onclick="openModal();">노선추가</button>
+			</h3>
 		</div>
 	</div>
 </div> 
@@ -98,6 +110,18 @@ function delLine(lineNum) {
             	</tr>
             </tbody>
 <%	} %>
+			<tbody class="border border-primary">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
         </table>
 		</div>
 		</div>
@@ -106,7 +130,7 @@ function delLine(lineNum) {
 	
 </div>
 </div>
-<div class="modal fade" id="AddTerminalLine" tabindex="-1" role="dialog">
+<div class="modal fade" id="AddLine" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
         </div>

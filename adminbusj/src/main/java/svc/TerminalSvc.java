@@ -35,4 +35,9 @@ public class TerminalSvc {
 		int result = terminalDao.LineDel(bl_idx);
 		return result;
 	}
+
+	public List<TerminalInfo> getTerminalListPop(int bt_idx) {
+		List<TerminalInfo> terminalList = terminalDao.getTerminalListPop(bt_idx);
+		return terminalList;
+	}
 }

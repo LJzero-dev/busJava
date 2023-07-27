@@ -2,7 +2,6 @@ package ctrl;
 
 import java.io.*;
 import java.net.URLEncoder;
-
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.*;
@@ -17,7 +16,7 @@ public class TerminalCtrl {
 	public void setTerminalSvc(TerminalSvc terminalSvc) {
 		this.terminalSvc = terminalSvc;
 	}
-	@GetMapping("/terminal")
+	@GetMapping("/terminal")	// í„°ë¯¸ë„ê´€ë¦¬ ëª©ë¡
 	public String terminal(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		List<TerminalInfo> terminalList = terminalSvc.getTerminalList();
@@ -26,14 +25,13 @@ public class TerminalCtrl {
 		return "/line/h_terminal";
 	}
 	
-	@GetMapping("/terminalAdd")
+	@GetMapping("/terminalAdd")		//	í„°ë¯¸ë„ ì¶”ê°€ íŒì—…ìœ¼ë¡œ ì´ë™
 	public String terminalAdd()  {
 		return "/popup/terminal_add";
 	}
 	
-	@PostMapping("/chkTerminal")
-	@ResponseBody // ÀÚ¹Ù °´Ã¼¸¦ http ÀÀ´äÀ» °´Ã¼·Î º¯È¯ÇÏ¿© Å¬¶óÀÌ¾ğÆ®¿¡ Àü¼Û
-	// ºñµ¿±â Åë½Å(ajax)½Ã ¼­¹ö¿¡¼­ Å¬¶óÀÌ¾ğÆ®·Î ÀÀ´ä ¸Ş¼¼Áö¸¦ º¸³¾ ‹š µ¥ÀÌÅÍ¸¦ ´ã¾Æ¼­ º¸³¾ ÇØ´ç º»¹®À» ÀÇ¹Ì
+	@PostMapping("/chkTerminal")	// í„°ë¯¸ë„ëª… ì¤‘ë³µí™•ì¸
+	@ResponseBody
 	public String chkTerminal(HttpServletRequest request) throws Exception {
 		request.setCharacterEncoding("utf-8");
 		String name = request.getParameter("name").trim();
@@ -42,7 +40,7 @@ public class TerminalCtrl {
 		return result + "";
 	}
 	
-	@PostMapping("/terminalIn")
+	@PostMapping("/terminalIn")		// í„°ë¯¸ë„ insert
 	public String terminalInsert(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
 		String name = request.getParameter("bt_name");
@@ -53,7 +51,7 @@ public class TerminalCtrl {
 		PrintWriter out = response.getWriter();
 		if (chkName.equals("n")) {
 			out.println("<script>");
-			out.println("alert('ÅÍ¹Ì³Î¸íÀ» È®ÀÎÇØÁÖ¼¼¿ä.');");
+			out.println("alert('í„°ë¯¸ë„ ì¶”ê°€ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.');");
 			out.println("history.back();");
 			out.println("</script>");
 			out.close();
@@ -63,7 +61,7 @@ public class TerminalCtrl {
 		
 		if (result != 1) {
 			out.println("<script>");
-			out.println("alert('ÅÍ¹Ì³Î Ãß°¡¿¡ ½ÇÆĞÇß½À´Ï´Ù.');");
+			out.println("alert('ï¿½Í¹Ì³ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.');");
 			out.println("history.back();");
 			out.println("</script>");
 			out.close();
@@ -71,7 +69,7 @@ public class TerminalCtrl {
 		return "redirect:/terminal";
 	}
 	
-	@GetMapping("/terminalLine")
+	@GetMapping("/terminalLine")	// í„°ë¯¸ë„ ì‹œê°„í‘œ ëª©ë¡
 	public String terminalLine(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
 		int bt_idx = Integer.parseInt(request.getParameter("bt_idx"));
@@ -83,7 +81,7 @@ public class TerminalCtrl {
 		return "/line/h_terminal_line";
 	}
 
-	@GetMapping("/LineDel")
+	@GetMapping("/LineDel")		// ë…¸ì„  ì‚­ì œ
 	public String LineDel(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
 		int bl_idx = Integer.parseInt(request.getParameter("lineNum"));
@@ -96,12 +94,25 @@ public class TerminalCtrl {
 			response.setContentType("text/html; charset=utf-8");
 			PrintWriter out = response.getWriter();
 			out.println("<script>");
-			out.println("alert('³ë¼± »èÁ¦¿¡ ½ÇÆĞÇß½À´Ï´Ù.');");
+			out.println("alert('ë…¸ì„  ì‚­ì œì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.');");
 			out.println("history.back();");
 			out.println("</script>");
 			out.close();
 		}
 		
 		return "redirect:/terminalLine?bt_idx=" + bt_idx + "&bt_name=" + URLEncoder.encode(bt_name, "UTF-8");
+	}
+	
+	@GetMapping("/popUpLineAdd")		// ë…¸ì„  ì¶”ê°€
+	public String popUpLineAdd(HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		int bt_idx = Integer.parseInt(request.getParameter("bt_idx")); 
+		String bt_name = request.getParameter("bt_name");
+		List<TerminalInfo> terminalList = terminalSvc.getTerminalListPop(bt_idx);
+		
+		request.setAttribute("bt_idx", bt_idx);
+		request.setAttribute("bt_name", bt_name);
+		request.setAttribute("terminalList", terminalList);
+		return "/popup/terminal_line_add";
 	}
 }

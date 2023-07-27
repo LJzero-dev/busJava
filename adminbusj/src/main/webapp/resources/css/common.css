@@ -12,3 +12,5 @@ table th.bg-gray, table td.bg-gray {
 .custom-list li a {width: 100%; display: block; padding: 10px 0;}
 
 .valid-feedback { display: block; font-size: 90%; }
+
+.select-size { width: 45%; display: inline; }
