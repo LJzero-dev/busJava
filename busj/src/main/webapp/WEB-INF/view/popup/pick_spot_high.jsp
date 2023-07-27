@@ -47,15 +47,15 @@ List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("term
 	    <button type="button" class="btn-success btn-sm">동서울</button>
     </div>
 <hr />
-    <form name="frmPoint">
+    <form name="frmPoint" action="selectHSpot" method="post">
       <div class="form-row">
         <div class="col-md-6 mb-3">
           <label for="sPointPop">출발지</label>
-          <input type="text" class="form-control form-control-lg focus-none active" id="sPointPop" required readonly>
+          <input type="text" class="form-control form-control-lg focus-none active" id="sPointPop" name="sPointPop" readonly>
         </div>
         <div class="col-md-6 mb-3">
           <label for="ePointPop">도착지</label>
-          <input type="text" class="form-control form-control-lg focus-none" id="ePointPop" required readonly>
+          <input type="text" class="form-control form-control-lg focus-none" id="ePointPop" name="ePointPop" readonly>
         </div>
       </div>
     </form>
@@ -146,62 +146,74 @@ List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("term
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-  <button type="button" class="btn btn-primary">확인</button>
+  <button type="button" id="btnSubmit" class="btn btn-primary" data-dismiss="modal">확인</button>
 </div>
 
 <%@ include file="../_inc/foot.jsp" %>
-<script>
+	<script>
+	// 각 탭에 데이터를 추가하는 함수
+	function addTerminalToTab(data, targetTabId) {
+	  let tabContent = '';
+	  if (data.length > 0) {
+	    data.forEach(function (terminal) {
+	      tabContent += '<li><span onclick="getESpotVal(this);">' + terminal.ename + '</span></li>';
+	    });
+	  } else {
+	    tabContent = '<li>터미널 없음</li>';
+	  }
+	  $(targetTabId).html(tabContent);
+	}
+	
 	$('#go li a').each(function () {
-		$(this).on('click', function (event) {
-			event.preventDefault();
-			$("#sPointPop").val($(this).text());
-	  		$("#sPointPop").removeClass("active");
-	  		$("#ePointPop").addClass("active");
-	  		
-	  		var btsidx = parseInt($(this).attr('href'), 10); // a 태그의 href 속성으로 터미널 인덱스 가져오기
+	  $(this).on('click', function (event) {
+		  
+	    event.preventDefault();
+	    $("#sPointPop").val($(this).text());
+	    $("#sPointPop").removeClass("active");
+	    $("#ePointPop").addClass("active");
+	    
+	    
+	
+	    var btsidx = parseInt($(this).attr('href'), 10); // a 태그의 href 속성으로 터미널 인덱스 가져오기
+	
+	    $.ajax({
+	      url: "lineSch",
+	      type: "GET",
+	      data: { btsidx: btsidx },
+	      dataType: "json",
+	      contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	      success: function (data) {
+			$("#go").hide();
+	        $("#arrival").show();
+	
+	        // 필요한 데이터를 필터링하여 함수 호출
+	        addTerminalToTab(data, '#all2');
+	        addTerminalToTab(data.filter(t => t.earea === '서울' || t.earea === '경기도'), '#seoulg2');
+	        addTerminalToTab(data.filter(t => t.earea === '강원도'), '#gang2');
+	        addTerminalToTab(data.filter(t => t.earea === '경상남도' || t.earea === '경상북도'), '#gyong2');
+	      },
+	      error: function (xhr, status, error) {
+	        console.error(error);
+	      }
+	    });
+	  });
+	});
+	
+	function getESpotVal(span)  {
+		$("#ePointPop").val(span.innerHTML);
+		$("#ePointPop").removeClass("active");
+		$("#arrival").hide();
+	}
+	
+	$("#btnSubmit").on('click', function() {
+		if (($("#sPointPop").val() == "") || ($("#ePointPop").val() == "")) {
+			alert("출발지와 도착지를 선택해주세요.");
+			return;
+		}
+		$("#sPoint").val(($("#sPointPop").val()));
+		$("#ePoint").val(($("#ePointPop").val()));
+		$('#ViewModal').modal('hide');
+		
+	});
 
-			$.ajax({
-			  url: "lineSch",
-			  type: "GET",
-			  data: { btsidx : btsidx },
-			  dataType: "json",
-			  contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
-			  success: function (data) {
-				$("#arrival").show();
-			    let modalContent = '';
-			    
-			    data.forEach(function (terminal) {
-			    	$("#go").hide();
-			    	modalContent += '<li><span id="'+ terminal.bt_eidx +'">' + terminal.ename + '</span></li>';
-			    	console.log(modalContent);
-			    	$('#all2').html(modalContent);
-			    	
-			    	if (terminal.earea == '서울' || terminal.earea == '경기도') {
-			    		console.log((terminal.earea == '서울' || terminal.earea == '경기도').length);
-			    		$('#seoulg2').html(modalContent);
-			    	}
-			    	
-			    	if (terminal.earea == '강원도') {
-			    		$('#gang2').html(modalContent);
-			    	}
-			    	
-			    	if (terminal.earea == '경상남도' || terminal.earea == '경상북도') {
-			    		$('#gyong2').html(modalContent);
-			    	}
-			    });
-				
-			  },
-			  error: function (xhr, status, error) {
-			    console.error(error);
-			  }
-			});
-		});
-	});
-	
-	$('#arrival li span').on('click', function () {
-		alert(1);
-		$("#ePointPop").val($(this).val());
-		$(this).hide();
-	});
-	
 </script>

@@ -135,7 +135,7 @@ button.btn-sm { padding: 0.25rem 0.5rem; font-size: 0.875rem;}
     font-size: 0.8rem;
 }
 
-/* ¹ö½º ±âº» */
+/* ï¿½ï¿½ï¿½ï¿½ ï¿½âº» */
 .seat-bg {
     background: url(/assets/images/bg_bus.png) 50% 33px no-repeat; 
     width: 382px;
@@ -179,7 +179,7 @@ button.btn-sm { padding: 0.25rem 0.5rem; font-size: 0.875rem;}
     background-position: 0 -144px;
 }
 
-/* 3´Ü°è ¹ö½º (°í¼Ó)*/
+/* 3ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½)*/
 .seat28 .seat-list {
     width: 235px;
     margin: 0 auto;
@@ -244,8 +244,9 @@ button.w-120p {width: 120px;}
     border-color : #ccc;
 }
 
-/* ÆË¾÷ ¸®½ºÆ® ½ºÅ¸ÀÏ */
+/* ï¿½Ë¾ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½Å¸ï¿½ï¿½ */
 .t-list {display: inline-block;}
 .t-list li { display: inline-block; width: 24%; flex-wrap: wrap;}
-.t-list li a{ width: 100%; padding: 10px 0; text-align: center; transition: none; font-size: 16px;}
-.t-list li a:hover {background: #dfdfdf; transition: none; border-radius: 10px;}
+.t-list li a, .t-list li span{ width: 100%; padding: 10px 0; text-align: center; transition: none; font-size: 16px;}
+.t-list li a:hover, .t-list li span:hover {background: #dfdfdf; color:#007e2f; transition: none; border-radius: 10px;}
+.t-list li span {display : block;}

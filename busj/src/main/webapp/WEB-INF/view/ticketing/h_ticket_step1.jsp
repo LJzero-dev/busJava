@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../_inc/head.jsp" %>
+<%
+request.setCharacterEncoding("utf-8");
+%>
 
 <section class="probootstrap_section">
   <div class="container">
@@ -71,7 +74,7 @@
 
     </div>
     <div class="col-md-8 probootstrap-animate fadeInUp probootstrap-animated m-auto">
-      <form name="frmSchLine" action="" method="POST" class="probootstrap-form">
+      <form name="frmLineInfo" action="hTicketingStep02" method="POST" class="probootstrap-form">
         <input type="hidden" name="mode" id="mode" value="p" />
         <input type="hidden" name="sDate1-1" id="sDate1-1" value="" />
         <input type="hidden" name="sDate2-1" id="sDate2-1" value="" />
@@ -215,7 +218,8 @@ $(document).ready(function() {
 		}).datepicker("setDate",'now')
 		.on('changeDate', function(e) {
 		$("#sDate1-1").val($(this).val());
-		console.log($("#sDate1-1").val());
+		$("#sDate2-2").val($(this).val());
+
 	});
 
 	$("#sDate2-2").datepicker({
@@ -228,6 +232,8 @@ $(document).ready(function() {
 		weekStart: 1,
 	}).datepicker("setDate",'now')
 		.on('changeDate', function(e) {
+		$("#sDate1-1").val($(this).val());
+		$("#sDate1-2").val($(this).val());
 		$("#sDate2-1").val($(this).val());
 		$("#eDate1-2").datepicker("setStartDate", new Date($( "#sDate2-2" ).datepicker("getDate")));
      	// 오는날 필드에서 가는날 필드의 이전날짜 선택을 막음
@@ -257,9 +263,11 @@ $(document).ready(function() {
 			}
 		}
 		
-		if (!($("#sPoint") == "" && $("#ePoint") == "")) {
+		if ($("#sPoint") == "" && $("#ePoint") == "") {
 			alert("출발지와 도착지를 선택해주세요.");
 		}
+		
+		document.frmLineInfo.submit();
 	});
 });
 </script>

@@ -73,6 +73,18 @@
 		    <version>5.0.2.RELEASE</version>
 		</dependency>
       <!--메일 전송를 위한 추가 부분 종료-->
+      <!-- jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<!-- jackson-core -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.9.2</version>
+		</dependency>
   </dependencies>
   <build>
     <finalName>busj</finalName>

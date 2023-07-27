@@ -24,6 +24,7 @@ public class HTicketingCtrl {
 		return "ticketing/h_ticket_step1";
 	}
 	
+	
 	@GetMapping("/pickSpotHigh")
 	public String pickSpotHigh(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		List<TerminalInfo> terminalList = hTicketingSvc.getTerminalList();
@@ -35,11 +36,15 @@ public class HTicketingCtrl {
 	@GetMapping("/lineSch")
 	@ResponseBody
 	public List<LineInfo> lineSch(@RequestParam int btsidx) {
-		System.out.println("컨트롤 : " + btsidx);
-        // btidx에 해당하는 터미널 목록을 조회하는 비즈니스 로직을 수행하여 List<LineInfo>를 반환하는 예시
+        // btidx에 해당하는 터미널 목록을 조회한 결과로 List<LineInfo>를 반환
         List<LineInfo> lineList = hTicketingSvc.getAvailableLineList(btsidx);
         return lineList;
     }
+	
+	@PostMapping("/hTicketingStep02")
+	public String hTicketingStep02() {
+		return "ticketing/h_ticket_step2";
+	}
 	
 	
 }
