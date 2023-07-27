@@ -1,31 +1,42 @@
 package vo;
 
+import java.util.List;
+
 public class BookInfo {
-	private int ri_idx, ri_acnt, ri_scnt, ri_ccnt, bt_sidx, bt_eidx, si_seat;
-	private String ri_status, ri_sday, bs_stime, bl_type;
+	private int ri_acnt, ri_scnt, ri_ccnt, bt_sidx, bt_eidx;
+	private String ri_status, ri_sday, bs_stime, bl_type, ri_idx, si_seat;
+	private List<BusSeatList> busSeatList;
 
-	// 디폴트 생성자 : 위에 있는 getter 와 setter 를 전부 다 사용하면 괜찮지만 그 중 몇가지만 가져온다면 생성자는 필수요소 
-
-	public BookInfo(int ri_idx, int ri_acnt, int ri_scnt, int ri_ccnt, int bt_sidx, int bt_eidx, int si_seat,
-			String ri_status, String ri_sday, String bs_stime, String bl_type) {
+	public BookInfo(int ri_acnt, int ri_scnt, int ri_ccnt, int bt_sidx, int bt_eidx, String ri_status, String ri_sday,
+			String bs_stime, String bl_type, String ri_idx, List<BusSeatList> busSeatList) {
 		super();
-		this.ri_idx = ri_idx;
 		this.ri_acnt = ri_acnt;
 		this.ri_scnt = ri_scnt;
 		this.ri_ccnt = ri_ccnt;
 		this.bt_sidx = bt_sidx;
 		this.bt_eidx = bt_eidx;
-		this.si_seat = si_seat;
 		this.ri_status = ri_status;
 		this.ri_sday = ri_sday;
 		this.bs_stime = bs_stime;
 		this.bl_type = bl_type;
+		this.ri_idx = ri_idx;
+		this.busSeatList = busSeatList;
+	}
+
+	// 디폴트 생성자 : 위에 있는 getter 와 setter 를 전부 다 사용하면 괜찮지만 그 중 몇가지만 가져온다면 생성자는 필수요소 
+	public List<BusSeatList> getBusSeatList() {
+		return busSeatList;
 	}
 	
-	public int getRi_idx() {
+
+	public void setBusSeatList(List<BusSeatList> busSeatList) {
+		this.busSeatList = busSeatList;
+	}
+	
+	public String getRi_idx() {
 		return ri_idx;
 	}
-	public void setRi_idx(int ri_idx) {
+	public void setRi_idx(String ri_idx) {
 		this.ri_idx = ri_idx;
 	}
 	public int getRi_acnt() {
@@ -58,12 +69,6 @@ public class BookInfo {
 	public void setBt_eidx(int bt_eidx) {
 		this.bt_eidx = bt_eidx;
 	}
-	public int getSi_seat() {
-		return si_seat;
-	}
-	public void setSi_seat(int si_seat) {
-		this.si_seat = si_seat;
-	}
 	public String getRi_status() {
 		return ri_status;
 	}
@@ -87,6 +92,14 @@ public class BookInfo {
 	}
 	public void setBl_type(String bl_type) {
 		this.bl_type = bl_type;
+	}
+
+	public String getSi_seat() {
+		return si_seat;
+	}
+
+	public void setSi_seat(String si_seat) {
+		this.si_seat = si_seat;
 	}
 	
 }

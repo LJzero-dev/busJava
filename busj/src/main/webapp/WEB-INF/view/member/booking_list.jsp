@@ -6,7 +6,6 @@
 request.setCharacterEncoding("utf-8");
 List<BookInfo> bookList = (List<BookInfo>) request.getAttribute("bookList");
 
-for (BookInfo book : bookList) {
 %>
 <section class="probootstrap_section">
     <div class="container">
@@ -21,14 +20,14 @@ for (BookInfo book : bookList) {
             <table class="table table-hover">
               <colgroup>
                   <col width="*">    
-                  <col width="8%">
+                  <col width="10%">
                   <col width="10%">
                   <col width="10%">
                   <col width="15%">
                   <col width="10%">
-                  <col width="20%">
-                  <col width="5%">
+                  <col width="27%">
                   <col width="8%">
+                  <col width="10%">
               </colgroup>
               <thead>
               <tr>
@@ -44,85 +43,39 @@ for (BookInfo book : bookList) {
               </tr>
               </thead>
               <tbody class="text-center">
-              <tr>
-                  <td><%=book.getRi_idx() %></td>
-                  <td>시외</td>
-                  <td>동서울터미널</td>
-                  <td>가천대</td>
-                  <td>2023.07.10</td>
-                  <td>06:20</td>
-                  <td>성인 1명 청소년 1명 아동 1명</td>
-                  <td>15</td>
-                  <td>예매</td>
+<% for (BookInfo bl : bookList) {  
+// 최근 3개월 조건 필요
+// 좌석 번호 여러개 나와야함
+%>
+            <tr onclick="window.location='';" style="cursor:pointer;"> <!-- 이동할 주소입력(ri_idx값 들고 가야함) -->
+                  <td><%=bl.getRi_idx() %></a></td>
+                  <td><%=bl.getBl_type() %></td>
+                  <td><%=bl.getBt_sidx() %></td>
+                  <td><%=bl.getBt_eidx() %></td>
+                  <td><%=bl.getRi_sday() %></td>
+                  <td><%=bl.getBs_stime() %></td>
+                  <td>성인 <%=bl.getRi_acnt() %>명&nbsp;청소년 <%=bl.getRi_scnt() %>명&nbsp;아동 <%=bl.getRi_ccnt() %>명&nbsp;</td>
+				<td>
+<% 
+StringBuilder seats = new StringBuilder();
+if (bl.getBusSeatList().size() > 0) {
+  for (BusSeatList bs : bl.getBusSeatList()) {    
+    if (seats.length() != 0) {
+      seats.append(",");
+    }
+    seats.append(bs.getSi_seat());
+  } 
+}    
+%>       
+<%=seats.toString() %>         
+				</td>
+                  <td><%=bl.getRi_status() %></td>
               </tr>
-              <tr>
-                  <td>230710AA1002</td>
-                  <td>시외</td>
-                  <td>동서울터미널</td>
-                  <td>가천대</td>
-                  <td>2023.07.10</td>
-                  <td>06:20</td>
-                  <td>성인 1명 청소년 1명 아동 1명</td>
-                  <td>15</td>
-                  <td>예매</td>
-              </tr>
-              <tr>
-                  <td>230710AA1002</td>
-                  <td>시외</td>
-                  <td>동서울터미널</td>
-                  <td>가천대</td>
-                  <td>2023.07.10</td>
-                  <td>06:20</td>
-                  <td>성인 1명 청소년 1명 아동 1명</td>
-                  <td>15</td>
-                  <td>예매</td>
-              </tr>
-              <tr>
-                  <td>230710AA1002</td>
-                  <td>시외</td>
-                  <td>동서울터미널</td>
-                  <td>가천대</td>
-                  <td>2023.07.10</td>
-                  <td>06:20</td>
-                  <td>성인 1명 청소년 1명 아동 1명</td>
-                  <td>15</td>
-                  <td>예매</td>
-              </tr>
-              <tr>
-                  <td>230710AA1002</td>
-                  <td>시외</td>
-                  <td>동서울터미널</td>
-                  <td>가천대</td>
-                  <td>2023.07.10</td>
-                  <td>06:20</td>
-                  <td>성인 1명 청소년 1명 아동 1명</td>
-                  <td>15</td>
-                  <td>예매</td>
-              </tr>
-              <tr>
-                  <td>230710AA1002</td>
-                  <td>시외</td>
-                  <td>동서울터미널</td>
-                  <td>가천대</td>
-                  <td>2023.07.10</td>
-                  <td>06:20</td>
-                  <td>성인 1명 청소년 1명 아동 1명</td>
-                  <td>15</td>
-                  <td>예매</td>
-              </tr>
-              <tr>
-                  <td>230710AA1002</td>
-                  <td>시외</td>
-                  <td>동서울터미널</td>
-                  <td>가천대</td>
-                  <td>2023.07.10</td>
-                  <td>06:20</td>
-                  <td>성인 1명 청소년 1명 아동 1명</td>
-                  <td>15</td>
-                  <td>예매</td>
-              </tr>
+<% } %>    
               </tbody>
           </table>
+          
+          
           <nav aria-label="Page navigation example" class="mt-4">
             <ul class="pagination justify-content-center">
               <li class="page-item">
@@ -147,8 +100,6 @@ for (BookInfo book : bookList) {
             <li>신용카드 예매 취소 시 일주일 내로 예매했던 카드로 청구 취소 처리가 되면서 반환됩니다.</li>
         </ul>
     </div>
-   
 
 </section>
-<% } %>
 <%@ include file="../_inc/foot.jsp"%>

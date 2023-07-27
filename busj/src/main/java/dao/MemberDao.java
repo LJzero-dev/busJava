@@ -120,45 +120,43 @@ public class MemberDao {
 	}
 
 	public List<BookInfo> getBookList(String mi_id) {
-		String sql = "select ri.ri_idx, ri.ri_sday, ri.ri_acnt, ri.ri_scnt, ri.ri_ccnt, ri.ri_status, bs.bs_stime, bl.bl_type, bl.bt_sidx, bl.bt_eidx, si.si_seat "
+		String sql = "select ri.ri_idx, ri.ri_sday, ri.ri_acnt, ri.ri_scnt, ri.ri_ccnt, ri.ri_status, bs.bs_stime, bl.bl_type, bl.bt_sidx, bl.bt_eidx "
 				+ " from t_reservation_info ri, t_bus_schedule bs, t_seat_info si , t_bus_line bl "
-				+ " where ri.bs_idx = bs.bs_idx and bs.bl_idx = bl.bl_idx and  bs.bi_idx = si.bi_idx and ri.mi_id = '" + mi_id + "' order by ri.ri_idx desc ";
-		System.out.println(sql);
+				+ " where ri.bs_idx = bs.bs_idx "
+				+ " and bs.bl_idx = bl.bl_idx "
+				+ " and bs.bi_idx = si.bi_idx "
+				+ " and ri.mi_id = '" + mi_id + "' and ri.ri_date >= DATE_SUB(NOW(), INTERVAL 3 MONTH) GROUP BY ri.ri_idx order by ri.ri_idx desc";
+		/* System.out.println(sql); */
 		List<BookInfo> bookList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
 			BookInfo  bi = new BookInfo(
-				rs.getInt("ri_idx"),
-				rs.getInt("ri_acnt"),
-				rs.getInt("ri_scnt"),
-				rs.getInt("ri_ccnt"),
-				rs.getInt("bt_sidx"),
-				rs.getInt("bt_eidx"),
-				rs.getInt("si_seat"),
-				rs.getString("ri_status"),
-				rs.getString("ri_sday"),
-				rs.getString("bs_stime"),
-				rs.getString("bl_type"));
-			
+					rs.getInt("ri_acnt"),
+					rs.getInt("ri_scnt"),
+					rs.getInt("ri_ccnt"),
+					rs.getInt("bt_sidx"),
+					rs.getInt("bt_eidx"),
+					rs.getString("ri_status"),
+					rs.getString("ri_sday"),
+					rs.getString("bs_stime"),
+					rs.getString("bl_type"),
+					rs.getString("ri_idx"),
+					getBusSeatList(rs.getString("ri_idx")));
 			return bi;
 		});
 		return bookList;
 	}
-	/*
-	   public List<MemberAddr> getAddrList(String miid) {
-		      String sql = "select a.mi_name, a.mi_email, a.mi_phone, b.* from t_member_info a, t_member_addr b " + 
-		            " where a.mi_id = b.mi_id and b.mi_id = '" + miid + "' order by ma_basic desc";
-		      //System.out.println(sql);
-		      List<MemberAddr> addrList = jdbc.query(sql, 
-		         (ResultSet rs, int rowNum) -> {
-		            MemberAddr ar = new MemberAddr(
-		            rs.getInt("ma_idx"), rs.getString("mi_id"), rs.getString("mi_name"), rs.getString("mi_email"),  
-		            rs.getString("mi_phone"), rs.getString("ma_name"),  rs.getString("ma_rname"),  rs.getString("ma_phone"), 
-		            rs.getString("ma_zip"), rs.getString("ma_addr1"), rs.getString("ma_addr2"), rs.getString("ma_basic"),
-		            rs.getString("ma_date"));
-		            return ar;
-		         });
+	
+	private List<BusSeatList> getBusSeatList(String ri_idx) {
+		String sql = "select si.si_seat "
+				+ " from t_reservation_detail rd, t_seat_info si "
+				+ " where rd.si_idx = si.si_idx and rd.ri_idx = '" + ri_idx + "'";
+		/* System.out.println(sql); */
+		List<BusSeatList> busSeatList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
+			BusSeatList bs = new BusSeatList(rs.getString("si_seat"));
+			return bs;
+		});
+		return busSeatList;
+	}
+	
 
-		      return addrList;
-		   }
-*/
 }
 
