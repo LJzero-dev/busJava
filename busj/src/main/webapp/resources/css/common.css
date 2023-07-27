@@ -24,6 +24,10 @@ body { font-weight: 500 ;}
 .scroll-box a { color: black ; display: block;}
 .scroll-box a:hover { color: #007e2f;}
 
+.scroll-box2 { height: 300px; overflow-y: auto;}
+.scroll-box2 a { color: black ; display: block;}
+.scroll-box2 a:hover { color: #007e2f;}
+
 input[type=radio] { width: 20px; height: 20px;}
 .form-check.custom { display: inline-flex ; align-items: center;}
 .form-check.custom .form-check-input { position: unset; margin: 0;}
@@ -32,6 +36,7 @@ input[type=radio] { width: 20px; height: 20px;}
 
 .btn-group.custom button{ line-height: 0;}
 .scroll-box { overflow-y: auto; height: 200px; border: 1px solid #e3e3e3; padding: 20px; font-size: 14px;}
+.scroll-box2 { overflow-y: auto; height: 300px; border: 1px solid #e3e3e3; padding: 20px; font-size: 12px;}
 .allchkbox {border: 1px solid #ccc; text-align: center;}
 .allchkbox.active { border: 1px solid #7db249;}
 .allchkbox.active label { color: #7db249;}
@@ -135,7 +140,7 @@ button.btn-sm { padding: 0.25rem 0.5rem; font-size: 0.875rem;}
     font-size: 0.8rem;
 }
 
-/* ���� �⺻ */
+/* 占쏙옙占쏙옙 占썩본 */
 .seat-bg {
     background: url(/assets/images/bg_bus.png) 50% 33px no-repeat; 
     width: 382px;
@@ -179,7 +184,7 @@ button.btn-sm { padding: 0.25rem 0.5rem; font-size: 0.875rem;}
     background-position: 0 -144px;
 }
 
-/* 3�ܰ� ���� (���)*/
+/* 3占쌤곤옙 占쏙옙占쏙옙 (占쏙옙占�)*/
 .seat28 .seat-list {
     width: 235px;
     margin: 0 auto;
@@ -244,7 +249,7 @@ button.w-120p {width: 120px;}
     border-color : #ccc;
 }
 
-/* �˾� ����Ʈ ��Ÿ�� */
+/* 占싯억옙 占쏙옙占쏙옙트 占쏙옙타占쏙옙 */
 .t-list {display: inline-block;}
 .t-list li { display: inline-block; width: 24%; flex-wrap: wrap;}
 .t-list li a, .t-list li span{ width: 100%; padding: 10px 0; text-align: center; transition: none; font-size: 16px;}
