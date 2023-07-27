@@ -24,6 +24,10 @@ body { font-weight: 500 ;}
 .scroll-box a { color: black ; display: block;}
 .scroll-box a:hover { color: #007e2f;}
 
+.scroll-box2 { height: 200px; overflow-y: auto;}
+.scroll-box2 a { color: black ; display: block;}
+.scroll-box2 a:hover { color: #007e2f;}
+
 input[type=radio] { width: 20px; height: 20px;}
 .form-check.custom { display: inline-flex ; align-items: center;}
 .form-check.custom .form-check-input { position: unset; margin: 0;}
@@ -32,6 +36,7 @@ input[type=radio] { width: 20px; height: 20px;}
 
 .btn-group.custom button{ line-height: 0;}
 .scroll-box { overflow-y: auto; height: 200px; border: 1px solid #e3e3e3; padding: 20px; font-size: 14px;}
+.scroll-box2 { overflow-y: auto; height: 280px; border: 1px solid #e3e3e3; padding: 20px; font-size: 14px;}
 .allchkbox {border: 1px solid #ccc; text-align: center;}
 .allchkbox.active { border: 1px solid #7db249;}
 .allchkbox.active label { color: #7db249;}

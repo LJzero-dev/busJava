@@ -167,17 +167,17 @@ if (terminalList.size() > 0) {	// 터미널 목록이 있는경우
 	</div>
 	<div class="col-10">
 		<div class="tab-content" id="v-pills-tabContent">
-			<ul class="tab-pane scroll-box t-list active" id="all2" role="tabpanel" aria-expanded="true">
+			<ul class="tab-pane scroll-box2 t-list active" id="all2" role="tabpanel" aria-expanded="true">
 			</ul>
-			<ul class="tab-pane scroll-box t-list" id="seoul2" role="tabpanel">
+			<ul class="tab-pane scroll-box2 t-list" id="seoul2" role="tabpanel">
 			</ul>
-			<ul class="tab-pane scroll-box t-list" id="gyeonggi2" role="tabpanel">
+			<ul class="tab-pane scroll-box2 t-list" id="gyeonggi2" role="tabpanel">
 			</ul>
-			<ul class="tab-pane scroll-box t-list" id="gangwon2" role="tabpanel">
+			<ul class="tab-pane scroll-box2 t-list" id="gangwon2" role="tabpanel">
 			</ul>
-			<ul class="tab-pane scroll-box t-list" id="gyeongbuk2" role="tabpanel">
+			<ul class="tab-pane scroll-box2 t-list" id="gyeongbuk2" role="tabpanel">
 			</ul>
-			<ul class="tab-pane scroll-box t-list" id="gyeongnam2" role="tabpanel">
+			<ul class="tab-pane scroll-box2 t-list" id="gyeongnam2" role="tabpanel">
 			</ul>
 		</div>
 	</div> 
