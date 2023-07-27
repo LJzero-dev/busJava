@@ -249,9 +249,11 @@ button.w-120p {width: 120px;}
     border-color : #ccc;
 }
 
-/* �˾� ����Ʈ ��Ÿ�� */
+/* 출도착지 팝업 스타일 */
 .t-list {display: inline-block;}
 .t-list li { display: inline-block; width: 24%; flex-wrap: wrap;}
 .t-list li a, .t-list li span{ width: 100%; padding: 10px 0; text-align: center; transition: none; font-size: 16px;}
 .t-list li a:hover, .t-list li span:hover {background: #dfdfdf; color:#007e2f; transition: none; border-radius: 10px;}
 .t-list li span {display : block;}
+
+.border-b td {border-bottom: 1px solid #e9ecef;}

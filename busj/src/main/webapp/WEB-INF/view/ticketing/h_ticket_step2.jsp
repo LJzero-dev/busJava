@@ -2,6 +2,9 @@
 <%@ include file="../_inc/head.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
+String mode = request.getParameter("mode");
+String sDate = request.getParameter("sDate1-1");
+String eDate = request.getParameter("eDate1-1");
 %>
 
 <section class="probootstrap_section">
@@ -9,6 +12,7 @@ request.setCharacterEncoding("utf-8");
 		<div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated mb-0">
 			<div class="col-md-12"><h2 class="border-bottom mb-5 probootstrap-section-heading">고속버스 예매</h2></div>
 			<div class="col-md-12">
+<% if (mode.equals("p")) { // 편도일 경우 %>
 				<div class="col-md-8 m-auto">
 					<div class="progress-bar-custom 1">
 					    <div class="progress-step ">
@@ -33,7 +37,7 @@ request.setCharacterEncoding("utf-8");
 			    		</div>
 					</div>
 				</div>
-              
+<% } else { // 왕복일 경우 %>   
 	            <div class="col-md-12 m-auto">
 					<div class="progress-bar-custom 2">
 						<div class="progress-step">
@@ -66,6 +70,7 @@ request.setCharacterEncoding("utf-8");
 		                </div>
 					</div>
 				</div>
+<% } %>
 			</div>
 		</div>
         <div class="row">
@@ -80,16 +85,16 @@ request.setCharacterEncoding("utf-8");
 		                <col width="*">
 					</colgroup>
 		            <tbody>
-		              <tr>
-		                <td><span class="badge badge-danger">출발지</span></td>
-		                <td>서울</td>
-		                <td><span class="badge badge-primary">도착지</span></td>
-		                <td>부산</td>
+		              <tr class="border-b">
+		                <td class="align-middle"><span class="badge badge-danger">출발지</span></td>
+		                <td class="align-middle">서울</td>
+		                <td class="align-middle"><span class="badge badge-primary">도착지</span></td>
+		                <td class="align-middle">부산</td>
 		                <td class="text-left">
 		                  <div class="w-50">
 		                  <div class="probootstrap-date-wrap">
 		                        <span class="icon ion-calendar"></span> 
-		                        <input type="text" id="probootstrap-date-departure" class="form-control" placeholder="">
+		                        <input type="text" id="sDate" class="form-control" value="<%=sDate %>" readonly>
 		                      </div></td>
 		                  </div>
 		              </tr>
@@ -108,7 +113,7 @@ request.setCharacterEncoding("utf-8");
 			            <col width="10%">
 			            <col width="10%">
 					</colgroup>
-		            <thead>
+		            <thead class="bg-primary">
 		            <tr>
 		                <th scope="col" class="text-center">출발시각</th>
 		                <th scope="col" class="text-center">고속사</th>
@@ -155,6 +160,10 @@ request.setCharacterEncoding("utf-8");
 <%@ include file="../_inc/foot.jsp" %>
 <script>
 
+function openModal() {
+	$('#ViewModal .modal-content').load("/busj/pickSpotHigh");
+	$('#ViewModal').modal()
+  }
 
 function getToday(){
 	const DATE = new Date();
@@ -167,8 +176,20 @@ function getToday(){
 
 
 $(document).ready(function() {
+	
+    
+	$("#sDate").datepicker({
+		format: "yyyy.mm.dd",
+		autoclose: true,
+		startDate: "0d",
+		endDate: "+30d",
+		language: "kr",
+		showMonthAfterYear: true,
+		weekStart: 1,
+		});
 
 });
+
 </script>
 
 
