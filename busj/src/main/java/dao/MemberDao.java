@@ -119,13 +119,14 @@ public class MemberDao {
 		return result;
 	}
 
-	public List<BookInfo> getBookList(String mi_id) {
+	public List<BookInfo> getBookList(String mi_id, int cpage, int psize) {
 		String sql = "select ri.ri_idx, ri.ri_sday, ri.ri_acnt, ri.ri_scnt, ri.ri_ccnt, ri.ri_status, bs.bs_stime, bl.bl_type, bl.bt_sidx, bl.bt_eidx "
 				+ " from t_reservation_info ri, t_bus_schedule bs, t_seat_info si , t_bus_line bl "
 				+ " where ri.bs_idx = bs.bs_idx "
 				+ " and bs.bl_idx = bl.bl_idx "
 				+ " and bs.bi_idx = si.bi_idx "
-				+ " and ri.mi_id = '" + mi_id + "' and ri.ri_date >= DATE_SUB(NOW(), INTERVAL 3 MONTH) GROUP BY ri.ri_idx order by ri.ri_idx desc";
+				+ " and ri.mi_id = '" + mi_id + "' and ri.ri_date >= DATE_SUB(NOW(), INTERVAL 3 MONTH) GROUP BY ri.ri_idx order by ri.ri_idx desc"
+				+ " limit "+ ((cpage - 1) * psize) + ", " + psize;
 		/* System.out.println(sql); */
 		List<BookInfo> bookList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
 			BookInfo  bi = new BookInfo(
@@ -155,6 +156,13 @@ public class MemberDao {
 			return bs;
 		});
 		return busSeatList;
+	}
+
+	public int getbookListCount(String mi_id) {
+		String sql = "select count(*) from t_reservation_info where mi_id = '" + mi_id + "' ";
+		/* System.out.println(sql); */
+		int rcnt = jdbc.queryForObject(sql, Integer.class);
+		return rcnt;
 	}
 	
 

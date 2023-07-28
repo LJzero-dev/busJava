@@ -341,6 +341,7 @@ public class MemberCtrl {
 	public String pwForm() {
 		return "/member/pw_form";
 	}
+	
 	@GetMapping("/booking")
 	public String bookingList(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
@@ -348,8 +349,34 @@ public class MemberCtrl {
 		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
 		String mi_id = loginInfo.getMi_id();
 		
-		List<BookInfo> bookList = memberSvc.getBookList(mi_id);
+		int cpage = 1, pcnt = 0, spage = 0, rcnt = 0, psize = 10, bsize = 10;
+		//현제페이지 번호, 페이지 수, 시작페이지 , 게시글수, 페이지크기(내가 정하는 값), 블록크기(내가 정하는 값)
+    	if (request.getParameter("cpage") != null)
+    		cpage = Integer.parseInt(request.getParameter("cpage"));
+    	
+    	String args = "";
+    	args = "?cpage=" + cpage;
+
+    	rcnt = memberSvc.getbookListCount(mi_id);
+        
+    	List<BookInfo> bookList = memberSvc.getBookList(mi_id, cpage, psize);
+    	
+    	pcnt = rcnt / psize;
+        if (rcnt % psize > 0) pcnt ++;
+        spage = (cpage - 1) / bsize * bsize + 1;
+    	
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setBsize(bsize);   
+        pageInfo.setCpage(cpage);
+        pageInfo.setPsize(psize);   
+        pageInfo.setPcnt(pcnt);
+        pageInfo.setRcnt(rcnt);      
+        pageInfo.setSpage(spage);
+        pageInfo.setArgs(args);
+        
+    
 		request.setAttribute("bookList", bookList);
+		request.setAttribute("pageInfo", pageInfo);
 			
 		return "/member/booking_list";
 	}
@@ -550,5 +577,6 @@ public class MemberCtrl {
 		out.println("</script>");
 		out.close(); 
 	}
+	
 	
 }

@@ -82,9 +82,14 @@ public class MemberSvc {
 		return result;
 	}
 
-	public List<BookInfo> getBookList(String mi_id) {
-		List<BookInfo> bookList = memberDao.getBookList(mi_id);
+	public List<BookInfo> getBookList(String mi_id,int cpage, int psize) {
+		List<BookInfo> bookList = memberDao.getBookList(mi_id, cpage, psize);
 		return bookList;
+	}
+
+	public int getbookListCount(String mi_id) {
+		int rcnt = memberDao.getbookListCount(mi_id);
+		return rcnt;
 	}
 
 }
