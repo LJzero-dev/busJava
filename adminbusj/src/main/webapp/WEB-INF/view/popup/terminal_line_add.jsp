@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
+<%@ page import="vo.*" %>
 <%
 request.setCharacterEncoding("utf-8");
+String bt_name = request.getParameter("bt_name");
+List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("terminalList");
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -15,16 +18,9 @@ request.setCharacterEncoding("utf-8");
 
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/animate.css">
-    <link rel="stylesheet" href="assets/fonts/ionicons/css/ionicons.min.css">
-    
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/owl.carousel.min.css">
-    
-    <link rel="stylesheet" href="assets/fonts/flaticon/font/flaticon.css">
-
-    <link rel="stylesheet" href="assets/fonts/fontawesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/select2.css">
-    
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/helpers.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
@@ -33,7 +29,35 @@ request.setCharacterEncoding("utf-8");
 	</head>
 <script>
 function areaChange() {
+	var inputStateValue = document.getElementById('area').value;
+	var terminalOptions = document.getElementById('terminal').options;
 	
+	for (var i = 0; i < terminalOptions.length; i++) {
+		var option = terminalOptions[i];
+		var option2 = option.value;
+		var arrOption = option2.split(":");
+	    if (inputStateValue == '' || arrOption[0] == inputStateValue) {
+	    	option.style.display = 'block';
+	    } else {
+	    	option.style.display = 'none';
+		}
+		
+	}
+}
+
+function adultGyesan(sale) {
+	var adult = document.getElementById("adult");
+	var teenager = document.getElementById("teenager");
+	var children = document.getElementById("children");
+	var numericSale = parseInt(sale.replace(/,/g, ''), 10); // 쉼표 제거 후 정수로 변환
+	
+	adult.value = numericSale.toLocaleString('ko-KR');
+	teenager.value = Math.floor(numericSale * 0.8).toLocaleString('ko-KR');
+	children.value = Math.floor(numericSale * 0.5).toLocaleString('ko-KR');
+}
+
+function restrictAdult(input) {
+	input.value = input.value.replace(/[^0-9]/g, '');
 }
 </script>
 	<body>
@@ -44,6 +68,7 @@ function areaChange() {
       </button>
     </div>
     <div class="modal-body">
+    <form name="frm" action="/AddLine" method="post">
       <table class="table text-center">
         <colgroup>
           <col width="25%">
@@ -52,13 +77,13 @@ function areaChange() {
         <tbody>
           <tr>
             <th>출발지</th>
-            <td class="text-left"><%=request.getParameter("bt_name") %></td>
+            <td class="text-left"><%=bt_name %></td>
           </tr>
           <tr>
             <th>도착지</th>
             <td class="text-left">
             <div class="form-group pl-0">
-                <select id="inputState" class="form-control select-size mr-5" onchange="areaChange(this.value);">
+                <select id="area" class="form-control select-size mr-5" onchange="areaChange();">
                   <option value="">지역</option>
                   <option>서울</option>
                   <option>경기도</option>
@@ -66,9 +91,11 @@ function areaChange() {
                   <option>경상북도</option>
                   <option>경상남도</option>
                 </select>
-                <select id="inputState" class="form-control select-size">
+                <select id="terminal" class="form-control select-size">
                   <option value="">터미널</option>
-                  <option></option>
+<% for (TerminalInfo ti : terminalList ) { %>
+                  <option value="<%= ti.getBt_area() %>:<%=ti.getBt_name() %>"><%=ti.getBt_name() %></option>
+<% } %>
                 </select>
             </div>
             </td>
@@ -76,27 +103,29 @@ function areaChange() {
           <tr>
             <th>성인 요금</th>
             <td>
-              <input type="text" class="form-control" id="validationServer01" required>
+              <input type="text" class="form-control" name="adult" id="adult" oninput="restrictAdult(this)" 
+              onkeyup="adultGyesan(this.value);" required>
             </td>
           </tr>
           <tr>
             <th>청소년 요금</th>
             <td>
-              <input type="text" class="form-control" id="validationServer01" readonly>
+              <input type="text" class="form-control" id="teenager" value="" readonly>
             </td>
           </tr>
           <tr>
             <th>아동 요금</th>
             <td>
-              <input type="text" class="form-control" id="validationServer01" readonly>
+              <input type="text" class="form-control" id="children" readonly>
             </td>
           </tr>
         </tbody>
       </table>
+      </form>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-      <button type="button" class="btn btn-primary">확인</button>
+      <button type="submit" class="btn btn-primary">확인</button>
     </div>
 	</body>
 </html>

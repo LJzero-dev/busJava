@@ -81,8 +81,9 @@ public class TerminalDao {
 	}
 
 	public List<TerminalInfo> getTerminalListPop(int bt_idx) {
-		String sql = "SELECT DISTINCT t1.* FROM t_bus_terminal t1 LEFT JOIN t_bus_line t2 ON t1.bt_idx = t2.bt_eidx " + 
-	"WHERE bt_status != 'c' AND bt_idx != " + bt_idx + " AND t2.bt_eidx IS NULL";
+		String sql = "SELECT DISTINCT t1.* FROM t_bus_terminal t1 WHERE t1.bt_idx NOT IN "
+				+ "(SELECT bt_eidx FROM t_bus_line WHERE bt_sidx = " + bt_idx + " and bl_status != 'n') and bt_idx != " + 
+				bt_idx + " and bt_type != 'c'";
 		List<TerminalInfo> terminalList = jdbc.query(sql, 
 				(ResultSet rs, int rowNum) -> {
 					TerminalInfo ti = new TerminalInfo();

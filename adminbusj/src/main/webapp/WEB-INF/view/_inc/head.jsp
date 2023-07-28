@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -12,7 +15,13 @@
     <link href="${pageContext.request.contextPath}/resources/css/style.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/css/common.css" rel="stylesheet">
 </head>
-
+<script>
+function onlyNum(obj) {
+	if (isNaN(obj.value)) {	// 숫자가 아니면
+		obj.value = "";
+	}
+}
+</script>
 <body>
     <div class="preloader">
         <div class="lds-ripple">
