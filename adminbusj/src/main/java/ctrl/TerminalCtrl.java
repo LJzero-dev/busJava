@@ -51,7 +51,7 @@ public class TerminalCtrl {
 		PrintWriter out = response.getWriter();
 		if (chkName.equals("n")) {
 			out.println("<script>");
-			out.println("alert('터미널 추가에 실패했습니다.');");
+			out.println("alert('터미널 명을 확인해주세요.');");
 			out.println("history.back();");
 			out.println("</script>");
 			out.close();
@@ -61,7 +61,7 @@ public class TerminalCtrl {
 		
 		if (result != 1) {
 			out.println("<script>");
-			out.println("alert('�͹̳� �߰��� �����߽��ϴ�.');");
+			out.println("alert('터미널 추가에 실패했습니다.');");
 			out.println("history.back();");
 			out.println("</script>");
 			out.close();
@@ -114,5 +114,35 @@ public class TerminalCtrl {
 		request.setAttribute("bt_name", bt_name);
 		request.setAttribute("terminalList", terminalList);
 		return "/popup/terminal_line_add";
+	}
+	
+	@PostMapping("/AddLine")
+	public String AddLine(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		int bt_sidx = Integer.parseInt(request.getParameter("bt_sidx"));
+		String tmp = request.getParameter("bt_eidx");
+		String[] arr = tmp.split(":");
+		int bt_eidx = Integer.parseInt(arr[1]);
+		String bt_name = request.getParameter("bt_name");
+		String[] tmp2 = request.getParameter("adult").split(",");
+		String str = "";
+		for (int i = 0; i < tmp2.length; i++) {
+			str += tmp2[i];
+		}
+		int adult = Integer.parseInt(str);
+		
+		int result = terminalSvc.AddLineIn(bt_sidx, bt_eidx, adult);
+		
+		if (result != 1) {
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('노선 추가에 실패했습니다.');");
+			out.println("history.back();");
+			out.println("</script>");
+			out.close();
+		}
+		
+		return "redirect:/terminalLine?bt_idx="+bt_sidx+"&bt_name="+ URLEncoder.encode(bt_name, "UTF-8");
 	}
 }

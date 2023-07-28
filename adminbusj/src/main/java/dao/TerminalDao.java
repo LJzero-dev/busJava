@@ -96,4 +96,11 @@ public class TerminalDao {
 				});
 		return terminalList;
 	}
+
+	public int AddLineIn(int bt_sidx, int bt_eidx, int adult) {
+		String sql = "INSERT INTO t_bus_line (bt_sidx, bt_eidx, bl_type, bl_adult) VALUES (" + bt_sidx + ", " + bt_eidx + ", '고속', " + adult + ")";
+		int result = jdbc.update(sql);
+
+		return result;
+	}
 }

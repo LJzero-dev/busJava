@@ -67,8 +67,10 @@ function restrictAdult(input) {
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
+    <form name="frm" action="AddLine" method="post">
     <div class="modal-body">
-    <form name="frm" action="/AddLine" method="post">
+    <input type="hidden" name="bt_sidx" value="<%=request.getParameter("bt_idx") %>"/>
+    <input type="hidden" name="bt_name" value="<%=bt_name %>"/>
       <table class="table text-center">
         <colgroup>
           <col width="25%">
@@ -91,10 +93,10 @@ function restrictAdult(input) {
                   <option>경상북도</option>
                   <option>경상남도</option>
                 </select>
-                <select id="terminal" class="form-control select-size">
+                <select id="terminal" name="bt_eidx" class="form-control select-size">
                   <option value="">터미널</option>
 <% for (TerminalInfo ti : terminalList ) { %>
-                  <option value="<%= ti.getBt_area() %>:<%=ti.getBt_name() %>"><%=ti.getBt_name() %></option>
+                  <option value="<%= ti.getBt_area() %>:<%=ti.getBt_idx() %>"><%=ti.getBt_name() %></option>
 <% } %>
                 </select>
             </div>
@@ -121,11 +123,12 @@ function restrictAdult(input) {
           </tr>
         </tbody>
       </table>
-      </form>
+      
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
       <button type="submit" class="btn btn-primary">확인</button>
     </div>
+    </form>
 	</body>
 </html>

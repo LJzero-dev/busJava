@@ -40,4 +40,9 @@ public class TerminalSvc {
 		List<TerminalInfo> terminalList = terminalDao.getTerminalListPop(bt_idx);
 		return terminalList;
 	}
+
+	public int AddLineIn(int bt_sidx, int bt_eidx, int adult) {
+		int result = terminalDao.AddLineIn(bt_sidx, bt_eidx, adult);
+		return result;
+	}
 }
