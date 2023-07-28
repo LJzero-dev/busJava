@@ -164,7 +164,55 @@ public class MemberDao {
 		int rcnt = jdbc.queryForObject(sql, Integer.class);
 		return rcnt;
 	}
+
+	public BookInfo getBookInfo(String riidx) {
+		String sql = "SELECT DISTINCT "
+				+ " bs.bs_stime, bi.bi_level, bc.bc_name, ri.ri_idx, ri.ri_sday, ri.ri_acnt, ri.ri_scnt, ri.ri_ccnt, ri.ri_status, bl.bl_type, bl.bt_sidx, bl.bt_eidx, cr.cr_date, cr.cr_payment, cr.cr_pay "
+				+ " FROM t_reservation_info ri, t_bus_schedule bs, t_bus_info bi, t_bus_company bc, t_bus_line bl, t_bus_terminal bt1, t_bus_terminal bt2, t_count_rinfo cr "
+				+ " WHERE  ri.bs_idx = bs.bs_idx and bs.bi_idx = bi.bi_idx and bi.bc_idx = bc.bc_idx and bs.bl_idx = bl.bl_idx and bl.bt_sidx = bt1.bt_idx and bl.bt_eidx = bt2.bt_idx and ri.ri_idx = cr.ri_idx "
+				+ " and ri.ri_idx = '" + riidx + "' ORDER BY ri.ri_sday ASC";
+		BookInfo bi = jdbc.queryForObject(sql, new RowMapper<BookInfo>() {
+			@Override
+			public BookInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+				BookInfo bi = new BookInfo(
+				rs.getInt("ri_acnt"),
+				rs.getInt("ri_scnt"),
+				rs.getInt("ri_ccnt"),
+				rs.getString("ri_status"),
+				rs.getString("ri_sday"),
+				rs.getString("bs_stime"),
+				rs.getString("bl_type"),
+				rs.getString("ri_idx"),
+				rs.getString("cr_payment"),
+				rs.getString("cr_date"),
+				rs.getInt("bt_sidx"),
+				rs.getInt("bt_eidx"),
+				rs.getString("bi_level"),
+				rs.getString("bc_name"),
+				rs.getInt("cr_pay"),
+				getBusSeatList(rs.getString("ri_idx")));
+						
+	            return bi;
+			}
+		});
+		
+		return bi;
+	}
 	
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

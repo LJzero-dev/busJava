@@ -49,7 +49,7 @@ PageInfo pi = (PageInfo)request.getAttribute("pageInfo");
 // 좌석 번호 여러개 나와야함
 %>
             <tr> <!-- 이동할 주소입력(ri_idx값 들고 가야함) -->
-                  <td><a href="bookView<%=pi.getArgs() %>Riidx=<%=bl.getRi_idx() %>"><%=bl.getRi_idx() %></a></td>
+                  <td><a href="bookDetail<%=pi.getArgs() %>&riidx=<%=bl.getRi_idx() %>"><%=bl.getRi_idx() %></a></td>
                   <td><%=bl.getBl_type() %></td>
                   <td><%=bl.getBt_sidx() %></td>
                   <td><%=bl.getBt_eidx() %></td>
@@ -78,30 +78,37 @@ if (bl.getBusSeatList().size() > 0) {
 
           <nav aria-label="Page navigation example" class="mt-4">
             <ul class="pagination justify-content-center">
-<% if (pi.getCpage() > 1 ) { %>          
+<% if (pi.getCpage() == 1 ) { %>          
               <li class="page-item">
+                  <span class="page-link" aria-hidden="true">&laquo;</span>
+              </li>
+<% } else if (pi.getCpage() > 1)  { %>
+			 <li class="page-item">
                 <a class="page-link" href="booking?cpage=<%=pi.getCpage() - 1 %>" aria-label="Previous">
                   <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
-<% } %>
-<% 
+<% }
 int endPage = (pi.getSpage() + pi.getBsize() - 1 < pi.getPcnt()) ? pi.getSpage() + pi.getBsize() - 1 : pi.getPcnt();
 for (int i = pi.getSpage(); i <= endPage; i++) { 
 	if (i == pi.getCpage()) {
 %>
-            <li class="page-item"><%=i%></li>
+            <li class="page-link" ><%=i%></li>
 <% } else if (i != pi.getCpage()) { %>
 			<li class="page-item"><a class="page-link" href="booking?cpage=<%=i%>"><%=i%></a></li>
 <% }
 }%>
 <%  if (pi.getCpage() < pi.getPcnt()) { %>             
               <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
+                <a class="page-link" href="booking?cpage=<%=pi.getCpage() + 1 %>" aria-label="Next">
                   <span aria-hidden="true">&raquo;</span>
                 </a>
               </li>
-<% } %>              
+<% } else if (pi.getCpage() == pi.getPcnt()) { %>     
+				<li class="page-item">
+                  <span class="page-link" aria-hidden="true">&raquo;</span>
+            	</li>
+<% } %>         
             </ul>
           </nav>
           </div>

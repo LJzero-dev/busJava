@@ -1,6 +1,7 @@
 package ctrl;
 
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Random;
 import javax.mail.internet.MimeMessage;
@@ -578,5 +579,18 @@ public class MemberCtrl {
 		out.close(); 
 	}
 	
-	
+	@GetMapping("/bookDetail")
+	public String freeView(Model model, HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		String riidx = request.getParameter("riidx");
+		int cpage = Integer.parseInt(request.getParameter("cpage"));
+		
+		BookInfo bi = memberSvc.getBookInfo(riidx);
+		String args = "?cpage=" + cpage;
+		
+		request.setAttribute("bi", bi);
+		request.setAttribute("args", args);
+		
+		return "member/booking_detail";
+	}
 }
