@@ -1,9 +1,12 @@
 package vo;
 
+import java.util.*;
+
 public class LineInfo {
 // 노선의 정보를 담고있는 인스턴스 (+ 출발지, 도착지 : sname, ename / + 출발지역, 도착지역 : sarea, earea)
 	private int bl_idx, bt_sidx, bt_eidx, bl_adult;
 	private String sname, ename, sarea, earea, bl_type, bl_status;
+	private List<ScheduleInfo> scheduleInfo;
 	public int getBl_idx() {
 		return bl_idx;
 	}
