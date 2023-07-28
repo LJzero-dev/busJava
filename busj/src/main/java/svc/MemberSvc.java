@@ -92,4 +92,9 @@ public class MemberSvc {
 		return rcnt;
 	}
 
+	public BookInfo getBookInfo(String riidx) {
+		BookInfo bi = memberDao.getBookInfo(riidx);
+		return bi;
+	}
+
 }
