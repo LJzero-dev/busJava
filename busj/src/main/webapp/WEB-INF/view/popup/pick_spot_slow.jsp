@@ -87,7 +87,7 @@ if (terminalList.size() > 0) {	// 터미널 목록이 있는경우
 	for (int i = 0 ; i < terminalList.size() ; i++) {	// 전체목록
 		TerminalInfo ti = terminalList.get(i);	
 %>
-				<li><a href="<%=ti.getBt_idx() %>" ><%=ti.getBt_name() %></a></li>
+				<li><a href="<%=ti.getBt_idx() %>"><%=ti.getBt_name() %></a></li>
 <%
 		}
 %>
@@ -215,7 +215,7 @@ $('#departure li a').each(function () {		// ID로 태그 선택
 		var btsidx = parseInt($(this).attr('href'), 10); // a 태그의 href 속성으로 터미널 인덱스 가져오기
 
 		$.ajax({
-			url: "lineSch",					// 맵핑값
+			url: "sLineSch",					// 맵핑값
 			type: "GET",
 			data: { btsidx : btsidx },		// 출발지 인덱스
 			dataType: "json",				// "json" - JSON 형식의 데이터로 배열, 객체를 포함하는 문자열
@@ -223,7 +223,6 @@ $('#departure li a').each(function () {		// ID로 태그 선택
 			success: function (data) {
 				$("#departure").hide();		// 출발지 터미널 리스트 숨김
 				$("#arrival").show();		// 도착지 터미널 리스트 표시
-
         	// 필요한 데이터를 필터링하여 함수 호출
 	        addTerminalToTab(data, '#all2');
 	        addTerminalToTab(data.filter(t => t.earea === '서울'), '#seoul2');
@@ -250,8 +249,8 @@ $("#btnSubmit").on('click', function() {
 		alert("출발지와 도착지를 선택해주세요.");
 		return;
 	}
-	$("#bt_sidx").val(($("#sPointPop").val()));
-	$("#bt_eidx").val(($("#ePointPop").val()));
+	$("#btsname").val(($("#sPointPop").val()));
+	$("#btename").val(($("#ePointPop").val()));
 	$('#ViewModal').modal('hide');
 	
 });

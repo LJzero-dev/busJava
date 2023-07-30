@@ -15,7 +15,7 @@
                  	<div class="step-count"></div>
                  	<div class="step-description">정보 입력</div>
                	</div>
-               	<div class="progress-step">
+				<div class="progress-step">
                   	<div class="step-count"></div>
                   	<div class="step-description">배차 조회</div>
                	</div>
@@ -75,6 +75,8 @@
 	<input type="hidden" name="ri_sday1" id="ri_sday1" value="" />	<!-- 편도 가는 날 -->
 	<input type="hidden" name="ri_sday2" id="ri_sday2" value="" />	<!-- 왕복 가는 날 -->
 	<input type="hidden" name="ri_sday3" id="ri_sday3" value="" />	<!-- 왕복 오는 날 -->
+	<input type="hidden" name="bt_sidx" id="bt_sidx" value="" />	<!-- 출발지 idx -->
+	<input type="hidden" name="bt_eidx" id="bt_eidx" value="" />	<!-- 도착지 idx -->
 		<div class="form-group">
 		<ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
 			<li class="nav-item" role="presentation">
@@ -127,14 +129,14 @@
 				<div class="row mb-3">
 				<div class="col-md">
 					<div class="form-group">
-					<label for="exampleInputEmail1">출발지</label>
-					<input type="text" class="form-control" id="bt_sidx" name="bt_sidx" data-toggle="modal" data-target="#ViewModal" role="button" readonly onclick="openModal();">
+					<label for="btsname">출발지</label>
+					<input type="text" class="form-control" id="btsname" name="btsname" data-toggle="modal" data-target="#ViewModal" role="button" readonly onclick="openModal();">
 					</div>
 				</div>
 				<div class="col-md">
 					<div class="form-group">
-					<label for="exampleInputEmail1">도착지</label>
-					<input type="email" class="form-control" id="bt_eidx" name="bt_eidx" readonly>
+					<label for="btename">도착지</label>
+					<input type="text" class="form-control" id="btename" name="btename" readonly>
 					</div>
 				</div>
 				</div>
