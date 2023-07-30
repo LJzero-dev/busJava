@@ -14,6 +14,11 @@
     <title>BUSJAVA ADMIN</title>
     <link href="${pageContext.request.contextPath}/resources/css/style.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/css/common.css" rel="stylesheet">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.4.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/jquery.timepicker.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/jquery.timepicker.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/js/jquery.timepicker.min.css">
+    
 </head>
 <script>
 function onlyNum(obj) {

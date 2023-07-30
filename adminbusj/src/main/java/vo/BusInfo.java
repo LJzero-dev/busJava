@@ -3,6 +3,8 @@ package vo;
 public class BusInfo {
 	private int bi_idx, bc_idx;
 	private String bi_num, bi_level, bi_status;
+	
+	
 	public int getBi_idx() {
 		return bi_idx;
 	}

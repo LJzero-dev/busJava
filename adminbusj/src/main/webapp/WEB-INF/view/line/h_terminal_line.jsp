@@ -24,7 +24,39 @@ function openModal(area) {
 	$('#AddLine').modal();
 }
 
+function scheduleAdd() {
+	
+}
+
+function adultGyesan(sale) {
+	var adult = document.getElementById("adult");
+	var teenager = document.getElementById("teenager");
+	var children = document.getElementById("children");
+	var numericSale = parseInt(sale.replace(/,/g, ''), 10); // 쉼표 제거 후 정수로 변환
+	
+	if (!isNaN(numericSale)) {
+        adult.value = numericSale.toLocaleString('ko-KR');
+        teenager.value = Math.floor(numericSale * 0.8).toLocaleString('ko-KR');
+        children.value = Math.floor(numericSale * 0.5).toLocaleString('ko-KR');
+    } else {
+        // 입력된 값이 숫자로 변환될 수 없는 경우, 텍스트 박스를 빈 값으로 설정
+        adult.value = "";
+        teenager.value = "";
+        children.value = "";
+    }
+}
+
+function restrictAdult(input) {
+	input.value = input.value.replace(/[^0-9]/g, '');
+}
+
+
 </script>
+<style>
+.timepicker { width:100px; text-align:center; }
+.form-control { text-align:center; }
+.paddingRL { padding:10px 30px; }
+</style>
 <body>
 <section class="probootstrap_section">
 <div class="page-wrapper">     
@@ -55,19 +87,20 @@ function openModal(area) {
 			<button type="button" class="btn float-right btn-outline-danger btn-lg mr-1" id="bl_idx" 
 			value="<%=bl.getBl_idx() %>" onclick="delLine(this.value);">노선삭제</button>
 			<button type="button" class="btn waves-effect waves-light btn-primary btn-lg" id="seoul" value="<%=bl.getBl_idx() %>"
-			 onclick="">추가</button>
+			 onclick="scheduleAdd(this.value);">추가</button>
 			</div>		
 		</div>
 		<div class="card">
-		<table class="table text-center mb-0">
+		<table class="table text-center mb-0 padding-size-sm">
 			<colgroup>
+				<col width="10%">
+				<col width="10%">
 				<col width="12%">
-				<col width="12%">
-				<col width="12%">
-				<col width="12%">
-				<col width="12%">
-				<col width="12%">
-				<col width="12%">
+				<col width="*">
+				<col width="10%">
+				<col width="10%">
+				<col width="10%">
+				<col width="10%">
 				<col width="12%">
 			</colgroup>
             <thead class="bg-primary text-white">
@@ -75,6 +108,7 @@ function openModal(area) {
                     <th>출발시간</th>
                     <th>도착시간</th>
                     <th>회사명</th>
+                    <th>차량번호</th>
                     <th>등급</th>
                     <th>성인요금</th>
                     <th>청소년요금</th>
@@ -88,13 +122,14 @@ function openModal(area) {
 			
 %>
             
-            <tbody class="border border-primary">
+            <tbody class="border border-primary ">
                 <tr>
                     <td><%=bs.getBs_stime() %></td>
                     <td><%=bs.getBs_etime() %></td>
                     <td><%=bs.getBc_name() %></td>
+                    <td><%=bs.getBi_num() %></td>
                     <td><%=bs.getBi_level() %></td>
-                    <td><%=bl.getBl_adult() %></td>
+                    <td><%=bl.getBl_adult() %>원</td>
                     <td><%=Math.round(bl.getBl_adult() * 0.8) %></td>
                     <td><%=Math.round(bl.getBl_adult() * 0.5) %></td>
                     <td>수정, 삭제</td>
@@ -111,15 +146,35 @@ function openModal(area) {
             </tbody>
 <%	} %>
 			<tbody class="border border-primary">
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr style="" id="dis">
+                    <td>
+    					<input type="text" name="time1" id="time1" class="timepicker mt-1" >
+				    </td>
+                    <td>
+                    	<input type="text" name="time2" id="time2" class="timepicker mt-1" >
+                    </td>
+                    <td style="padding:10px 20px;">
+                    <select class="form-control" >
+                    	<option value="">회사명</option>
+                    </select>
+                    </td>
+                    <td style="padding:10px 20px;">
+                    <select class="form-control">
+                    	<option value="">차량번호</option>
+                    </select>
+                    </td>
+                    <td style="padding:10px 20px;">
+                    <select class="form-control">
+                    	<option value="">등급</option>
+                    	<option value="">우등</option>
+                    	<option value="">프리미엄</option>
+                    </select>
+                    </td>
+                    <td><input type="text" class="text-right mt-1" style="width:80px;" id="adult" oninput="restrictAdult(this)" 
+                    onkeyup="adultGyesan(this.value);" maxlength="7" />원</td>
+                    <td><input type="text" class="text-right mt-1" style="width:80px; border:0; text-align:center" id="teenager" readonly="readonly" />원</td>
+                    <td><input type="text" class="text-right mt-1" style="width:80px; border:0;" id="children" readonly="readonly" />원</td>
+                    <td><input class="btn waves-effect waves-light btn-primary" type="button" value="등록" /></td>
                 </tr>
             </tbody>
         </table>
@@ -136,6 +191,20 @@ function openModal(area) {
         </div>
     </div>
 </div>
-
 </section>
+<script>
+$(function () {
+	$(".timepicker").timepicker({
+	    timeFormat: 'HH:mm',
+	    interval: 10,
+	    minTime: '00:00',
+	    maxTime: '23:59',
+	    defaultTime: '00:00',
+	    startTime: '00:00',
+	    dynamic: false,
+	    dropdown: true,
+	    scrollbar: true
+	});
+});
+</script>
 <%@ include file="../_inc/foot.jsp" %>

@@ -62,13 +62,13 @@ public class TerminalDao {
 	}
 
 	private List<BusScheduleInfo> getBusScheduleInfo(int bl_idx) {
-		String sql = "select a.bs_idx, c.bc_idx, bs_stime, bs_etime, a.bs_date, bi_level, bc_name "
+		String sql = "select a.bs_idx, c.bc_idx, bs_stime, bs_etime, a.bs_date, bi_level, bc_name, b.bi_idx, b.bi_num "
 				+ "from t_bus_schedule a, t_bus_info b, t_bus_company c "
 				+ "where a.bi_idx = b.bi_idx and b.bc_idx = c.bc_idx and a.bl_idx = " + bl_idx;
 		List<BusScheduleInfo> busScheduleInfo = jdbc.query(sql, 
 				(ResultSet rs, int rowNum) -> {
-					BusScheduleInfo bs = new BusScheduleInfo(rs.getInt("bs_idx"), rs.getInt("bc_idx"), rs.getString("bs_stime"), 
-							rs.getString("bs_etime"), rs.getString("bs_date"), rs.getString("bi_level"), rs.getString("bc_name"));
+					BusScheduleInfo bs = new BusScheduleInfo(rs.getInt("bs_idx"), rs.getInt("bc_idx"), rs.getInt("bi_idx"), rs.getString("bi_num"),
+						rs.getString("bs_stime"), rs.getString("bs_etime"), rs.getString("bs_date"), rs.getString("bi_level"), rs.getString("bc_name"));
 					return bs;
 				});
 		return busScheduleInfo;
@@ -102,5 +102,19 @@ public class TerminalDao {
 		int result = jdbc.update(sql);
 
 		return result;
+	}
+
+	public List<BusInfo> getBusInfo() {
+		String sql = "select * from t_bus_info where bi_status = 'y'";
+		List<BusInfo> busInfo = jdbc.query(sql, 
+				(ResultSet rs, int rowNum) -> {
+					BusInfo bi = new BusInfo();
+					bi.setBc_idx(rs.getInt("bc_idx"));
+					bi.setBi_idx(rs.getInt("bi_idx"));
+					bi.setBi_level(rs.getString("bi_level"));
+					bi.setBi_num(rs.getString("bi_num"));
+					return bi;
+				});
+		return busInfo;
 	}
 }

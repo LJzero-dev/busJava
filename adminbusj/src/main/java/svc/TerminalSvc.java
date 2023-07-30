@@ -30,7 +30,12 @@ public class TerminalSvc {
 		List<BusLineInfo> busLineList = terminalDao.getBusLine(bt_idx);
 		return busLineList;
 	}
-
+	
+	public List<BusInfo> getBusInfo() {
+		List<BusInfo> busInfo = terminalDao.getBusInfo();
+		return busInfo;
+	}
+	
 	public int LineDel(int bl_idx) {
 		int result = terminalDao.LineDel(bl_idx);
 		return result;
@@ -45,4 +50,5 @@ public class TerminalSvc {
 		int result = terminalDao.AddLineIn(bt_sidx, bt_eidx, adult);
 		return result;
 	}
+	
 }

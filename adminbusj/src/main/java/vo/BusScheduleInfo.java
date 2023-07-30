@@ -3,13 +3,15 @@ package vo;
 import java.util.*;
 
 public class BusScheduleInfo {
-	private int bs_idx, bc_idx;
-	private String bs_stime, bs_etime, bs_date, bi_level, bc_name;
+	private int bs_idx, bc_idx, bi_idx;
+	private String bs_stime, bs_etime, bs_date, bi_level, bc_name, bi_num;
 	
-	public BusScheduleInfo(int bs_idx, int bc_idx, String bs_stime, String bs_etime, String bs_date, String bi_level,
+	public BusScheduleInfo(int bs_idx, int bc_idx, int bi_idx, String bi_num, String bs_stime, String bs_etime, String bs_date, String bi_level,
 			String bc_name) {
 		this.bs_idx = bs_idx;
 		this.bc_idx = bc_idx;
+		this.bi_idx = bi_idx;
+		this.bi_num = bi_num;
 		this.bs_stime = bs_stime;
 		this.bs_etime = bs_etime;
 		this.bs_date = bs_date;
@@ -23,6 +25,24 @@ public class BusScheduleInfo {
 	public void setBs_idx(int bs_idx) {
 		this.bs_idx = bs_idx;
 	}
+	
+	
+	public int getBi_idx() {
+		return bi_idx;
+	}
+
+	public void setBi_idx(int bi_idx) {
+		this.bi_idx = bi_idx;
+	}
+
+	public String getBi_num() {
+		return bi_num;
+	}
+
+	public void setBi_num(String bi_num) {
+		this.bi_num = bi_num;
+	}
+
 	public String getBs_stime() {
 		return bs_stime;
 	}

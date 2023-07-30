@@ -14,3 +14,7 @@ table th.bg-gray, table td.bg-gray {
 .valid-feedback { display: block; font-size: 90%; }
 
 .select-size { width: 45%; display: inline; }
+
+.padding-size-sm td { padding:10px; }
+
+.padding-0 { padding:0; }

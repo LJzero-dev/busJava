@@ -74,14 +74,16 @@ public class TerminalCtrl {
 		request.setCharacterEncoding("utf-8");
 		int bt_idx = Integer.parseInt(request.getParameter("bt_idx"));
 		String bt_name = request.getParameter("bt_name");
+		
 		List<BusLineInfo> busLineList = terminalSvc.getBusLine(bt_idx);
+		List<BusInfo> busInfo = terminalSvc.getBusInfo();
 		
 		request.setAttribute("busLineList", busLineList);
-		
+		request.setAttribute("busInfo", busInfo);
 		return "/line/h_terminal_line";
 	}
 
-	@GetMapping("/LineDel")		// 노선 삭제
+	@GetMapping("/LineDel")		// 노선 삭제 update
 	public String LineDel(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
 		int bl_idx = Integer.parseInt(request.getParameter("lineNum"));
@@ -103,7 +105,7 @@ public class TerminalCtrl {
 		return "redirect:/terminalLine?bt_idx=" + bt_idx + "&bt_name=" + URLEncoder.encode(bt_name, "UTF-8");
 	}
 	
-	@GetMapping("/popUpLineAdd")		// 노선 추가
+	@GetMapping("/popUpLineAdd")		// 노선 추가 팝업으로 이동
 	public String popUpLineAdd(HttpServletRequest request) throws Exception {
 		request.setCharacterEncoding("utf-8");
 		int bt_idx = Integer.parseInt(request.getParameter("bt_idx")); 
@@ -116,7 +118,7 @@ public class TerminalCtrl {
 		return "/popup/terminal_line_add";
 	}
 	
-	@PostMapping("/AddLine")
+	@PostMapping("/AddLine")		// 노선 추가 insert 작업
 	public String AddLine(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
 		int bt_sidx = Integer.parseInt(request.getParameter("bt_sidx"));
