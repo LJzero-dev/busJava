@@ -47,7 +47,8 @@ List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("term
 	    <button type="button" class="btn-success btn-sm">동서울</button>
     </div>
 <hr />
-    <form name="frmPoint" action="selectHSpot" method="post">
+    <form name="frmPoint">
+		<input type="hidden" name="lineNum" value="" />
       <div class="form-row">
         <div class="col-md-6 mb-3">
           <label for="sPointPop">출발지</label>
@@ -199,19 +200,40 @@ List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("term
 	  });
 	});
 	
+	
 	function getESpotVal(span)  {
 		$("#ePointPop").val(span.innerHTML);
 		$("#ePointPop").removeClass("active");
 		$("#arrival").hide();
 	}
 	
+	
 	$("#btnSubmit").on('click', function() {
 		if (($("#sPointPop").val() == "") || ($("#ePointPop").val() == "")) {
 			alert("출발지와 도착지를 선택해주세요.");
 			return;
 		}
+		
 		$("#sPoint").val(($("#sPointPop").val()));
 		$("#ePoint").val(($("#ePointPop").val()));
+		let sPoint = $("#sPoint").val();
+		let ePoint = $("#ePoint").val();
+		
+		$.ajax({
+		      url: "getLineNum",
+		      type: "POST",
+		      data: {
+		        spoint: sPoint,
+		        epoint: ePoint
+		      },
+		      dataType: "json",
+		      success: function(data) {
+		        $("#lineNum").val(data);
+		      },
+		      error: function(xhr, status, error) {
+		        console.error(error);
+		      }
+		    });
 		$('#ViewModal').modal('hide');
 		
 	});

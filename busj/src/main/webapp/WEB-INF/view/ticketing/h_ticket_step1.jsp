@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../_inc/head.jsp" %>
-<%
-request.setCharacterEncoding("utf-8");
-%>
 
 <section class="probootstrap_section">
   <div class="container">
@@ -79,6 +76,7 @@ request.setCharacterEncoding("utf-8");
         <input type="hidden" name="sDate1-1" id="sDate1-1" value="" />
         <input type="hidden" name="sDate2-1" id="sDate2-1" value="" />
         <input type="hidden" name="eDate1-1" id="eDate1-1" value="" />
+        <input type="hidden" name="lineNum" id="lineNum" value="" />
         <div class="form-group">
           <ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
@@ -132,13 +130,13 @@ request.setCharacterEncoding("utf-8");
             <div class="col-md">
               <div class="form-group">
                 <label for="sPoint">출발지</label>
-                <input type="text" class="form-control" id="sPoint" readonly data-toggle="modal" data-target="#ViewModal" role="button" onclick="openModal();">
+                <input type="text" class="form-control" id="sPoint" name="sPoint" readonly data-toggle="modal" data-target="#ViewModal" role="button" onclick="openModal();">
               </div>
             </div>
             <div class="col-md">
               <div class="form-group">
                 <label for="ePoint">도착지</label>
-                <input type="text" class="form-control" id="ePoint"  readonly>
+                <input type="text" class="form-control" id="ePoint" name="ePoint"  readonly>
               </div>
             </div>
           </div>
@@ -149,7 +147,7 @@ request.setCharacterEncoding("utf-8");
             </div>
           </div>
         </div>
-      </form>
+      </form>	
     </div>  
   </div>
 <div class="modal fade" id="ViewModal" tabindex="-1" role="dialog">
@@ -263,8 +261,9 @@ $(document).ready(function() {
 			}
 		}
 		
-		if ($("#sPoint") == "" && $("#ePoint") == "") {
+		if ($("#sPoint").val() == "" || $("#ePoint").val() == "") {
 			alert("출발지와 도착지를 선택해주세요.");
+			return false;
 		}
 		
 		document.frmLineInfo.submit();

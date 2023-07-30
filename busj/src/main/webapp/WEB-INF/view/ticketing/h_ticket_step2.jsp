@@ -1,12 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import = "java.util.*" %>
 <%@ include file="../_inc/head.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
 String mode = request.getParameter("mode");
 String sDate = request.getParameter("sDate1-1");
 String eDate = request.getParameter("eDate1-1");
-%>
+String sPoint = request.getParameter("sPoint");
+String ePoint = request.getParameter("ePoint");
+int lineNum = Integer.parseInt(request.getParameter("lineNum"));
 
+List<ScheduleInfo> scheduleList = (List<ScheduleInfo>)session.getAttribute("scheduleList");
+%>
+<style>
+tr.data:hover { cursor: pointer; }
+</style>
 <section class="probootstrap_section">
 	<div class="container">
 		<div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated mb-0">
@@ -87,9 +95,9 @@ String eDate = request.getParameter("eDate1-1");
 		            <tbody>
 		              <tr class="border-b">
 		                <td class="align-middle"><span class="badge badge-danger">출발지</span></td>
-		                <td class="align-middle">서울</td>
+		                <td class="align-middle"><%=sPoint %></td>
 		                <td class="align-middle"><span class="badge badge-primary">도착지</span></td>
-		                <td class="align-middle">부산</td>
+		                <td class="align-middle"><%=ePoint %></td>
 		                <td class="text-left">
 		                  <div class="w-50">
 		                  <div class="probootstrap-date-wrap">
@@ -101,6 +109,7 @@ String eDate = request.getParameter("eDate1-1");
 		            </tbody>
 	            </table>
         	</div>
+        	
         </div>
 		<div class="row">
 			<div class="col-md-12">
@@ -124,34 +133,49 @@ String eDate = request.getParameter("eDate1-1");
 		            </tr>
 		            </thead>
 		            <tbody class="text-center">
-		            <tr>
-		                <td>HH:MM</td>
-		                <td>동양고속</td>
-		                <td>우등</td>
-		                <td>30000</td>
-		                <td>28</td>
-		                <td>20</td>
-		            </tr>
+		            <!-- 시간표 영역 -->
+					<form name="frmSchedule" method="post" action="hTicketingStep03">
+<% if (scheduleList.size() > 0) {	// 해당 노선의 시간표가 있는 경우
+for (ScheduleInfo sl : scheduleList) { %>
+					<tr class="data">
+					<input type="hidden" value="<%=sl.getBs_idx() %>" />
+						<td><%=sl.getBs_stime() %></td>
+					    <td><%=sl.getComname() %>고속</td>
+					    <td><%=sl.getBi_level() %></td>
+					    <td><%=sl.getBl_adult() %></td>
+					    <td><%=sl.getTotal_seat() %></td>
+					    <td><%=sl.getLeft_seat() %></td>
+					</tr>
+					
+<% 
+	} 
+} else { // 해당 노선의 시간표가 없는 경우 %>
+					<tr>
+						<td colspan="6">해당 노선의 시간표가 없습니다.</td>
+					</tr>
+<% } %>				
+     
+		            </form>
 		            </tbody>
 				</table>
 				<!-- 페이지네이션 영역 -->
-				<nav aria-label="Page navigation example" class="mt-4">
-					<ul class="pagination justify-content-center">
-						<li class="page-item">
-						  <a class="page-link" href="#" aria-label="Previous">
-						    <span aria-hidden="true">&laquo;</span>
-						  </a>
-						</li>
-						<li class="page-item"><a class="page-link" href="#">1</a></li>
-						<li class="page-item"><a class="page-link" href="#">2</a></li>
-						<li class="page-item"><a class="page-link" href="#">3</a></li>
-						<li class="page-item">
-						  <a class="page-link" href="#" aria-label="Next">
-						    <span aria-hidden="true">&raquo;</span>
-						  </a>
-						</li>
-					</ul>
-				</nav>
+<!-- 				<nav aria-label="Page navigation example" class="mt-4"> -->
+<!-- 					<ul class="pagination justify-content-center"> -->
+<!-- 						<li class="page-item"> -->
+<!-- 						  <a class="page-link" href="#" aria-label="Previous"> -->
+<!-- 						    <span aria-hidden="true">&laquo;</span> -->
+<!-- 						  </a> -->
+<!-- 						</li> -->
+<!-- 						<li class="page-item"><a class="page-link" href="#">1</a></li> -->
+<!-- 						<li class="page-item"><a class="page-link" href="#">2</a></li> -->
+<!-- 						<li class="page-item"><a class="page-link" href="#">3</a></li> -->
+<!-- 						<li class="page-item"> -->
+<!-- 						  <a class="page-link" href="#" aria-label="Next"> -->
+<!-- 						    <span aria-hidden="true">&raquo;</span> -->
+<!-- 						  </a> -->
+<!-- 						</li> -->
+<!-- 					</ul> -->
+<!-- 				</nav> -->
 				<!-- 페이지네이션 영역 끝 -->
 			</div>
 		</div>
@@ -159,21 +183,6 @@ String eDate = request.getParameter("eDate1-1");
 </section>
 <%@ include file="../_inc/foot.jsp" %>
 <script>
-
-function openModal() {
-	$('#ViewModal .modal-content').load("/busj/pickSpotHigh");
-	$('#ViewModal').modal()
-  }
-
-function getToday(){
-	const DATE = new Date();
-    const YEAR = DATE.getFullYear();
-    const MONTH = ("0" + (1 + DATE.getMonth())).slice(-2);
-    const DAY = ("0" + DATE.getDate()).slice(-2);
-
-    return YEAR + "." + MONTH + "." + DAY;
-}
-
 
 $(document).ready(function() {
 	
@@ -188,6 +197,10 @@ $(document).ready(function() {
 		weekStart: 1,
 		});
 
+	$("tr.data").on('click', function() {
+		alert(1);
+		document.frmSchedule.submit();
+	});
 });
 
 </script>

@@ -21,5 +21,17 @@ public class HTicketingSvc {
 		List<LineInfo> lineList = hTicketingDao.getAvailableLineList(btsidx);
 		return lineList;
 	}
+
+	public int getLineNum(String spoint, String epoint) {
+		int lineNum = hTicketingDao.getLineNum(spoint, epoint);
+		return lineNum;
+	}
+
+	public List<ScheduleInfo> getSList(String sDate, int lineNum) {
+		List<ScheduleInfo> scheduleList = hTicketingDao.getSList(sDate, lineNum);
+		return scheduleList;
+	}
+
+	
 	
 }
