@@ -66,5 +66,22 @@ public class STicketingCtrl {
 		
 		return "ticketing/s_ticket_step2";
 	}
+	
+	@PostMapping("/sTicketingStep03")
+	public String sTicketingStep03(HttpServletRequest request) throws Exception {
+		// bs_idx로 버스 운영시간표 (출발시간, 도착시간) / bi_idx로 조인해서 버스 좌석 정보 (좌석 번호) 가져오기
+		// 예매된 좌석은 선택이 되지 않게 (checkbox 비활성화)
+		request.setCharacterEncoding("utf-8");
+		HttpSession session = request.getSession();	
+		ReservationInfo ri1 =  new ReservationInfo();
+		int bsidx = Integer.parseInt(request.getParameter("bsidx"));
+		String bcname = request.getParameter("bcname");
+		String ri_sday1 = request.getParameter("ri_sday1");			// 예매 2단계에서 날짜를 바꾸게 되면 받아오는 값
+		if (ri_sday1 != null && !ri_sday1.equals(""))	ri1.setRi_sday(ri_sday1);	// 바뀐 값이 있으면 세션에 다시 담기
+		
+		
+			
+		return "ticketing/s_ticket_step3";
+	}
 
 }

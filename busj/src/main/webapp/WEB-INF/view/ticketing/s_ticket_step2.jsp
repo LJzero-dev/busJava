@@ -10,6 +10,7 @@ String btsname = request.getParameter("btsname");
 String btename = request.getParameter("btename");
 List<ReservationStep2> scheduleList = (List<ReservationStep2>)request.getAttribute("scheduleList");
 int bsidx = 0;
+String bcname = "";
 /* System.out.println(mode);
 System.out.println(ri_sday1);	// 편도 : 가는날	왕복 : 가는날	형식 : yyyy.mm.dd
 System.out.println(ri_sday2);	// 편도 : 가는날 	왕복 : 오는날	
@@ -93,7 +94,7 @@ tr:hover {
 		<div class="col-md-12 text-center mb-5">
 		<h5 class="text-left"><% if (mode.equals("p")) { // 편도일 경우 %>가는편<%} %><%else { // 왕복일 경우 %>가는 날 가는편<%} %></h5>
 		<form name="frmSchedule" action="sTicketingStep03" method="post">
-		<input type="hidden" name="mode" id="mode" value="<%=mode %>" />
+		<input type="hidden" id="ri_sday1" name="ri_sday1" value="" />
 		<table class="table">
 			<colgroup>
 				<col width="5%">
@@ -119,12 +120,10 @@ tr:hover {
 			</tr>
 			</tbody>
 		</table>
-		</form>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-		<form name="frmSchedule" action="sTicketingStep03" method="post">
 		<table class="table table-hover">
 			<colgroup>
 				<col width="10%">
@@ -157,7 +156,7 @@ tr:hover {
 				<td><%=sl.getBi_level() %></td>		<!-- 버스등급 bi_level -->
 				<td><%=sl.getBl_adult() %></td>	<!-- 성인요금 bl_adult -->
 				<td><%=seat%></td>		<!-- 전체좌석 int seat		if(bi_level.equals("우등")) seat = 28 else seat = 36 -->
-				<td>구하는 방법을 알려줘...</td>		<!-- 잔여(예매가능)좌석 si.getLseat -->			
+				<td>잔여좌석 구해줘...</td>		<!-- 잔여(예매가능)좌석 si.getLseat -->			
 			</tr>
 <% } %>				
 			</tbody>
@@ -209,7 +208,6 @@ function getToday(){
 
 $(document).ready(function() {
 	
-    
 	$("#sday1").datepicker({
 		format: "yyyy.mm.dd",
 		autoclose: true,
@@ -218,13 +216,22 @@ $(document).ready(function() {
 		language: "kr",
 		showMonthAfterYear: true,
 		weekStart: 1,
-		});
-		
+		})
+	    .on('changeDate', function(e) {	
+	      $("#ri_sday1").val($(this).val());	// 왕복 가는 날, 오는 날 값 설정
+	    });
+		console.log($("#ri_sday1"));
 });
 
 function rowClicked(row) {
-	  // 클릭한 행의 데이터를 가져오기
-	  var bsidx = <%=bsidx %>; // bs_idx 값 추가
+// 클릭한 행의 데이터를 가져오기
+	  var bsidx = <%=bsidx %>;				// 시간표 인덱스
+	  var bcname = row.cells[1].innerText;	// 버스회사이름
+	  var lSeat = row.cells[5].innerText;	// 잔여좌석
+	  if (lSeat == 0) {
+		  alert("예매 가능한 좌석이 없습니다.");
+		  return;
+	  }
 	  // 기존의 form 가져오기
 	  var form = document.forms['frmSchedule'];
 	  // 클릭한 행의 데이터를 input hidden 필드로 추가
@@ -233,6 +240,13 @@ function rowClicked(row) {
 	  bsIdxInput.name = 'bsidx';
 	  bsIdxInput.value = bsidx;
 	  form.appendChild(bsIdxInput);
+	  
+ 	  var busCompanyInput = document.createElement('input');
+	  busCompanyInput.type = 'hidden';
+	  busCompanyInput.name = 'bcname';
+	  busCompanyInput.value = bcname;
+	  form.appendChild(busCompanyInput); 
+	  
 	  // form 서버로 제출
 	  form.submit();
 }
