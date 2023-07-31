@@ -3,7 +3,8 @@
 <%@ include file="../_inc/head.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
-String mode = request.getParameter("mode");
+ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
+String mode = ri1.getMode();
 %>
 <section class="probootstrap_section">
 	<div class="container">
@@ -87,10 +88,10 @@ String mode = request.getParameter("mode");
 			  <tbody>
 			    <tr>
 			      <td><span class="badge badge-danger">출발지</span></td>
-			      <td>서울</td>
+			      <td><%=ri1.getSspot() %></td>
 			      <td><span class="badge badge-primary">도착지</span></td>
-			      <td>부산</td>
-			      <td>2023.07.06 목</td>
+			      <td><%=ri1.getEspot() %></td>
+			      <td><%=ri1.getSdate() %></td>
 			      <td>출발 06:45</td>
 			      <td>도착 10:45</td>
 			      <td>금호고속</td>

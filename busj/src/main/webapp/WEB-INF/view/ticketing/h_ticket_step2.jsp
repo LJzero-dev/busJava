@@ -139,6 +139,7 @@ tr.data:hover { cursor: pointer; }
 for (ScheduleInfo sl : scheduleList) { %>
 					<tr class="data">
 					<input type="hidden" value="<%=sl.getBs_idx() %>" />
+					
 						<td><%=sl.getBs_stime() %></td>
 					    <td><%=sl.getComname() %>고속</td>
 					    <td><%=sl.getBi_level() %></td>
@@ -198,7 +199,6 @@ $(document).ready(function() {
 		});
 
 	$("tr.data").on('click', function() {
-		alert(1);
 		document.frmSchedule.submit();
 	});
 });

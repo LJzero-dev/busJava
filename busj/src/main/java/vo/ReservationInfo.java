@@ -3,7 +3,8 @@ package vo;
 public class ReservationInfo {
 	private int	ri_idx,	bs_idx,	ri_acnt, ri_scnt, ri_ccnt;
 	private String mi_id, ri_sday, ri_status, ri_date, ri_type;
-	private String mode, sdate, edate, sspot, espot;	// 왕복편도 구분, 출발일, 도착일, 출발장소, 도착장소 ===> 왕복이면 세션2개로 한다
+	private String mode, sdate, sspot, espot;	// 왕복편도 구분, 탑승일, 출발장소, 도착장소, 노선번호 ===> 왕복이면 세션2개로 한다
+	private int linenum;
 	public int getRi_idx() {
 		return ri_idx;
 	}
@@ -76,12 +77,6 @@ public class ReservationInfo {
 	public void setSdate(String sdate) {
 		this.sdate = sdate;
 	}
-	public String getEdate() {
-		return edate;
-	}
-	public void setEdate(String edate) {
-		this.edate = edate;
-	}
 	public String getSspot() {
 		return sspot;
 	}
@@ -94,7 +89,11 @@ public class ReservationInfo {
 	public void setEspot(String espot) {
 		this.espot = espot;
 	}
-	
-	
-	
+	public int getLinenum() {
+		return linenum;
+	}
+	public void setLinenum(int linenum) {
+		this.linenum = linenum;
+	}
+
 }
