@@ -21,10 +21,17 @@ public class STicketingSvc {
 		return lineList;
 	}
 
-	public List<ReservationStep2> getScheduleList(String btsname, String btename) {
-	// 받아온 출발지와 도착지를 이용하여 노선을 구하고 해당 노선에 운영되는 시간표를 ScheduleInfo형 scheduleList인스턴스로 받아옴
-		List<ReservationStep2> scheduleList = sTicketingDao.getScheduleList(btsname, btename);
+	public int getsLineNum(String btsname, String btename) {
+	// 받아온 출발지와 도착지를 이용하여 노선을 구함
+		int blidx = sTicketingDao.getsLineNum(btsname, btename);
+		return blidx;
+	}
+	
+	public List<ReservationStep2> getScheduleList(int blidx, String ri_sday1) {
+	// 구해온 노선에 운영되는 시간표를 ScheduleInfo형 scheduleList인스턴스로 받아옴
+		List<ReservationStep2> scheduleList = sTicketingDao.getScheduleList(blidx, ri_sday1);
 		return scheduleList;
 	}
+	
 }
 

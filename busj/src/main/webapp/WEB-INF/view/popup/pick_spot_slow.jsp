@@ -251,6 +251,9 @@ $("#btnSubmit").on('click', function() {
 	}
 	$("#btsname").val(($("#sPointPop").val()));
 	$("#btename").val(($("#ePointPop").val()));
+	let btsname = $("#btsname").val();
+	let btename = $("#btename").val();
+	
 	$('#ViewModal').modal('hide');
 	
 });

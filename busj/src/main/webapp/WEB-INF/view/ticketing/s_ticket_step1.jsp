@@ -72,11 +72,8 @@
 	<div class="col-md-8 probootstrap-animate fadeInUp probootstrap-animated m-auto">
 	<form name="frmLineInfo" action="sTicketingStep02"  method="post" class="probootstrap-form">
 	<input type="hidden" name="mode" id="mode" value="p" />	<!-- 편도: p / 왕복: w -->
-	<input type="hidden" name="ri_sday1" id="ri_sday1" value="" />	<!-- 편도 가는 날 -->
-	<input type="hidden" name="ri_sday2" id="ri_sday2" value="" />	<!-- 왕복 가는 날 -->
-	<input type="hidden" name="ri_sday3" id="ri_sday3" value="" />	<!-- 왕복 오는 날 -->
-	<input type="hidden" name="bt_sidx" id="bt_sidx" value="" />	<!-- 출발지 idx -->
-	<input type="hidden" name="bt_eidx" id="bt_eidx" value="" />	<!-- 도착지 idx -->
+	<input type="hidden" name="ri_sday1" id="ri_sday1" value="" />	<!-- 편도 가는 날 왕복 가는 날-->
+	<input type="hidden" name="ri_sday2" id="ri_sday2" value="" />	<!-- 편도 가는 날 왕복 오는 날 -->
 		<div class="form-group">
 		<ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
 			<li class="nav-item" role="presentation">

@@ -9,13 +9,7 @@ String ri_sday2 = request.getParameter("ri_sday2");
 String btsname = request.getParameter("btsname");
 String btename = request.getParameter("btename");
 List<ReservationStep2> scheduleList = (List<ReservationStep2>)request.getAttribute("scheduleList");
-int bsidx = 0;
-String bcname = "";
-/* System.out.println(mode);
-System.out.println(ri_sday1);	// 편도 : 가는날	왕복 : 가는날	형식 : yyyy.mm.dd
-System.out.println(ri_sday2);	// 편도 : 가는날 	왕복 : 오는날	
-System.out.println(btsname);	// 출발지 : 터미널 이름(bt_name)
-System.out.println(btename);	// 도착지 : 터미널 이름(bt_name) */
+
 %>
 <style>
 tr:hover {
@@ -144,19 +138,23 @@ tr:hover {
 			</tr>
 			</thead>
 			<tbody class="text-center">
-<%for (ReservationStep2 sl : scheduleList) {
-	bsidx = sl.getBs_idx();
-	int seat = 0;
-	if (sl.getBi_level().equals("우등"))	seat = 28;
-	else 								seat = 36;
+<%if (scheduleList.size() > 0) {	// 해당 노선의 시간표가 있는 경우
+	for (ReservationStep2 sl : scheduleList) {
 %>
-			<tr onclick="rowClicked(this)">	
-				<td><%=sl.getBs_stime() %></td>	<!-- 출발시간 si.getBs_stime -->
-				<td><%=sl.getBc_name() %></td>	<!-- 버스회사이름 bc_name -->
+			<tr onclick="rowClicked(this);">
+				<td><%=sl.getBs_stime() %></td>		<!-- 출발시간 si.getBs_stime -->
+				<td><%=sl.getBc_name() %></td>		<!-- 버스회사이름 bc_name -->
 				<td><%=sl.getBi_level() %></td>		<!-- 버스등급 bi_level -->
-				<td><%=sl.getBl_adult() %></td>	<!-- 성인요금 bl_adult -->
-				<td><%=seat%></td>		<!-- 전체좌석 int seat		if(bi_level.equals("우등")) seat = 28 else seat = 36 -->
-				<td>잔여좌석 구해줘...</td>		<!-- 잔여(예매가능)좌석 si.getLseat -->			
+				<td><%=sl.getBl_adult() %></td>		<!-- 성인요금 bl_adult -->
+				<td><%=sl.getTotal_seat()%></td>	<!-- 전체좌석 int seat		if(bi_level.equals("우등")) seat = 28 else seat = 36 -->
+				<td><%=sl.getLeft_seat() %></td>	<!-- 잔여(예매가능)좌석 si.getLseat -->
+				<input type="hidden" name="bsidx" value="<%=sl.getBs_idx() %>" />
+				<input type="hidden" name="etime" value="<%=sl.getBs_etime() %>" />				
+			</tr>
+<% } 
+} else {%>
+			<tr>
+				<td colspan="6">해당 노선의 시간표가 없습니다.</td>
 			</tr>
 <% } %>				
 			</tbody>
@@ -220,33 +218,62 @@ $(document).ready(function() {
 	    .on('changeDate', function(e) {	
 	      $("#ri_sday1").val($(this).val());	// 왕복 가는 날, 오는 날 값 설정
 	    });
-		console.log($("#ri_sday1"));
+
 });
 
 function rowClicked(row) {
 // 클릭한 행의 데이터를 가져오기
-	  var bsidx = <%=bsidx %>;				// 시간표 인덱스
-	  var bcname = row.cells[1].innerText;	// 버스회사이름
-	  var lSeat = row.cells[5].innerText;	// 잔여좌석
-	  if (lSeat == 0) {
+	  var stime = row.cells[0].innerText;		// 출발시간
+	  var bcname = row.cells[1].innerText;		// 버스회사이름
+	  var bilevel = row.cells[2].innerText;		// 버스등급
+	  var bladult = row.cells[3].innerText;		// 성인요금
+	  var totalseat = row.cells[4].innerText;	// 전체좌석
+	  var leftseat = row.cells[5].innerText;	// 잔여좌석
+	  if (leftseat == 0) {
 		  alert("예매 가능한 좌석이 없습니다.");
 		  return;
 	  }
 	  // 기존의 form 가져오기
 	  var form = document.forms['frmSchedule'];
+	  
 	  // 클릭한 행의 데이터를 input hidden 필드로 추가
-	  var bsIdxInput = document.createElement('input');
-	  bsIdxInput.type = 'hidden';
-	  bsIdxInput.name = 'bsidx';
-	  bsIdxInput.value = bsidx;
-	  form.appendChild(bsIdxInput);
 	  
  	  var busCompanyInput = document.createElement('input');
 	  busCompanyInput.type = 'hidden';
-	  busCompanyInput.name = 'bcname';
+	  busCompanyInput.name = 'bcname';	  
 	  busCompanyInput.value = bcname;
 	  form.appendChild(busCompanyInput); 
-	  
+
+	  var departureTimeInput = document.createElement('input');
+	  departureTimeInput.type = 'hidden';
+	  departureTimeInput.name = 'stime';  
+	  departureTimeInput.value = stime;
+	  form.appendChild(departureTimeInput);
+	
+	  var busLevelInput = document.createElement('input');
+	  busLevelInput.type = 'hidden';
+	  busLevelInput.name = 'bilevel';	  
+	  busLevelInput.value = bilevel;
+	  form.appendChild(busLevelInput);
+	
+	  var adultFareInput = document.createElement('input');
+	  adultFareInput.type = 'hidden';
+	  adultFareInput.name = 'bladult';	  
+	  adultFareInput.value = bladult;
+	  form.appendChild(adultFareInput);
+	
+	  var totalSeatsInput = document.createElement('input');
+	  totalSeatsInput.type = 'hidden';
+	  totalSeatsInput.name = 'totalseat';  
+	  totalSeatsInput.value = totalseat;
+	  form.appendChild(totalSeatsInput);
+	
+	  var availableSeatsInput = document.createElement('input');
+	  availableSeatsInput.type = 'hidden';
+	  availableSeatsInput.name = 'leftseat';  
+	  availableSeatsInput.value = leftseat;
+	  form.appendChild(availableSeatsInput);
+
 	  // form 서버로 제출
 	  form.submit();
 }

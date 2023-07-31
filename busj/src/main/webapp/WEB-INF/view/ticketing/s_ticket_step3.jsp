@@ -5,11 +5,10 @@
 <%
 request.setCharacterEncoding("utf-8");
 int bsidx = Integer.parseInt(request.getParameter("bsidx"));	// 시간표인덱스 번호
-String ri_sday1 = request.getParameter("ri_sday1");				// 2단계에서 가는 날을 바꿨을 경우 받아오는 날짜
-String bcname = request.getParameter("bcname");					// 버스회사 이름
-System.out.println(bcname);
 String mode = "";
-ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
+String totalseat = request.getParameter("totalseat");
+String leftseat = request.getParameter("leftseat");
+ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
 if (ri1 != null) {
     mode = ri1.getMode();
 } else {
@@ -91,7 +90,6 @@ if (ri1 != null) {
 	<div class="row">
 		<div class="col-md-12 text-center mb-5">
 		<h4 class="display-5 probootstrap-section-heading text-left"><% if (mode.equals("p")) { // 편도일 경우 %>가는편<%} %><%else { // 왕복일 경우 %>가는 날 가는편<%} %></h4>
-		<form name="frmSeat" action="sTicketingStep04" method="post">
 		<table class="table">
 			<colgroup>
 				<col width="5%">
@@ -109,17 +107,18 @@ if (ri1 != null) {
 				<td><span class="badge badge-primary">도착지</span></td>
 				<td><%=ri1.getEspot() %></td>
 				<td><%=ri1.getSdate() %></td>
-				<td>출발 06:45</td>
-				<td>도착 10:45</td>
-				<td><%=bcname %></td>
+				<td>출발 <%=ri1.getStime() %></td>
+				<td>도착 <%=ri1.getEtime() %></td>
+				<td><%=ri1.getComname() %></td>
 			</tr>
 			</tbody>
 		</table>
 		</div>
 	</div>
+	<form name="frmSeat" action="sTicketingStep04" method="post">
 	<div class="row justify-content-center">
 		<div class="col-md-6 text-center">
-			<p>좌석선택 27/28</p>
+			<p>좌석선택 <%=leftseat %> / <%=totalseat %></p>
             <div class="seat-bg seat28 ml-auto">
               <div class="seat-list">
                 <span class="seat-box disabled"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_01" value="1" onclick="" disabled><label for="seatNum_28_01">1</label></span>
@@ -160,13 +159,13 @@ if (ri1 != null) {
               <div class="d-block mb-2">
                 <span class="mr-3">성인</span>
                 <div class="btn-group custom">
-                  <button type="button" class="btn btn-primary p-1">
+                  <button type="button" class="btn btn-primary p-1" onclick="">	<!-- [-] 버튼 -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
                     <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>
                     </svg>
                   </button>
-                  <input class="form-control text-center" type="text" name="ex1" id="exampleRadios1" value="1" size="5">
-                  <button type="button" class="btn btn-primary p-1">
+                  <input class="form-control text-center" type="text" name="riacnt" id="riacnt" value="1" size="5">	<!-- 성인티켓량 -->
+                  <button type="button" class="btn btn-primary p-1" onclick="">	<!-- [+] 버튼 -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                       <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
                     </svg>
@@ -181,7 +180,7 @@ if (ri1 != null) {
                     <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>
                     </svg>
                   </button>
-                  <input class="form-control text-center" type="text" name="ex1" id="exampleRadios1" value="1" size="5">
+                  <input class="form-control text-center" type="text" name="riscnt" id="riscnt" value="0" size="5">
                   <button type="button" class="btn btn-primary p-1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                       <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -197,7 +196,7 @@ if (ri1 != null) {
                     <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>
                     </svg>
                   </button>
-                  <input class="form-control text-center" type="text" name="ex1" id="exampleRadios1" value="1" size="5">
+                  <input class="form-control text-center" type="text" name="riccnt" id="riccnt" value="0" size="5">
                   <button type="button" class="btn btn-primary p-1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                       <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -210,7 +209,7 @@ if (ri1 != null) {
             </div>
             <div class="col-md-6 mb-5">
               <h4>선택 좌석</h4>
-              <p class="h5">15, 16, 17</p>
+              <p class="h5">?, ?, ?</p>
               <hr />
             </div>
             <div class="col-md-6">
@@ -229,12 +228,13 @@ if (ri1 != null) {
               </div>
               <hr />
               <p class="h5 text-right mb-5">총 ?원</p>
-            <button type="button" class="btn btn-primary btn-block">선택완료</button>
+            <button type="submit" class="btn btn-primary btn-block">선택완료</button>
 
             </div>
         </div>
         
       </div>
+      </form>
       </div>
     </section>
     <!-- END section -->
@@ -243,50 +243,7 @@ if (ri1 != null) {
 <%@ include file="../_inc/foot.jsp" %>
 <script>
 
-function openModal() {
-	$('#ViewModal .modal-content').load("/busj/pickSpotHigh");
-	$('#ViewModal').modal()
-  }
 
-function getToday(){
-	const DATE = new Date();
-    const YEAR = DATE.getFullYear();
-    const MONTH = ("0" + (1 + DATE.getMonth())).slice(-2);
-    const DAY = ("0" + DATE.getDate()).slice(-2);
-
-    return YEAR + "." + MONTH + "." + DAY;
-}
-
-
-$(document).ready(function() {
-	
-    
-	$("#sday1").datepicker({
-		format: "yyyy.mm.dd",
-		autoclose: true,
-		startDate: "0d",
-		endDate: "+30d",
-		language: "kr",
-		showMonthAfterYear: true,
-		weekStart: 1,
-		});
-		
-});
-
-function rowClicked(row) {
-	  // 클릭한 행의 데이터를 가져오기
-	  var bsidx = <%=bsidx %>; // bs_idx 값 추가
-	  // 기존의 form 가져오기
-	  var form = document.forms['frmSchedule'];
-	  // 클릭한 행의 데이터를 input hidden 필드로 추가
-	  var bsIdxInput = document.createElement('input');
-	  bsIdxInput.type = 'hidden';
-	  bsIdxInput.name = 'bsidx';
-	  bsIdxInput.value = bsidx;
-	  form.appendChild(bsIdxInput);
-	  // form 서버로 제출
-	  form.submit();
-}
 </script>
 
 

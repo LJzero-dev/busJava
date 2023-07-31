@@ -2,7 +2,7 @@ package vo;
 
 public class ReservationStep2 {
 // 버스예매 2단계 시간표조회 시 필요한 컬럼들
-	private int bs_idx, bl_idx, bi_idx, bl_adult;
+	private int bs_idx, bl_idx, bi_idx, bl_adult, total_seat, left_seat;
 	// 시간표 인덱스, 노선번호, 버스번호, 성인요금
 	private String bs_stime, bs_etime, bl_type, bc_name, bi_level;
 	// 출발시간, 도착시간, 버스구분(고속/시외), 버스회사이름, 버스등급
@@ -29,6 +29,18 @@ public class ReservationStep2 {
 	}
 	public void setBl_adult(int bl_adult) {
 		this.bl_adult = bl_adult;
+	}
+	public int getTotal_seat() {
+		return total_seat;
+	}
+	public void setTotal_seat(int total_seat) {
+		this.total_seat = total_seat;
+	}
+	public int getLeft_seat() {
+		return left_seat;
+	}
+	public void setLeft_seat(int left_seat) {
+		this.left_seat = left_seat;
 	}
 	public String getBs_stime() {
 		return bs_stime;

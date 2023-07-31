@@ -36,7 +36,7 @@ public class STicketingCtrl {
 	@ResponseBody
 	public List<LineInfo> sLineSch(@RequestParam int btsidx) {
 		// btsidx에 해당하는 터미널 목록을 조회한 결과로 List<LineInfo>를 반환
-        List<LineInfo> lineList = sTicketingSvc.getArrivalLineList(btsidx);
+		List<LineInfo> lineList = sTicketingSvc.getArrivalLineList(btsidx);
         return lineList;
 	}
 	
@@ -48,20 +48,22 @@ public class STicketingCtrl {
 		String ri_sday1 = request.getParameter("ri_sday1");		String ri_sday2 = request.getParameter("ri_sday2");
 		String btsname = request.getParameter("btsname");		String btename = request.getParameter("btename");
 		
+		int blidx = sTicketingSvc.getsLineNum(btsname, btename);
+		
 		HttpSession session = request.getSession();	
 		ReservationInfo ri1 =  new ReservationInfo();	// 편도/왕복의 가는 날 세션(ri1) 
 		ri1.setMode(mode);			ri1.setSdate(ri_sday1);
-		ri1.setSspot(btsname);		ri1.setEspot(btename);
+		ri1.setSspot(btsname);		ri1.setEspot(btename);		ri1.setLinenum(blidx);
 		session.setAttribute("ri1", ri1);
 		
 		if (mode.equals("w")) {	// 왕복 예매일 경우 오는 날 세션(ri2)도 생성		/ 탑승일을 ri_sday2로 출발지와 도착지는 서로 크로스하여 입력
 			ReservationInfo ri2 =  new ReservationInfo();
-			ri2.setMode(mode);			ri2.setEdate(ri_sday2);
+			ri2.setMode(mode);			ri2.setSdate(ri_sday2);
 			ri1.setSspot(btename);		ri1.setEspot(btsname);
 			session.setAttribute("ri2", ri2);
 		}
 		
-		List<ReservationStep2>scheduleList = sTicketingSvc.getScheduleList(btsname, btename);
+		List<ReservationStep2>scheduleList = sTicketingSvc.getScheduleList(blidx, ri_sday1);
 		request.setAttribute("scheduleList", scheduleList);
 		
 		return "ticketing/s_ticket_step2";
@@ -72,12 +74,21 @@ public class STicketingCtrl {
 		// bs_idx로 버스 운영시간표 (출발시간, 도착시간) / bi_idx로 조인해서 버스 좌석 정보 (좌석 번호) 가져오기
 		// 예매된 좌석은 선택이 되지 않게 (checkbox 비활성화)
 		request.setCharacterEncoding("utf-8");
-		HttpSession session = request.getSession();	
-		ReservationInfo ri1 =  new ReservationInfo();
 		int bsidx = Integer.parseInt(request.getParameter("bsidx"));
-		String bcname = request.getParameter("bcname");
+		
+		String bcname = request.getParameter("bcname");		String bilevel = request.getParameter("bilevel");
+		String stime = request.getParameter("stime");		String etime = request.getParameter("etime");
+		int bladult = Integer.parseInt(request.getParameter("bladult"));
+		int totalseat = Integer.parseInt(request.getParameter("totalseat"));
+		int leftseat = Integer.parseInt(request.getParameter("leftseat"));
+		
+		HttpSession session = request.getSession();	
+		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
+		ri1.setBs_idx(bsidx);		ri1.setComname(bcname);		ri1.setLevel(bilevel);	ri1.setPrice(bladult);
+		ri1.setStime(stime);		ri1.setEtime(etime);		
+		
 		String ri_sday1 = request.getParameter("ri_sday1");			// 예매 2단계에서 날짜를 바꾸게 되면 받아오는 값
-		if (ri_sday1 != null && !ri_sday1.equals(""))	ri1.setRi_sday(ri_sday1);	// 바뀐 값이 있으면 세션에 다시 담기
+		if (ri_sday1 != null && !ri_sday1.equals(""))	ri1.setSdate(ri_sday1);	// 바뀐 값이 있으면 세션에 다시 담기
 		
 		
 			
