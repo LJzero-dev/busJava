@@ -105,7 +105,7 @@ public class TerminalDao {
 	}
 
 	public List<BusInfo> getBusInfo() {
-		String sql = "select * from t_bus_info where bi_status = 'y'";
+		String sql = "select * from t_bus_info a, t_bus_company b where a.bc_idx = b.bc_idx and bi_status = 'y'";
 		List<BusInfo> busInfo = jdbc.query(sql, 
 				(ResultSet rs, int rowNum) -> {
 					BusInfo bi = new BusInfo();
@@ -113,6 +113,7 @@ public class TerminalDao {
 					bi.setBi_idx(rs.getInt("bi_idx"));
 					bi.setBi_level(rs.getString("bi_level"));
 					bi.setBi_num(rs.getString("bi_num"));
+					bi.setBc_name(rs.getString("bc_name"));
 					return bi;
 				});
 		return busInfo;

@@ -7,6 +7,8 @@
 request.setCharacterEncoding("utf-8");
 
 List<BusLineInfo> busLineList = (List<BusLineInfo>)request.getAttribute("busLineList");
+List<BusInfo> busInfo = (List<BusInfo>)request.getAttribute("busInfo");
+
 %>
 <script>
 function delLine(lineNum) {
@@ -22,10 +24,6 @@ function openModal(area) {
 	$('#AddLine .modal-content').load("/adminbusj/popUpLineAdd?bt_idx=" + 
 	<%=request.getParameter("bt_idx")%> + "&bt_name=" + bt_name);
 	$('#AddLine').modal();
-}
-
-function scheduleAdd() {
-	
 }
 
 function adultGyesan(sale) {
@@ -49,7 +47,6 @@ function adultGyesan(sale) {
 function restrictAdult(input) {
 	input.value = input.value.replace(/[^0-9]/g, '');
 }
-
 
 </script>
 <style>
@@ -91,6 +88,7 @@ function restrictAdult(input) {
 			</div>		
 		</div>
 		<div class="card">
+		<form name="frmIn" action="" method="">
 		<table class="table text-center mb-0 padding-size-sm">
 			<colgroup>
 				<col width="10%">
@@ -124,14 +122,50 @@ function restrictAdult(input) {
             
             <tbody class="border border-primary ">
                 <tr>
-                    <td><%=bs.getBs_stime() %></td>
-                    <td><%=bs.getBs_etime() %></td>
-                    <td><%=bs.getBc_name() %></td>
-                    <td><%=bs.getBi_num() %></td>
-                    <td><%=bs.getBi_level() %></td>
-                    <td><%=bl.getBl_adult() %>원</td>
-                    <td><%=Math.round(bl.getBl_adult() * 0.8) %></td>
-                    <td><%=Math.round(bl.getBl_adult() * 0.5) %></td>
+                    <td><input type="text" class="text-center" style="width:100px; border:0;"  
+                    value="<%=bs.getBs_stime() %>" readonly="readonly" /></td>
+                    <td><input type="text" class="text-center" style="width:100px; border:0;"  
+                    value="<%=bs.getBs_etime() %>" readonly="readonly" /></td>
+                    <td><input type="text" class="text-center" style="width:100px; border:0;" 
+                    value="<%=bs.getBc_name() %>" readonly="readonly" /></td>
+                    <td><input type="text" class="text-center" style="width:100px; border:0;"  
+                    value="<%=bs.getBi_num() %>" readonly="readonly" /></td>
+                    <td><input type="text" class="text-center" style="width:100px; border:0;" 
+                    value="<%=bs.getBi_level() %>" readonly="readonly" /></td>
+<% 
+String tmp = "";
+String tmp1 = "";
+String tmp2 = "";
+tmp += Math.round(bl.getBl_adult() * 0.8);
+tmp1 += Math.round(bl.getBl_adult());
+tmp2 += Math.round(bl.getBl_adult() * 0.5);
+
+StringBuffer sb = new StringBuffer();
+StringBuffer sb1 = new StringBuffer();
+StringBuffer sb2 = new StringBuffer();
+
+sb.append(tmp);
+if (tmp.length() > 7)
+	sb.insert(3, ",");
+sb.insert(2, ",");
+
+sb1.append(tmp1);
+if (tmp1.length() > 7)
+	sb1.insert(3, ",");
+sb1.insert(2, ",");
+
+sb2.append(tmp2);
+if (tmp2.length() > 7)
+	sb2.insert(3, ",");
+sb2.insert(2, ",");
+
+%>
+					<td><input type="text" class="text-center" style="width:100px; border:0;" 
+                    value="<%=sb1 %>원" readonly="readonly" /></td>
+					<td><input type="text" class="text-center" style="width:100px; border:0;" 
+                    value="<%=sb %>원" readonly="readonly" /></td>
+                    <td><input type="text" class="text-center" style="width:100px; border:0;" 
+                    value="<%=sb2 %>원" readonly="readonly" /></td>
                     <td>수정, 삭제</td>
                 </tr>
             </tbody>
@@ -145,29 +179,37 @@ function restrictAdult(input) {
             	</tr>
             </tbody>
 <%	} %>
+			
 			<tbody class="border border-primary">
                 <tr style="" id="dis">
                     <td>
-    					<input type="text" name="time1" id="time1" class="timepicker mt-1" >
+    					<input type="text" name="time1" id="time1" class="timepicker mt-1" oninput="updateTime2Options(this.value);" >
 				    </td>
                     <td>
                     	<input type="text" name="time2" id="time2" class="timepicker mt-1" >
                     </td>
                     <td style="padding:10px 20px;">
-                    <select class="form-control" >
+                    <select class="form-control text-center" id="company" name="company" onchange="companyChange();">
                     	<option value="">회사명</option>
+                    	<option>금호고속</option>
+                    	<option>동부고속</option>
+                    	<option>동양고속</option>
+                    	<option>중앙고속</option>
                     </select>
                     </td>
-                    <td style="padding:10px 20px;">
-                    <select class="form-control">
+                    <td style="padding:10px 50px;">
+                    <select class="form-control text-center" id="number" name="number">
                     	<option value="">차량번호</option>
+<% for (BusInfo bi : busInfo) { %>
+						<option value="<%=bi.getBc_name() %>"><%=bi.getBi_num() %></option>
+<% } %>
                     </select>
                     </td>
                     <td style="padding:10px 20px;">
-                    <select class="form-control">
+                    <select class="form-control text-center" name="level">
                     	<option value="">등급</option>
-                    	<option value="">우등</option>
-                    	<option value="">프리미엄</option>
+                    	<option>우등</option>
+                    	<option>프리미엄</option>
                     </select>
                     </td>
                     <td><input type="text" class="text-right mt-1" style="width:80px;" id="adult" oninput="restrictAdult(this)" 
@@ -178,6 +220,7 @@ function restrictAdult(input) {
                 </tr>
             </tbody>
         </table>
+        </form>
 		</div>
 		</div>
 	</div>
@@ -193,18 +236,64 @@ function restrictAdult(input) {
 </div>
 </section>
 <script>
+
 $(function () {
-	$(".timepicker").timepicker({
-	    timeFormat: 'HH:mm',
-	    interval: 10,
-	    minTime: '00:00',
-	    maxTime: '23:59',
-	    defaultTime: '00:00',
-	    startTime: '00:00',
-	    dynamic: false,
-	    dropdown: true,
-	    scrollbar: true
-	});
+    $("#time1").timepicker({
+        timeFormat: 'HH:mm',
+        interval: 10,
+        minTime: '00:00',
+        maxTime: '23:59',
+        defaultTime: '06:00',
+        startTime: '06:00',
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true,
+        change: function (time) {
+            var from_time = $("#time1").val(); // time1에서 선택한 값
+            $("#time2").timepicker('option', 'minTime', from_time); // time2의 minTime 변경
+
+            // time2가 time1보다 작은 경우, time2를 time1과 동일하게 설정
+            if ($("#time2").val() && $("#time2").val() < from_time) {
+                $("#time2").timepicker('setTime', from_time);
+            }
+        }
+        
+    });
+      
+
+    $("#time2").timepicker({
+        timeFormat: 'HH:mm',
+        interval: 10,
+        minTime: '00:00',
+        maxTime: '23:59',
+        defaultTime: '07:00',
+        startTime: '07:00',
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true
+        
+    });
+    
 });
+
+
+function companyChange() {
+	var inputStateValue = document.getElementById('company').value;
+	var numberOptions = document.getElementById('number').options;
+
+	for (var i = 0; i < numberOptions.length; i++) {
+		var option = numberOptions[i];
+		var option2 = option.value;
+		var arrOption = option2.split(":");
+	    if (inputStateValue == '' || arrOption[0] == inputStateValue) {
+	    	option.style.display = 'block';
+	    	
+	    } else {
+	    	option.style.display = 'none';
+		}
+		
+	}
+}
+
 </script>
 <%@ include file="../_inc/foot.jsp" %>

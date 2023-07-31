@@ -2,7 +2,7 @@ package vo;
 
 public class BusInfo {
 	private int bi_idx, bc_idx;
-	private String bi_num, bi_level, bi_status;
+	private String bi_num, bi_level, bi_status, bc_name;
 	
 	
 	public int getBi_idx() {
@@ -34,6 +34,12 @@ public class BusInfo {
 	}
 	public void setBi_status(String bi_status) {
 		this.bi_status = bi_status;
+	}
+	public String getBc_name() {
+		return bc_name;
+	}
+	public void setBc_name(String bc_name) {
+		this.bc_name = bc_name;
 	}
 	
 	
