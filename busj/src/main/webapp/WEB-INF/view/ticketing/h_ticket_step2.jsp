@@ -135,11 +135,18 @@ tr.data:hover { cursor: pointer; }
 		            <tbody class="text-center">
 		            <!-- 시간표 영역 -->
 					<form name="frmSchedule" method="post" action="hTicketingStep03">
+					<input type="hidden" id="bsidx" name="bsidx" value="" />
+					<input type="hidden" id="bllevel" name="bllevel" value="" />
+					<input type="hidden" id="price" name="price" value="" />
+					<input type="hidden" id="comname" name="comname" value="" />
+					<input type="hidden" id="stime" name="stime" value="" />
+					<input type="hidden" id="etime" name="etime" value="" />
+					<input type="hidden" id="total-seat" name="total-seat" value="" />
+					<input type="hidden" id="left-seat" name="left-seat" value="" />
+					
 <% if (scheduleList.size() > 0) {	// 해당 노선의 시간표가 있는 경우
 for (ScheduleInfo sl : scheduleList) { %>
-					<tr class="data">
-					<input type="hidden" value="<%=sl.getBs_idx() %>" />
-					
+					<tr class="data" data-bsidx="<%=sl.getBs_idx()%>" data-etime="<%=sl.getBs_etime()%>">
 						<td><%=sl.getBs_stime() %></td>
 					    <td><%=sl.getComname() %>고속</td>
 					    <td><%=sl.getBi_level() %></td>
@@ -199,6 +206,26 @@ $(document).ready(function() {
 		});
 
 	$("tr.data").on('click', function() {
+		let stime = $(this).find('td:nth-child(1)').text();
+		let comname = $(this).find('td:nth-child(2)').text();
+		let level = $(this).find('td:nth-child(3)').text();
+		let bl_adult = $(this).find('td:nth-child(4)').text();
+		let totalseat = $(this).find('td:nth-child(5)').text();
+		let leftseat = $(this).find('td:nth-child(6)').text();
+		
+		let bsidx = $(this).data("bsidx");
+		let etimeT = $(this).data("etime");
+		let priceT = $(this).data("price");
+		
+		$("#bsidx").val(bsidx);
+		$("#bllevel").val(level);
+		$("#comname").val(comname);
+		$("#price").val(bl_adult);
+		$("#stime").val(stime);
+		$("#etime").val(etimeT);
+		$("#total-seat").val(totalseat);
+		
+		$("#left-seat").val(leftseat);
 		document.frmSchedule.submit();
 	});
 });

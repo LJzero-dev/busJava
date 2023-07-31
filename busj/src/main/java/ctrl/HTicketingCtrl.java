@@ -95,23 +95,25 @@ public class HTicketingCtrl {
 	@PostMapping("/hTicketingStep03")
 	public String hTicketingStep03(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
+		int bsidx = Integer.parseInt(request.getParameter("bsidx"));
+		String stime = request.getParameter("stime");
+		String etime = request.getParameter("etime");
+		int price = Integer.parseInt(request.getParameter("price"));
+		String comname = request.getParameter("comname");
+		String bllevel = request.getParameter("bllevel");
 		
 		HttpSession session = request.getSession();
 		
 		
 		ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
 		String mode = ri1.getMode();
-//		
-//		if (mode.equals("p")) {	// 편도일경우 (세션 1개 생성)
-//			
-//			session.setAttribute("ri1", ri1);
-//		} else {	// 왕복일 경우 (세션2개 생성)
-//			session.setAttribute("ri1", ri1);
-//			
-//			ReservationInfo ri2 = (ReservationInfo) session.getAttribute("ri2");
-//			session.setAttribute("ri2", ri2);
-//		}
 		
+		// 편도, 왕복 상관없음
+		ri1.setStime(stime);	ri1.setEtime(etime);
+		ri1.setPrice(price);	ri1.setBs_idx(bsidx);
+		ri1.setComname(comname); ri1.setLevel(bllevel);
+		session.setAttribute("ri1", ri1);
+
 //		List<ScheduleInfo> seatList = hTicketingSvc.getSeatList(sDate, lineNum);
 //		session.setAttribute("seatList", seatList);
 

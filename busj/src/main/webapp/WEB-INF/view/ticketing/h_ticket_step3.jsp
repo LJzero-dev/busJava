@@ -5,6 +5,9 @@
 request.setCharacterEncoding("utf-8");
 ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
 String mode = ri1.getMode();
+
+int totalSeat = Integer.parseInt(request.getParameter("total-seat"));
+int leftSeat = Integer.parseInt(request.getParameter("left-seat"));
 %>
 <section class="probootstrap_section">
 	<div class="container">
@@ -92,9 +95,9 @@ String mode = ri1.getMode();
 			      <td><span class="badge badge-primary">도착지</span></td>
 			      <td><%=ri1.getEspot() %></td>
 			      <td><%=ri1.getSdate() %></td>
-			      <td>출발 06:45</td>
-			      <td>도착 10:45</td>
-			      <td>금호고속</td>
+			      <td>출발 <%=ri1.getStime() %></td>
+			      <td>도착 <%=ri1.getEtime() %></td>
+			      <td><%=ri1.getComname() %></td>
 			    </tr>
 			  </tbody>
 			</table>
@@ -102,7 +105,7 @@ String mode = ri1.getMode();
 	</div>
 	<div class="row justify-content-center">
 		<div class="col-md-6 text-center">
-			<p>좌석선택 27/28</p>
+			<p>좌석선택 <%=leftSeat %>/<%=totalSeat %></p>
 			<div class="seat-bg seat28 ml-auto">
 		    <div class="seat-list">
 				<span class="seat-box disabled"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_01" value="1" onclick="" disabled><label for="seatNum_28_01">1</label></span>
@@ -166,7 +169,7 @@ String mode = ri1.getMode();
 				        <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>
 				        </svg>
 				      </button>
-				      <input class="form-control text-center" type="text" name="ex1" id="exampleRadios1" value="1" size="5">
+				      <input class="form-control text-center" type="text" name="ex1" id="exampleRadios1" value="0" size="5">
 				      <button type="button" class="btn btn-primary p-1">
 				        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
 				          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -184,7 +187,7 @@ String mode = ri1.getMode();
 				        <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>
 				        </svg>
 				      </button>
-				      <input class="form-control text-center" type="text" name="ex1" id="exampleRadios1" value="1" size="5">
+				      <input class="form-control text-center" type="text" name="ex1" id="exampleRadios1" value="0" size="5">
 				      <button type="button" class="btn btn-primary p-1">
 				        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
 				          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
