@@ -32,6 +32,11 @@ public class HTicketingSvc {
 		return scheduleList;
 	}
 
+	public List<SeatInfo> getSeatList(int bsidx) {
+		List<SeatInfo> seatList = hTicketingDao.getSeatList(bsidx);
+		return seatList;
+	}
+
 	
 	
 }

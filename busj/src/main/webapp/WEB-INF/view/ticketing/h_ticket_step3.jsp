@@ -8,6 +8,8 @@ String mode = ri1.getMode();
 
 int totalSeat = Integer.parseInt(request.getParameter("total-seat"));
 int leftSeat = Integer.parseInt(request.getParameter("left-seat"));
+
+List<SeatInfo> seatList = (List<SeatInfo>)session.getAttribute("seatList");
 %>
 <section class="probootstrap_section">
 	<div class="container">
@@ -21,11 +23,11 @@ int leftSeat = Integer.parseInt(request.getParameter("left-seat"));
 					      <div class="step-count"></div>
 					      <div class="step-description">정보 입력</div>
 					    </div>
-					    <div class="progress-step is-active">
+					    <div class="progress-step">
 					      <div class="step-count"></div>
 					      <div class="step-description">배차 조회</div>
 					    </div>
-					    <div class="progress-step">
+					    <div class="progress-step is-active">
 					      <div class="step-count"></div>
 					      <div class="step-description">좌석 선택</div>
 					    </div>
@@ -46,11 +48,11 @@ int leftSeat = Integer.parseInt(request.getParameter("left-seat"));
 							<div class="step-count"></div>
 							<div class="step-description">정보 입력</div>
 						</div>
-		                <div class="progress-step is-active">
+		                <div class="progress-step">
 		                  <div class="step-count"></div>
 		                  <div class="step-description">가는 날 배차 조회</div>
 		                </div>
-		                <div class="progress-step">
+		                <div class="progress-step is-active">
 		                  <div class="step-count"></div>
 		                  <div class="step-description">가는 날 좌석 선택</div>
 		                </div>
@@ -107,36 +109,47 @@ int leftSeat = Integer.parseInt(request.getParameter("left-seat"));
 		<div class="col-md-6 text-center">
 			<p>좌석선택 <%=leftSeat %>/<%=totalSeat %></p>
 			<div class="seat-bg seat28 ml-auto">
-		    <div class="seat-list">
-				<span class="seat-box disabled"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_01" value="1" onclick="" disabled><label for="seatNum_28_01">1</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_02" value="2" onclick=""><label for="seatNum_28_02">2</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_03" value="3" onclick=""><label for="seatNum_28_03">3</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_04" value="4" onclick=""><label for="seatNum_28_04">4</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_05" value="5" onclick=""><label for="seatNum_28_05">5</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_06" value="6" onclick=""><label for="seatNum_28_06">6</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_07" value="7" onclick=""><label for="seatNum_28_07">7</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_08" value="8" onclick=""><label for="seatNum_28_08">8</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_09" value="9" onclick=""><label for="seatNum_28_09">9</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_10" value="10" onclick=""><label for="seatNum_28_10">10</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_11" value="11" onclick=""><label for="seatNum_28_11">11</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_12" value="12" onclick=""><label for="seatNum_28_12">12</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_13" value="13" onclick=""><label for="seatNum_28_13">13</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_14" value="14" onclick=""><label for="seatNum_28_14">14</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_15" value="15" onclick=""><label for="seatNum_28_15">15</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_16" value="16" onclick=""><label for="seatNum_28_16">16</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_17" value="17" onclick=""><label for="seatNum_28_17">17</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_18" value="18" onclick=""><label for="seatNum_28_18">18</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_19" value="19" onclick=""><label for="seatNum_28_19">19</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_20" value="20" onclick=""><label for="seatNum_28_20">20</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_21" value="21" onclick=""><label for="seatNum_28_21">21</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_22" value="22" onclick=""><label for="seatNum_28_22">22</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_23" value="23" onclick=""><label for="seatNum_28_23">23</label></span>
-				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_24" value="24" onclick=""><label for="seatNum_28_24">24</label></span>
-				<span class="seat-box last_seat"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_25" value="25" onclick=""><label for="seatNum_28_25">25</label></span>
-				<span class="seat-box last_seat"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_26" value="26" onclick=""><label for="seatNum_28_26">26</label></span>
-				<span class="seat-box last_seat"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_27" value="27" onclick=""><label for="seatNum_28_27">27</label></span>
-				<span class="seat-box last_seat last"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_28" value="28" onclick=""><label for="seatNum_28_28">28</label></span>
-		    </div>
+			<div class="seat-list">
+<% for (SeatInfo sl : seatList) {
+System.out.println(sl.getReserved_yn());
+%>
+
+			<span class="seat-box <% if (sl.getReserved_yn().equals("Y")) { %>disabled<% } %>">
+				<input type="checkbox" name="seatBoxDtl" id="seatNum_28_<%=sl.getSi_seat() %>" value="<%=sl.getSi_seat() %>" onclick="" <% if (sl.getReserved_yn().equals("Y")) { %>disabled<% } %>>
+				<label for="seatNum_28_<%=sl.getSi_seat() %>"><%=sl.getSi_seat() %></label>
+			</span>
+<% } %>
+			</div>
+<!-- 		    <div class="seat-list"> -->
+<!-- 				<span class="seat-box disabled"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_01" value="1" onclick="" disabled><label for="seatNum_28_01">1</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_02" value="2" onclick=""><label for="seatNum_28_02">2</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_03" value="3" onclick=""><label for="seatNum_28_03">3</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_04" value="4" onclick=""><label for="seatNum_28_04">4</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_05" value="5" onclick=""><label for="seatNum_28_05">5</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_06" value="6" onclick=""><label for="seatNum_28_06">6</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_07" value="7" onclick=""><label for="seatNum_28_07">7</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_08" value="8" onclick=""><label for="seatNum_28_08">8</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_09" value="9" onclick=""><label for="seatNum_28_09">9</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_10" value="10" onclick=""><label for="seatNum_28_10">10</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_11" value="11" onclick=""><label for="seatNum_28_11">11</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_12" value="12" onclick=""><label for="seatNum_28_12">12</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_13" value="13" onclick=""><label for="seatNum_28_13">13</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_14" value="14" onclick=""><label for="seatNum_28_14">14</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_15" value="15" onclick=""><label for="seatNum_28_15">15</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_16" value="16" onclick=""><label for="seatNum_28_16">16</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_17" value="17" onclick=""><label for="seatNum_28_17">17</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_18" value="18" onclick=""><label for="seatNum_28_18">18</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_19" value="19" onclick=""><label for="seatNum_28_19">19</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_20" value="20" onclick=""><label for="seatNum_28_20">20</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_21" value="21" onclick=""><label for="seatNum_28_21">21</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_22" value="22" onclick=""><label for="seatNum_28_22">22</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_23" value="23" onclick=""><label for="seatNum_28_23">23</label></span> -->
+<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_24" value="24" onclick=""><label for="seatNum_28_24">24</label></span> -->
+<!-- 				<span class="seat-box last_seat"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_25" value="25" onclick=""><label for="seatNum_28_25">25</label></span> -->
+<!-- 				<span class="seat-box last_seat"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_26" value="26" onclick=""><label for="seatNum_28_26">26</label></span> -->
+<!-- 				<span class="seat-box last_seat"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_27" value="27" onclick=""><label for="seatNum_28_27">27</label></span> -->
+<!-- 				<span class="seat-box last_seat last"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_28" value="28" onclick=""><label for="seatNum_28_28">28</label></span> -->
+<!-- 		    </div> -->
 			</div>
 		</div>
 		<div class="col-md-6">

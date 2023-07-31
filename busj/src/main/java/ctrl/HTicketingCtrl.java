@@ -105,7 +105,7 @@ public class HTicketingCtrl {
 		HttpSession session = request.getSession();
 		
 		
-		ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
+		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
 		String mode = ri1.getMode();
 		
 		// 편도, 왕복 상관없음
@@ -114,8 +114,9 @@ public class HTicketingCtrl {
 		ri1.setComname(comname); ri1.setLevel(bllevel);
 		session.setAttribute("ri1", ri1);
 
-//		List<ScheduleInfo> seatList = hTicketingSvc.getSeatList(sDate, lineNum);
-//		session.setAttribute("seatList", seatList);
+		List<SeatInfo> seatList = hTicketingSvc.getSeatList(bsidx);
+		// 일자도 포함하여 좌석정보 가져올 수 있도록 수정필요
+		session.setAttribute("seatList", seatList);
 
 		return "ticketing/h_ticket_step3";
 	}

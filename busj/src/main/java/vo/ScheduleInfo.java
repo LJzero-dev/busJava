@@ -7,7 +7,7 @@ public class ScheduleInfo {
 	// 2단계 화면에서 보여주기위한 필드 추가
 	private int bl_adult, total_seat, left_seat;
 	private String comname, bi_level; 
-
+	
 	public int getBs_idx() {
 		return bs_idx;
 	}

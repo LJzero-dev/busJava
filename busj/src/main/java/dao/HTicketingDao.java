@@ -96,6 +96,36 @@ public class HTicketingDao {
 		return scheduleList;
 	}
 
+	public List<SeatInfo> getSeatList(int bsidx) {
+		String sql = "SELECT SI.SI_SEAT, if(RD.SI_IDX is null, 'N', 'Y') RESERVED_YN " + 
+				"FROM T_BUS_INFO BI " + 
+				"JOIN T_BUS_SCHEDULE BS ON BI.BI_IDX = BS.BI_IDX " + 
+				"JOIN T_SEAT_INFO SI ON BI.BI_IDX = SI.BI_IDX " + 
+				"LEFT JOIN ( " + 
+				"   SELECT SRD.SI_IDX, SBS.BS_IDX " + 
+				"    FROM T_RESERVATION_INFO SRI " + 
+				"    JOIN T_RESERVATION_DETAIL SRD ON SRI.RI_IDX = SRD.RI_IDX " + 
+				"    JOIN T_BUS_SCHEDULE SBS ON SBS.BS_IDX = SRI.BS_IDX " + 
+				"    JOIN T_BUS_INFO SBI ON SBS.BI_IDX = SBI.BI_IDX " + 
+				"    WHERE SBS.BS_IDX = " + bsidx + 
+				") RD " + 
+				"ON BS.BS_IDX = RD.BS_IDX AND SI.SI_IDX = RD.SI_IDX " + 
+				"WHERE BS.BS_IDX = " + bsidx;
+		List<SeatInfo> seatList = jdbc.query(
+				sql, new RowMapper<SeatInfo>() {
+					@Override
+					public SeatInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+						SeatInfo seatInfo = new SeatInfo();
+						seatInfo.setSi_seat(rs.getInt("SI_SEAT"));
+						seatInfo.setReserved_yn(rs.getString("RESERVED_YN"));
+						return seatInfo;
+					}
+				}
+			);
+		return seatList;
+	}
+
+
 	
 
 }
