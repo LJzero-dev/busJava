@@ -73,7 +73,8 @@
 	<form name="frmLineInfo" action="sTicketingStep02"  method="post" class="probootstrap-form">
 	<input type="hidden" name="mode" id="mode" value="p" />	<!-- 편도: p / 왕복: w -->
 	<input type="hidden" name="ri_sday1" id="ri_sday1" value="" />	<!-- 편도 가는 날 왕복 가는 날-->
-	<input type="hidden" name="ri_sday2" id="ri_sday2" value="" />	<!-- 편도 가는 날 왕복 오는 날 -->
+	<input type="hidden" name="ri_sday2" id="ri_sday2" value="" />	<!-- 편도 가는 날 왕복 가는 날 -->
+	<input type="hidden" name="ri_sday3" id="ri_sday3" value="" />	<!-- 왕복 오는 날 -->
 		<div class="form-group">
 		<ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
 			<li class="nav-item" role="presentation">
@@ -247,8 +248,9 @@ $(document).ready(function() {
       .datepicker("setDate",'now')
       .on('changeDate', function(e) {
 //        $("#ri_sday1").val($( "#sday1" ).datepicker("getDate"));	// 편도 가는 날 날짜 설정
-		$("#ri_sday1").val($(this).val());
+/* 		$("#ri_sday1").val($(this).val()); */
         $("#sday2").datepicker("setEndDate", new Date($("#sday3").datepicker("getDate")));	// 왕복 가는 날의 종료값을 왕복 오는 날 값으로 설정
+        $("#ri_sday3").val($(this).val());
       });
 
 	$("#schBtn").click(function() {

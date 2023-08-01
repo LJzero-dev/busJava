@@ -49,7 +49,7 @@ public class STicketingDao {
 	}
 
 	public int getsLineNum(String btsname, String btename) {
-		// 출/도착지 터미널 이름으로 노선번호 셀렉트
+	// 출/도착지 터미널 이름으로 노선번호 셀렉트
 		String sql = "select bl_idx from t_bus_line " 
 				 + "join t_bus_terminal start_terminal on t_bus_line.bt_sidx = start_terminal.bt_idx "
 				 + "join t_bus_terminal end_terminal on t_bus_line.bt_eidx = end_terminal.bt_idx "
@@ -88,6 +88,26 @@ public class STicketingDao {
 			return sl;
 		});
 		return scheduleList;
+	}
+
+	public List<SeatInfo> getSeatList(int bsidx, String ri_sday1) {
+	// 받아온 시간표인덱스로 버스번호를 구해 좌석개수를 가져오고 선택된 날짜와 시간표에 예매된 좌석이 있는지 체크
+		String sql =  "SELECT bi.bi_idx, bi.bi_num, bs.bs_idx, si.si_idx, si.si_seat, "
+					+ "    CASE "
+					+ "        WHEN rd.ri_idx IS NOT NULL THEN '예약완료' "
+					+ "        ELSE '예약가능' "
+					+ "    END AS reserved_yn "
+					+ "FROM t_bus_info bi "
+					+ "    INNER JOIN t_bus_schedule bs ON bi.bi_idx = bs.bi_idx "
+					+ "    INNER JOIN t_seat_info si ON bi.bi_idx = si.bi_idx "
+					+ "    INNER JOIN t_bus_line bl ON bs.bl_idx = bl.bl_idx "
+					+ "    LEFT JOIN t_reservation_detail rd ON si.si_idx = rd.si_idx "
+					+ "    LEFT JOIN t_reservation_info ri ON rd.ri_idx = ri.ri_idx AND (ri.ri_status IS NULL OR ri.ri_status <> 'C') "
+					+ "WHERE "
+					+ "    bs.bs_isuse = 'y' and "
+					+ "    bs.bs_idx = " + bsidx + " and "
+					+ "    ri.ri_sday = '" + ri_sday1.replace(".", "-") + "'";
+		return null;
 	}
 	
 }

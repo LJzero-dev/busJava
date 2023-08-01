@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
+<%@ page import="java.lang.*" %>
 <%@ page import="javax.servlet.http.*" %>
 <%@ include file="../_inc/head.jsp" %>
 <%
@@ -216,15 +217,15 @@ if (ri1 != null) {
               <h4>금액</h4>
               <div class="d-flex justify-content-between">
                 <p class="h5">성인 1</p>
-                <p class="h5">30,000</p>
+                <p class="h5"><%=ri1.getPrice() %></p>
               </div>
               <div class="d-flex justify-content-between">
                 <p class="h5">청소년 1</p>
-                <p class="h5">30,000</p>
+                <p class="h5"><%=Math.round(ri1.getPrice() * 0.8) %></p>
               </div>
               <div class="d-flex justify-content-between">
                 <p class="h5">아동 1</p>
-                <p class="h5">30,000</p>
+                <p class="h5"><%=Math.round(ri1.getPrice() * 0.5) %></p>
               </div>
               <hr />
               <p class="h5 text-right mb-5">총 ?원</p>

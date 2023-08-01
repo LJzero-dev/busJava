@@ -32,6 +32,12 @@ public class STicketingSvc {
 		List<ReservationStep2> scheduleList = sTicketingDao.getScheduleList(blidx, ri_sday1);
 		return scheduleList;
 	}
+
+	public List<SeatInfo> getSeatList(int bsidx, String ri_sday1) {
+	// 선택한 시간에 운행하는 버스번호와 좌석정보를 불러옴 예매 테이블에서 기 예매된 좌석이 있는지 확인
+		List<SeatInfo> seatList = sTicketingDao.getSeatList(bsidx, ri_sday1);
+		return seatList;
+	}
 	
 }
 

@@ -46,6 +46,7 @@ public class STicketingCtrl {
 		request.setCharacterEncoding("utf-8");
 		String mode = request.getParameter("mode");
 		String ri_sday1 = request.getParameter("ri_sday1");		String ri_sday2 = request.getParameter("ri_sday2");
+		String ri_sday3 = request.getParameter("ri_sday3");
 		String btsname = request.getParameter("btsname");		String btename = request.getParameter("btename");
 		
 		int blidx = sTicketingSvc.getsLineNum(btsname, btename);
@@ -58,7 +59,7 @@ public class STicketingCtrl {
 		
 		if (mode.equals("w")) {	// 왕복 예매일 경우 오는 날 세션(ri2)도 생성		/ 탑승일을 ri_sday2로 출발지와 도착지는 서로 크로스하여 입력
 			ReservationInfo ri2 =  new ReservationInfo();
-			ri2.setMode(mode);			ri2.setSdate(ri_sday2);
+			ri2.setMode(mode);			ri2.setSdate(ri_sday3);
 			ri1.setSspot(btename);		ri1.setEspot(btsname);
 			session.setAttribute("ri2", ri2);
 		}
@@ -70,7 +71,7 @@ public class STicketingCtrl {
 	}
 	
 	@PostMapping("/sTicketingStep03")
-	public String sTicketingStep03(HttpServletRequest request) throws Exception {
+	public String sTicketingStep03(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// bs_idx로 버스 운영시간표 (출발시간, 도착시간) / bi_idx로 조인해서 버스 좌석 정보 (좌석 번호) 가져오기
 		// 예매된 좌석은 선택이 되지 않게 (checkbox 비활성화)
 		request.setCharacterEncoding("utf-8");
@@ -90,7 +91,7 @@ public class STicketingCtrl {
 		String ri_sday1 = request.getParameter("ri_sday1");			// 예매 2단계에서 날짜를 바꾸게 되면 받아오는 값
 		if (ri_sday1 != null && !ri_sday1.equals(""))	ri1.setSdate(ri_sday1);	// 바뀐 값이 있으면 세션에 다시 담기
 		
-		
+		List<SeatInfo> seatList = sTicketingSvc.getSeatList(bsidx, ri_sday1);
 			
 		return "ticketing/s_ticket_step3";
 	}
