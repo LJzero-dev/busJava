@@ -106,7 +106,7 @@ public class HTicketingCtrl {
 		
 		
 		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
-		String mode = ri1.getMode();
+		String mode = ri1.getMode();	String sDate = ri1.getSdate();
 		
 		// 편도, 왕복 상관없음
 		ri1.setStime(stime);	ri1.setEtime(etime);
@@ -114,7 +114,7 @@ public class HTicketingCtrl {
 		ri1.setComname(comname); ri1.setLevel(bllevel);
 		session.setAttribute("ri1", ri1);
 
-		List<SeatInfo> seatList = hTicketingSvc.getSeatList(bsidx);
+		List<SeatInfo> seatList = hTicketingSvc.getSeatList(sDate, bsidx);
 		// 일자도 포함하여 좌석정보 가져올 수 있도록 수정필요
 		session.setAttribute("seatList", seatList);
 

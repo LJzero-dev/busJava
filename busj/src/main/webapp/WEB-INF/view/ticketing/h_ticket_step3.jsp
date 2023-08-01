@@ -10,6 +10,7 @@ int totalSeat = Integer.parseInt(request.getParameter("total-seat"));
 int leftSeat = Integer.parseInt(request.getParameter("left-seat"));
 
 List<SeatInfo> seatList = (List<SeatInfo>)session.getAttribute("seatList");
+
 %>
 <section class="probootstrap_section">
 	<div class="container">
@@ -108,48 +109,19 @@ List<SeatInfo> seatList = (List<SeatInfo>)session.getAttribute("seatList");
 	<div class="row justify-content-center">
 		<div class="col-md-6 text-center">
 			<p>좌석선택 <%=leftSeat %>/<%=totalSeat %></p>
+<%if(ri1.getLevel().equals("우등")) { %>
 			<div class="seat-bg seat28 ml-auto">
+<% } else if (ri1.getLevel().equals("프리미엄")) { %>
+			<div class="seat-bg seat18 ml-auto">
+<% } %>
 			<div class="seat-list">
-<% for (SeatInfo sl : seatList) {
-System.out.println(sl.getReserved_yn());
-%>
-
-			<span class="seat-box <% if (sl.getReserved_yn().equals("Y")) { %>disabled<% } %>">
-				<input type="checkbox" name="seatBoxDtl" id="seatNum_28_<%=sl.getSi_seat() %>" value="<%=sl.getSi_seat() %>" onclick="" <% if (sl.getReserved_yn().equals("Y")) { %>disabled<% } %>>
-				<label for="seatNum_28_<%=sl.getSi_seat() %>"><%=sl.getSi_seat() %></label>
+<% for (SeatInfo si : seatList) { %>
+			<span class="seat-box <% if (si.getReserved_yn().equals("Y")) { %>disabled<% } %> <% if (si.getSi_seat() > 24) %>last_seat <% if (si.getSi_seat() == 28) { %>last<% }%>">
+				<input type="checkbox" name="seatBoxDtl" id="seatNum_<%=si.getSi_seat() %>" value="<%=si.getSi_seat() %>" onclick="getSeat(this);" <% if (si.getReserved_yn().equals("Y")) { %>disabled<% } %>>
+				<label for="seatNum_<%=si.getSi_seat() %>"><%=si.getSi_seat() %></label>
 			</span>
 <% } %>
 			</div>
-<!-- 		    <div class="seat-list"> -->
-<!-- 				<span class="seat-box disabled"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_01" value="1" onclick="" disabled><label for="seatNum_28_01">1</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_02" value="2" onclick=""><label for="seatNum_28_02">2</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_03" value="3" onclick=""><label for="seatNum_28_03">3</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_04" value="4" onclick=""><label for="seatNum_28_04">4</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_05" value="5" onclick=""><label for="seatNum_28_05">5</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_06" value="6" onclick=""><label for="seatNum_28_06">6</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_07" value="7" onclick=""><label for="seatNum_28_07">7</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_08" value="8" onclick=""><label for="seatNum_28_08">8</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_09" value="9" onclick=""><label for="seatNum_28_09">9</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_10" value="10" onclick=""><label for="seatNum_28_10">10</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_11" value="11" onclick=""><label for="seatNum_28_11">11</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_12" value="12" onclick=""><label for="seatNum_28_12">12</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_13" value="13" onclick=""><label for="seatNum_28_13">13</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_14" value="14" onclick=""><label for="seatNum_28_14">14</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_15" value="15" onclick=""><label for="seatNum_28_15">15</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_16" value="16" onclick=""><label for="seatNum_28_16">16</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_17" value="17" onclick=""><label for="seatNum_28_17">17</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_18" value="18" onclick=""><label for="seatNum_28_18">18</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_19" value="19" onclick=""><label for="seatNum_28_19">19</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_20" value="20" onclick=""><label for="seatNum_28_20">20</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_21" value="21" onclick=""><label for="seatNum_28_21">21</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_22" value="22" onclick=""><label for="seatNum_28_22">22</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_23" value="23" onclick=""><label for="seatNum_28_23">23</label></span> -->
-<!-- 				<span class="seat-box"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_24" value="24" onclick=""><label for="seatNum_28_24">24</label></span> -->
-<!-- 				<span class="seat-box last_seat"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_25" value="25" onclick=""><label for="seatNum_28_25">25</label></span> -->
-<!-- 				<span class="seat-box last_seat"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_26" value="26" onclick=""><label for="seatNum_28_26">26</label></span> -->
-<!-- 				<span class="seat-box last_seat"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_27" value="27" onclick=""><label for="seatNum_28_27">27</label></span> -->
-<!-- 				<span class="seat-box last_seat last"><input type="checkbox" name="seatBoxDtl" id="seatNum_28_28" value="28" onclick=""><label for="seatNum_28_28">28</label></span> -->
-<!-- 		    </div> -->
 			</div>
 		</div>
 		<div class="col-md-6">
@@ -159,13 +131,13 @@ System.out.println(sl.getReserved_yn());
 				  <div class="col-md-5"><span class="mr-3">성인</span></div>
 				  <div class="col-md-7">
 				    <div class="btn-group custom">
-				      <button type="button" class="btn btn-primary p-1">
+				      <button type="button" id="minusA" class="btn btn-primary p-1" onclick="setCnt(this.id);">
 				        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
 				        <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>
 				        </svg>
 				      </button>
-				      <input class="form-control text-center" type="text" name="ex1" id="exampleRadios1" value="1" size="5">
-				      <button type="button" class="btn btn-primary p-1">
+				      <input class="form-control text-center" type="text" name="adult" id="adult" value="0" size="5" readonly>
+				      <button type="button" id="plusA" class="btn btn-primary p-1" onclick="setCnt(this.id);">
 				        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
 				          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
 				        </svg>
@@ -177,13 +149,13 @@ System.out.println(sl.getReserved_yn());
 				  <div class="col-md-5"><span class="mr-3">청소년</span></div>
 				  <div class="col-md-7">
 				    <div class="btn-group custom">
-				      <button type="button" class="btn btn-primary p-1">
+				      <button type="button" id="minusT" class="btn btn-primary p-1" onclick="setCnt(this.id);">
 				        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
 				        <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>
 				        </svg>
 				      </button>
-				      <input class="form-control text-center" type="text" name="ex1" id="exampleRadios1" value="0" size="5">
-				      <button type="button" class="btn btn-primary p-1">
+				      <input class="form-control text-center" type="text" name="teen" id="teen" value="0" size="5" readonly>
+				      <button type="button" id="plusT" class="btn btn-primary p-1" onclick="setCnt(this.id);">
 				        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
 				          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
 				        </svg>
@@ -195,13 +167,13 @@ System.out.println(sl.getReserved_yn());
 				  <div class="col-md-5"><span class="mr-3">아동</span></div>
 				  <div class="col-md-7">
 				    <div class="btn-group custom">
-				      <button type="button" class="btn btn-primary p-1">
+				      <button type="button" id="minusC" class="btn btn-primary p-1" onclick="setCnt(this.id);">
 				        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
 				        <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>
 				        </svg>
 				      </button>
-				      <input class="form-control text-center" type="text" name="ex1" id="exampleRadios1" value="0" size="5">
-				      <button type="button" class="btn btn-primary p-1">
+				      <input class="form-control text-center" type="text" name="child" id="child" value="0" size="5" readonly>
+				      <button type="button" id="plusC" class="btn btn-primary p-1" onclick="setCnt(this.id);">
 				        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
 				          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
 				        </svg>
@@ -210,30 +182,30 @@ System.out.println(sl.getReserved_yn());
 				  </div>
 				</div>
 				<hr />
-				<p class="h5 text-right">총 ?명</p>
+				<p class="h5 text-right">총 <span id="totalCnt">0</span>명</p>
 	      	</div>
 			<div class="col-md-6 mb-5">
 			  <h4>선택 좌석</h4>
-			  <p class="h5">15, 16, 17</p>
+			  <p id="seatArr" class="h5">좌석을 선택해주세요.</p>
 			  <hr />
 			</div>
 			<div class="col-md-6">
 			  <h4>금액</h4>
 			  <div class="d-flex justify-content-between">
-			    <p class="h5">성인 1</p>
-			    <p class="h5">30,000</p>
+			    <span>성인 <span id="adult2">0</span>명</span>
+			    <span id="priceA"></span>
 			  </div>
 			  <div class="d-flex justify-content-between">
-			    <p class="h5">청소년 1</p>
-			    <p class="h5">30,000</p>
+			    <span>청소년 <span id="teen2">0</span>명</span>
+			    <span id="priceT">0</span>
 			  </div>
 			  <div class="d-flex justify-content-between">
-			    <p class="h5">아동 1</p>
-			    <p class="h5">30,000</p>
+			    <span>아동 <span id="child2">0</span>명</span>
+			    <span id="priceC">0</span>
 			  </div>
 			  <hr />
-			  <p class="h5 text-right mb-5">총 ?원</p>
-			<button type="button" class="btn btn-primary btn-block">선택완료</button>
+			  <p class="h5 text-right mb-5">총 <span id="totalPrice"></span>원</p>
+			<button type="button" id="submitBtn" class="btn btn-primary btn-block">선택완료</button>
 			</div>
 		</div>
 	</div>
@@ -241,9 +213,115 @@ System.out.println(sl.getReserved_yn());
 </section>
 <%@ include file="../_inc/foot.jsp" %>
 <script>
+function setCnt(op) {
+	if ( $("#totalCnt").text() == 10 && (op == 'plusA' || op == 'plusT' || op == 'plusC')) {
+		alert("최대 예약 가능 인원은 10명입니다.");
+		return;
+	}
+	
+	let adult = parseInt($("#adult").val());
+	let teen = parseInt($("#teen").val());
+	let child = parseInt($("#child").val());
+	
+	
+	// 어른 필드 계산시
+	if (op == 'minusA' && !(adult < 1)) {
+		$("#adult").val(adult - 1);
+		adult--;
+		
+		
+	} else if (op == 'plusA' && !(adult > 9)) {
+		$("#adult").val(adult + 1);
+		adult++;
+		
+	}
+	
+	// 청소년 필드 계산시
+	if (op == 'minusT' && !(teen < 1)) {
+		$("#teen").val(teen - 1);
+		teen--;
+	} else if (op == 'plusT' && !(teen > 9)) {
+		$("#teen").val(teen + 1);
+		teen++;
+	}
+	
+	// 아동 필드 계산시
+	if (op == 'minusC' && !(child < 1)) {
+		$("#child").val(child - 1);
+		child--;
+		$("#child2").text(child);
+	} else if (op == 'plusC' && !(child > 9)) {
+		$("#child").val(child + 1);
+		child++;
+	}
+	
+	$("#adult2").text(adult);	$("#teen2").text(teen);	$("#child2").text(child);
+	$("#priceA").text(formatNumber(adult * <%=ri1.getPrice()%>));
+	$("#priceT").text(formatNumber(teen * <%=ri1.getPrice()%> * 0.8));
+	$("#priceC").text(formatNumber(child * <%=ri1.getPrice()%> * 0.5));
+	  
+	$("#totalCnt").text(adult + teen + child);
+	$("#totalPrice").text(formatNumber(adult * <%=ri1.getPrice()%> + teen * <%=ri1.getPrice()%> * 0.8 + child * <%=ri1.getPrice()%> * 0.5));
+	
+}
+
+function formatNumber(number) {
+	  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+const selectedValues = [];
+
+function getSeat(obj) {
+	const seats = document.getElementsByName("seatBoxDtl");	
+	const value = obj.value;
+	const index = selectedValues.indexOf(value);	// 체크한 값이 배열에 이미 있는지 확인을 위한 변수
+	
+	let seatsCnt = 0;
+	let max = parseInt($("#totalCnt").text());
+	for (let i = 0; i < seats.length; i++) {
+		if (seats[i].checked) {
+			seatsCnt++;
+		}
+	}
+	if (seatsCnt > max) {
+		alert("먼저 매수를 선택해 주세요.");
+		obj.checked = false;
+		return false;
+	}
+	
+	if (index === -1) {
+	    selectedValues.push(value);
+	  } else {
+	    selectedValues.splice(index, 1);
+	  }
+	
+	// 배열 오름차순 정렬
+	selectedValues.sort(function (a, b) {
+	  return a - b;
+	});
+	
+	$("#seatArr").text(selectedValues.join(", "));
+	
+	if (selectedValues.length == 0) {
+		$("#seatArr").text("좌석을 선택해주세요.");
+	}
+	
+}
 
 $(document).ready(function() {
-
+	setCnt('plusA');
+	// 기본적으로 성인1명의 표 값이 보이는 상태로 로딩
+	
+	$("#submitBtn").click(function() {
+		const seats = document.getElementsByName("seatBoxDtl");
+		
+		for (let i = 0; i < seats.length; i++) {
+			if (seats[i].checked == false) {
+				alert("좌석을 선택해주세요.");
+				return;
+			}
+		}
+	});
 });
 
 </script>

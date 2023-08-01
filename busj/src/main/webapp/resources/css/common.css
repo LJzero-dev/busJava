@@ -257,3 +257,5 @@ button.w-120p {width: 120px;}
 .t-list li span {display : block;}
 
 .border-b td {border-bottom: 1px solid #e9ecef;}
+
+input[type="text"]#adult, input[type="text"]#teen, input[type="text"]#child {background: #fff;}

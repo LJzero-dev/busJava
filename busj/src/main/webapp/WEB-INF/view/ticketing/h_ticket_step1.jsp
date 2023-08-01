@@ -209,6 +209,7 @@ $(document).ready(function() {
 		format: "yyyy.mm.dd",
 		autoclose: true,
 		startDate: "0d",
+		
 		endDate: "+30d",
 		language: "kr",
 		showMonthAfterYear: true,
