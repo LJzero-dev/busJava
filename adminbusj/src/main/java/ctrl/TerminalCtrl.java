@@ -147,4 +147,63 @@ public class TerminalCtrl {
 		
 		return "redirect:/terminalLine?bt_idx="+bt_sidx+"&bt_name="+ URLEncoder.encode(bt_name, "UTF-8");
 	}
+	
+	@PostMapping("/scheduleAdd")
+	public String scheduleAdd(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		int bt_idx = Integer.parseInt(request.getParameter("bt_idx"));
+		String bt_name = request.getParameter("bt_name");
+		
+		int bl_idx = Integer.parseInt(request.getParameter("bl_idx"));
+		String time1 = request.getParameter("time1");
+		String time2 = request.getParameter("time2");
+		String str = request.getParameter("number");
+		String[] arr = str.split(":");
+		String number = arr[1];
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		if (number.equals("")) {
+			out.println("<script>");
+			out.println("alert('차량 번호를 선택해주세요.');");
+			out.println("history.back();");
+			out.println("</script>");
+			out.close();
+		}
+		int adult = Integer.parseInt(request.getParameter("adult" + bl_idx));
+		
+		BusScheduleInfo busScheduleInfo = new BusScheduleInfo(0, 0, 0, number, time1, time2, "", "", "");
+		
+		int result = terminalSvc.scheduleAdd(busScheduleInfo, adult, bl_idx);
+		
+		if (result != 1) {
+			out.println("<script>");
+			out.println("alert('시간표 추가에 실패했습니다.');");
+			out.println("history.back();");
+			out.println("</script>");
+			out.close();
+		}
+		
+		return "redirect:/terminalLine?bt_idx=" + bt_idx + "&bt_name="+ URLEncoder.encode(bt_name, "UTF-8");
+	}
+	
+	@PostMapping("/changeLevel")
+	@ResponseBody
+	public String changeLevel(HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		String number = request.getParameter("number");
+
+		int result = terminalSvc.changeLevel(number);
+		return result + "";
+	}
+	
+	@PostMapping("/delShcedule")
+	@ResponseBody
+	public String delShcedule(HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		String bs_idx = request.getParameter("bsidx");
+		int bsidx = Integer.parseInt(bs_idx);	
+		
+		int result = terminalSvc.delShcedule(bsidx);
+		return result + "";
+	}
 }

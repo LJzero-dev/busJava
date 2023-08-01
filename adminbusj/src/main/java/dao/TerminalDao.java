@@ -63,14 +63,14 @@ public class TerminalDao {
 
 	private List<BusScheduleInfo> getBusScheduleInfo(int bl_idx) {
 		String sql = "select a.bs_idx, c.bc_idx, bs_stime, bs_etime, a.bs_date, bi_level, bc_name, b.bi_idx, b.bi_num "
-				+ "from t_bus_schedule a, t_bus_info b, t_bus_company c "
-				+ "where a.bi_idx = b.bi_idx and b.bc_idx = c.bc_idx and a.bl_idx = " + bl_idx;
-		List<BusScheduleInfo> busScheduleInfo = jdbc.query(sql, 
-				(ResultSet rs, int rowNum) -> {
-					BusScheduleInfo bs = new BusScheduleInfo(rs.getInt("bs_idx"), rs.getInt("bc_idx"), rs.getInt("bi_idx"), rs.getString("bi_num"),
-						rs.getString("bs_stime"), rs.getString("bs_etime"), rs.getString("bs_date"), rs.getString("bi_level"), rs.getString("bc_name"));
-					return bs;
-				});
+				+ " from t_bus_schedule a, t_bus_info b, t_bus_company c "
+				+ " where a.bi_idx = b.bi_idx and b.bc_idx = c.bc_idx and a.bs_isuse = 'y' and a.bl_idx = " + bl_idx 
+				+ " order by bs_stime asc";
+		List<BusScheduleInfo> busScheduleInfo = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
+			BusScheduleInfo bs = new BusScheduleInfo(rs.getInt("bs_idx"), rs.getInt("bc_idx"), rs.getInt("bi_idx"), rs.getString("bi_num"),
+			rs.getString("bs_stime"), rs.getString("bs_etime"), rs.getString("bs_date"), rs.getString("bi_level"), rs.getString("bc_name"));
+			return bs;
+		});
 		return busScheduleInfo;
 	}
 
@@ -100,7 +100,6 @@ public class TerminalDao {
 	public int AddLineIn(int bt_sidx, int bt_eidx, int adult) {
 		String sql = "INSERT INTO t_bus_line (bt_sidx, bt_eidx, bl_type, bl_adult) VALUES (" + bt_sidx + ", " + bt_eidx + ", '고속', " + adult + ")";
 		int result = jdbc.update(sql);
-
 		return result;
 	}
 
@@ -117,5 +116,29 @@ public class TerminalDao {
 					return bi;
 				});
 		return busInfo;
+	}
+
+	public int scheduleAdd(BusScheduleInfo busScheduleInfo, int adult, int bl_idx) {
+		String sql = "select bi_idx from t_bus_info where bi_num = '" + busScheduleInfo.getBi_num() + "'";
+		int bi_idx = jdbc.queryForObject(sql, Integer.class);
+		
+		sql = "insert into t_bus_schedule (bl_idx, bi_idx, bs_stime, bs_etime) values (" + bl_idx + ", " + bi_idx + ", '" + 
+				busScheduleInfo.getBs_stime() + "', '" + busScheduleInfo.getBs_etime() + "')";
+		int result = jdbc.update(sql);
+		return result;
+	}
+
+	public int changeLevel(String number) {
+		String sql = "select bi_level from t_bus_info where bi_num = '" + number + "'";
+		String tmp = jdbc.queryForObject(sql, String.class);
+		int result = 0;
+		if (tmp.equals("프리미엄"))		result++;
+		return result;
+	}
+
+	public int delShcedule(int bsidx) {
+		String sql = "update t_bus_schedule set bs_isuse = 'n' where bs_idx = " + bsidx;
+		int result = jdbc.update(sql);
+		return result;
 	}
 }

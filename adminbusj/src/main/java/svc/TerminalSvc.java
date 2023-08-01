@@ -50,5 +50,20 @@ public class TerminalSvc {
 		int result = terminalDao.AddLineIn(bt_sidx, bt_eidx, adult);
 		return result;
 	}
+
+	public int scheduleAdd(BusScheduleInfo busScheduleInfo, int adult, int bl_idx) {
+		int result = terminalDao.scheduleAdd(busScheduleInfo, adult, bl_idx);
+		return result;
+	}
+
+	public int changeLevel(String number) {
+		int result = terminalDao.changeLevel(number);
+		return result;
+	}
+
+	public int delShcedule(int bsidx) {
+		int result = terminalDao.delShcedule(bsidx);
+		return result;
+	}
 	
 }

@@ -26,28 +26,98 @@ function openModal(area) {
 	$('#AddLine').modal();
 }
 
-function adultGyesan(sale) {
-	var adult = document.getElementById("adult");
-	var teenager = document.getElementById("teenager");
-	var children = document.getElementById("children");
-	var numericSale = parseInt(sale.replace(/,/g, ''), 10); // 쉼표 제거 후 정수로 변환
+function companyChange(){
+	var inputStateValue = document.getElementById('company').value;
+	var numberOptions = document.getElementById('number').options;
+
+	for (var i = 0; i < numberOptions.length; i++) {
+		var option = numberOptions[i];
+		var option2 = option.value;
+		var arrOption = option2.split(":");
+	    if (inputStateValue == '' || arrOption[0] == inputStateValue) {
+	    	option.style.display = 'block';
+	    	
+	    } else {
+	    	option.style.display = 'none';
+		}
+		
+	}
+}
+var chk = true;
+function numberChange(blidx){
+	var number = document.getElementById('number').value;
+	var arr = number.split(":");
+	var carId = arr[1];
 	
-	if (!isNaN(numericSale)) {
-        adult.value = numericSale.toLocaleString('ko-KR');
-        teenager.value = Math.floor(numericSale * 0.8).toLocaleString('ko-KR');
-        children.value = Math.floor(numericSale * 0.5).toLocaleString('ko-KR');
-    } else {
-        // 입력된 값이 숫자로 변환될 수 없는 경우, 텍스트 박스를 빈 값으로 설정
-        adult.value = "";
-        teenager.value = "";
-        children.value = "";
-    }
+	if (carId != "") {
+		$.ajax({
+			type : "POST", 				
+			url : "./changeLevel", 
+			data : {"number" : carId}, 		
+			success : function(chkRs){	
+				var msg = "";
+				if (chkRs == 0) {	
+					msg = "<input type='text' class='text-center mt-1' id='level' style='width:100px; border:0; text-align:center' value='우등' readonly='readonly' />";
+					
+					if (!chk) {
+						var sale1Value = parseFloat(document.getElementById("common" + blidx).value.replace(",", "")) / 1.5;
+	                    var sale2Value = parseFloat(document.getElementById("teenager" + blidx).value.replace(",", "")) / 1.5;
+	                    var sale3Value = parseFloat(document.getElementById("child" + blidx).value.replace(",", "")) / 1.5;
+	                    document.getElementById('common' + blidx).value = formatNumber(sale1Value) + "원";
+	                    document.getElementById('teenager' + blidx).value = formatNumber(sale2Value) + "원";
+	                    document.getElementById('child' + blidx).value = formatNumber(sale3Value) + "원";
+	                    chk = true;
+					}
+					
+				} else {	
+					msg = "<input type='text' class='text-center mt-1' id='level' style='width:100px; border:0; text-align:center' value='프리미엄' readonly='readonly' />";
+					
+					if (chk) {
+						var sale1Value = parseFloat(document.getElementById('common' + blidx).value.replace(",", "")) * 1.5;
+	                    var sale2Value = parseFloat(document.getElementById('teenager' + blidx).value.replace(",", "")) * 1.5;
+	                    var sale3Value = parseFloat(document.getElementById('child' + blidx).value.replace(",", "")) * 1.5;
+	                    document.getElementById('common' + blidx).value = formatNumber(sale1Value) + "원";
+	                    document.getElementById('teenager' + blidx).value = formatNumber(sale2Value) + "원";
+	                    document.getElementById('child' + blidx).value = formatNumber(sale3Value) + "원";
+	                    chk = false;
+					}
+					
+                    
+				}
+				$("#msg").html(msg);
+			}
+		});
+	}
 }
 
-function restrictAdult(input) {
-	input.value = input.value.replace(/[^0-9]/g, '');
+function formatNumber(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+function delShcedule(bsidx) {
+	if(confirm('정말 삭제하시겠습니까?')) {
+		$.ajax({
+			type : "POST", 				
+			url : "./delShcedule", 
+			data : {"bsidx" : bsidx}, 		
+			success : function(chkRs){	
+				if (chkRs == 1) {	
+					location.reload();
+				} else {	
+					alert('삭제에 실패했습니다.');
+				}
+			}
+		});
+	}
+	event.preventDefault(); // form 액션 실행을 막음
+}
+
+function scheduleAdd(blidx) {
+	var tbodyElement = document.getElementById("disAdd" + blidx);
+		if (tbodyElement) {
+		tbodyElement.style.display = "";
+	}
+}
 </script>
 <style>
 .timepicker { width:100px; text-align:center; }
@@ -88,7 +158,11 @@ function restrictAdult(input) {
 			</div>		
 		</div>
 		<div class="card">
-		<form name="frmIn" action="" method="">
+		<form name="frmIn" action="scheduleAdd" method="post">
+		<input type="hidden" name="bl_idx" value="<%=bl.getBl_idx() %>" />
+		<input type="hidden" name="bt_idx" value="<%=request.getParameter("bt_idx") %>" />
+		<input type="hidden" name="bt_name" value="<%=request.getParameter("bt_name") %>" />
+		<input type="hidden" name="adult<%=bl.getBl_idx() %>" value="<%=bl.getBl_adult() %>" />
 		<table class="table text-center mb-0 padding-size-sm">
 			<colgroup>
 				<col width="10%">
@@ -111,7 +185,7 @@ function restrictAdult(input) {
                     <th>성인요금</th>
                     <th>청소년요금</th>
                     <th>아동요금</th>
-                    <th>수정/삭제</th>
+                    <th>삭제</th>
                 </tr>
             </thead>
 <% 
@@ -122,24 +196,30 @@ function restrictAdult(input) {
             
             <tbody class="border border-primary ">
                 <tr>
-                    <td><input type="text" class="text-center" style="width:100px; border:0;"  
+                    <td><input type="text" class="text-center" name="stime" style="width:100px; border:0;"  
                     value="<%=bs.getBs_stime() %>" readonly="readonly" /></td>
-                    <td><input type="text" class="text-center" style="width:100px; border:0;"  
+                    <td><input type="text" class="text-center" name="etime" style="width:100px; border:0;"  
                     value="<%=bs.getBs_etime() %>" readonly="readonly" /></td>
-                    <td><input type="text" class="text-center" style="width:100px; border:0;" 
+                    <td><input type="text" class="text-center" name="bc_name" style="width:100px; border:0;" 
                     value="<%=bs.getBc_name() %>" readonly="readonly" /></td>
-                    <td><input type="text" class="text-center" style="width:100px; border:0;"  
+                    <td><input type="text" class="text-center" name="bi_num" style="width:100px; border:0;"  
                     value="<%=bs.getBi_num() %>" readonly="readonly" /></td>
-                    <td><input type="text" class="text-center" style="width:100px; border:0;" 
+                    <td><input type="text" class="text-center" name="bi_level" style="width:100px; border:0;" 
                     value="<%=bs.getBi_level() %>" readonly="readonly" /></td>
 <% 
 String tmp = "";
 String tmp1 = "";
 String tmp2 = "";
-tmp += Math.round(bl.getBl_adult() * 0.8);
-tmp1 += Math.round(bl.getBl_adult());
-tmp2 += Math.round(bl.getBl_adult() * 0.5);
 
+if (bs.getBi_level().equals("프리미엄")) {
+	tmp += Math.round(bl.getBl_adult() * 1.5 * 0.8);
+	tmp1 += Math.round(bl.getBl_adult() * 1.5);
+	tmp2 += Math.round(bl.getBl_adult() * 1.5 * 0.5);
+} else {
+	tmp += Math.round(bl.getBl_adult() * 0.8);
+	tmp1 += Math.round(bl.getBl_adult());
+	tmp2 += Math.round(bl.getBl_adult() * 0.5);	
+}
 StringBuffer sb = new StringBuffer();
 StringBuffer sb1 = new StringBuffer();
 StringBuffer sb2 = new StringBuffer();
@@ -159,6 +239,7 @@ if (tmp2.length() > 7)
 	sb2.insert(3, ",");
 sb2.insert(2, ",");
 
+
 %>
 					<td><input type="text" class="text-center" style="width:100px; border:0;" 
                     value="<%=sb1 %>원" readonly="readonly" /></td>
@@ -166,7 +247,10 @@ sb2.insert(2, ",");
                     value="<%=sb %>원" readonly="readonly" /></td>
                     <td><input type="text" class="text-center" style="width:100px; border:0;" 
                     value="<%=sb2 %>원" readonly="readonly" /></td>
-                    <td>수정, 삭제</td>
+                    <td style="padding:5px;">
+                    <button class="btn waves-effect waves-light btn-primary" value="<%=bs.getBs_idx() %>"
+                    onclick="delShcedule(this.value);">삭제</button>
+                    </td>
                 </tr>
             </tbody>
 <%
@@ -180,7 +264,7 @@ sb2.insert(2, ",");
             </tbody>
 <%	} %>
 			
-			<tbody class="border border-primary">
+			<tbody id="disAdd<%=bl.getBl_idx() %>" style="display:none;" class="border border-primary">
                 <tr style="" id="dis">
                     <td>
     					<input type="text" name="time1" id="time1" class="timepicker mt-1" oninput="updateTime2Options(this.value);" >
@@ -198,25 +282,49 @@ sb2.insert(2, ",");
                     </select>
                     </td>
                     <td style="padding:10px 50px;">
-                    <select class="form-control text-center" id="number" name="number">
+                    <select class="form-control text-center" id="number" name="number" onchange="numberChange(<%=bl.getBl_idx() %>);">
                     	<option value="">차량번호</option>
 <% for (BusInfo bi : busInfo) { %>
-						<option value="<%=bi.getBc_name() %>"><%=bi.getBi_num() %></option>
+						<option value="<%=bi.getBc_name() %>:<%=bi.getBi_num() %>"><%=bi.getBi_num() %></option>
 <% } %>
                     </select>
                     </td>
                     <td style="padding:10px 20px;">
-                    <select class="form-control text-center" name="level">
-                    	<option value="">등급</option>
-                    	<option>우등</option>
-                    	<option>프리미엄</option>
-                    </select>
+                    <span id="msg"><input type='text' class='text-center mt-1' id='level' style='width:100px; border:0; text-align:center' value='우등' readonly='readonly' /></span>
                     </td>
-                    <td><input type="text" class="text-right mt-1" style="width:80px;" id="adult" oninput="restrictAdult(this)" 
-                    onkeyup="adultGyesan(this.value);" maxlength="7" />원</td>
-                    <td><input type="text" class="text-right mt-1" style="width:80px; border:0; text-align:center" id="teenager" readonly="readonly" />원</td>
-                    <td><input type="text" class="text-right mt-1" style="width:80px; border:0;" id="children" readonly="readonly" />원</td>
-                    <td><input class="btn waves-effect waves-light btn-primary" type="button" value="등록" /></td>
+<%
+String tmp1 = "";
+String tmp2 = "";
+String tmp3 = "";
+tmp1 += Math.round(bl.getBl_adult());
+tmp2 += Math.round(bl.getBl_adult() * 0.8);
+tmp3 += Math.round(bl.getBl_adult() * 0.5);
+StringBuffer sb1 = new StringBuffer();
+StringBuffer sb2 = new StringBuffer();
+StringBuffer sb3 = new StringBuffer();
+
+sb1.append(tmp1);
+if (tmp1.length() > 7)
+	sb1.insert(3, ",");
+sb1.insert(2, ",");
+
+sb2.append(tmp2);
+if (tmp2.length() > 7)
+	sb2.insert(3, ",");
+sb2.insert(2, ",");
+
+sb3.append(tmp3);
+if (tmp3.length() > 7)
+	sb3.insert(3, ",");
+sb3.insert(2, ",");
+
+%>
+                    <td><input type="text" id="common<%=bl.getBl_idx() %>" class="text-center mt-1" style="width:100px; border:0; text-align:center" 
+                    value="<%=sb1 %>원" readonly="readonly" /></td>
+                    <td><input type="text" id="teenager<%=bl.getBl_idx() %>" class="text-center mt-1" style="width:100px; border:0; text-align:center" 
+                    value="<%=sb2 %>원" readonly="readonly" /></td>
+                    <td><input type="text" id="child<%=bl.getBl_idx() %>" class="text-center mt-1" style="width:100px; border:0; text-align:center" value="<%=sb3 %>원" readonly="readonly" /></td>
+                    <td><input class="btn waves-effect waves-light btn-primary" type="submit" value="등록" /></td>
                 </tr>
             </tbody>
         </table>
@@ -238,7 +346,7 @@ sb2.insert(2, ",");
 <script>
 
 $(function () {
-    $("#time1").timepicker({
+    $(".timepicker").timepicker({
         timeFormat: 'HH:mm',
         interval: 10,
         minTime: '00:00',
@@ -247,7 +355,8 @@ $(function () {
         startTime: '06:00',
         dynamic: false,
         dropdown: true,
-        scrollbar: true,
+        scrollbar: true
+        /*
         change: function (time) {
             var from_time = $("#time1").val(); // time1에서 선택한 값
             $("#time2").timepicker('option', 'minTime', from_time); // time2의 minTime 변경
@@ -256,11 +365,11 @@ $(function () {
             if ($("#time2").val() && $("#time2").val() < from_time) {
                 $("#time2").timepicker('setTime', from_time);
             }
-        }
+        }*/
         
     });
       
-
+/*
     $("#time2").timepicker({
         timeFormat: 'HH:mm',
         interval: 10,
@@ -272,28 +381,9 @@ $(function () {
         dropdown: true,
         scrollbar: true
         
-    });
+    });*/
     
 });
-
-
-function companyChange() {
-	var inputStateValue = document.getElementById('company').value;
-	var numberOptions = document.getElementById('number').options;
-
-	for (var i = 0; i < numberOptions.length; i++) {
-		var option = numberOptions[i];
-		var option2 = option.value;
-		var arrOption = option2.split(":");
-	    if (inputStateValue == '' || arrOption[0] == inputStateValue) {
-	    	option.style.display = 'block';
-	    	
-	    } else {
-	    	option.style.display = 'none';
-		}
-		
-	}
-}
 
 </script>
 <%@ include file="../_inc/foot.jsp" %>
