@@ -96,21 +96,21 @@ public class HTicketingDao {
 		return scheduleList;
 	}
 
-	public List<SeatInfo> getSeatList(int bsidx) {
-		String sql = "SELECT SI.SI_SEAT, if(RD.SI_IDX is null, 'N', 'Y') RESERVED_YN " + 
+	public List<SeatInfo> getSeatList(String sDate, int bsidx) {
+		String sql = "SELECT SI.si_seat, if(RD.SI_IDX is null, 'N', 'Y') RESERVED_YN " + 
 				"FROM T_BUS_INFO BI " + 
-				"JOIN T_BUS_SCHEDULE BS ON BI.BI_IDX = BS.BI_IDX " + 
-				"JOIN T_SEAT_INFO SI ON BI.BI_IDX = SI.BI_IDX " + 
+				"JOIN T_BUS_SCHEDULE BS ON BI.bi_idx = BS.bi_idx " + 
+				"JOIN T_SEAT_INFO SI ON BI.bi_idx = SI.bi_idx " + 
 				"LEFT JOIN ( " + 
-				"   SELECT SRD.SI_IDX, SBS.BS_IDX " + 
+				"   SELECT SRD.si_idx, SBS.bs_idx " + 
 				"    FROM T_RESERVATION_INFO SRI " + 
-				"    JOIN T_RESERVATION_DETAIL SRD ON SRI.RI_IDX = SRD.RI_IDX " + 
-				"    JOIN T_BUS_SCHEDULE SBS ON SBS.BS_IDX = SRI.BS_IDX " + 
-				"    JOIN T_BUS_INFO SBI ON SBS.BI_IDX = SBI.BI_IDX " + 
-				"    WHERE SBS.BS_IDX = " + bsidx + 
+				"    JOIN T_RESERVATION_DETAIL SRD ON SRI.ri_idx = SRD.ri_idx " + 
+				"    JOIN T_BUS_SCHEDULE SBS ON SBS.bs_idx = SRI.bs_idx " + 
+				"    JOIN T_BUS_INFO SBI ON SBS.bi_idx = SBI.bi_idx " + 
+				"    WHERE SBS.bs_idx = " + bsidx + " AND SRI.ri_sday = '" + sDate + "'" +
 				") RD " + 
-				"ON BS.BS_IDX = RD.BS_IDX AND SI.SI_IDX = RD.SI_IDX " + 
-				"WHERE BS.BS_IDX = " + bsidx;
+				"ON BS.bs_idx = RD.bs_idx AND SI.si_idx = RD.si_idx " + 
+				"WHERE BS.bs_idx = " + bsidx;
 		List<SeatInfo> seatList = jdbc.query(
 				sql, new RowMapper<SeatInfo>() {
 					@Override
