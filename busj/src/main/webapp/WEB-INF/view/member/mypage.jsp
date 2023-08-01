@@ -29,7 +29,7 @@ String mi_id = mi.getMi_id();
               <li>
                 <a href="/busj/pwChk">
                   <div class="h-100 d-flex justify-content-center align-items-center flex-column">
-                  <img src="${pageContext.request.contextPath}/images/User.svg" />
+                  <img src="${pageContext.request.contextPath}/resources/images/User.svg" />
                   <p class="h5 mt-3">내 정보</p>
                   </div>
                 </a>
@@ -37,7 +37,7 @@ String mi_id = mi.getMi_id();
               <li>
                 <a href="/busj/booking">
                   <div class="h-100 d-flex justify-content-center align-items-center flex-column">
-                  <img src="${pageContext.request.contextPath}/images/Newspaper.svg" />
+                  <img src="${pageContext.request.contextPath}/resources/images/Newspaper.svg" />
                   <p class="h5 mt-3">예매 내역</p>
                   </div>
                 </a>
@@ -45,7 +45,7 @@ String mi_id = mi.getMi_id();
               <li>
                 <a href="/busj/payMoney">
                   <div class="h-100 d-flex justify-content-center align-items-center flex-column">
-                  <img src="${pageContext.request.contextPath}/images/Copyright.svg" />
+                  <img src="${pageContext.request.contextPath}/resources/images/Copyright.svg" />
                   <p class="h5 mt-3">내 페이머니</p>
                   </div>
                 </a>
@@ -53,7 +53,7 @@ String mi_id = mi.getMi_id();
               <li>
                 <a href="/busj/coupon">
                   <div class="h-100 d-flex justify-content-center align-items-center flex-column">
-                  <img src="${pageContext.request.contextPath}/images/Money.svg" />
+                  <img src="${pageContext.request.contextPath}/resources/images/Money.svg" />
                   <p class="h5 mt-3">내 쿠폰</p>
                   </div>
                 </a>
