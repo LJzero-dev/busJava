@@ -97,4 +97,14 @@ public class MemberSvc {
 		return bi;
 	}
 
+	public int getrealCancel(String riidx) {
+		int result = memberDao.getrealCancel(riidx);
+		return result;
+	}
+
+	public paymoneyInfo getpaymoneyList(String mi_id) {
+		paymoneyInfo pi = memberDao.getpaymoneyList(mi_id);
+		return pi;
+	}
+
 }

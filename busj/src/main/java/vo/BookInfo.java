@@ -9,14 +9,24 @@ public class BookInfo {
 	
 	/* detail 부분 */
 	private String cp_payment, cp_date, cr_age, cr_payment, cr_date, bt_name, bt_area, bt_type, bt_status, bi_level, bc_name;
-	private int cp_idx, cp_pay,cr_idx, cr_pmoney, cr_coupon, cr_pay, bt_idx, bl_adult;
-	
-	
+	private int cp_idx, cp_pay,cr_idx, cr_pmoney, cr_coupon, cr_pay, bt_idx, bl_adult, total_cr_pay;
+	private String bt1_sidx, bt2_eidx;
 	
 
+
+	public int getTatal_cr_pay() {
+		return total_cr_pay;
+	}
+
+
+	public void setTatal_cr_pay(int tatal_cr_pay) {
+		this.total_cr_pay = tatal_cr_pay;
+	}
+
+
 	public BookInfo(int ri_acnt, int ri_scnt, int ri_ccnt, String ri_status, String ri_sday, String bs_stime,
-			String bl_type, String ri_idx, String cr_payment, String cr_date, int bt_sidx, int bt_eidx, String bi_level,
-			String bc_name, int cr_pay, List<BusSeatList> busSeatList) {
+			String bl_type, String ri_idx, String cr_payment, String cr_date, String bt1_sidx, String bt2_eidx, String bi_level,
+			String bc_name, int total_cr_pay, List<BusSeatList> busSeatList) {
 		super();
 		this.ri_acnt = ri_acnt;
 		this.ri_scnt = ri_scnt;
@@ -28,11 +38,11 @@ public class BookInfo {
 		this.ri_idx = ri_idx;
 		this.cr_payment = cr_payment;
 		this.cr_date = cr_date;
-		this.bt_sidx = bt_sidx;
-		this.bt_eidx = bt_eidx;
+		this.bt1_sidx = bt1_sidx;
+		this.bt2_eidx = bt2_eidx;
 		this.bi_level = bi_level;
 		this.bc_name = bc_name;
-		this.cr_pay = cr_pay;
+		this.total_cr_pay = total_cr_pay;
 		this.busSeatList = busSeatList;
 	}
 
@@ -288,4 +298,23 @@ public class BookInfo {
 	public void setBl_adult(int bl_adult) {
 		this.bl_adult = bl_adult;
 	}
+	public String getBt1_sidx() {
+		return bt1_sidx;
+	}
+
+
+	public void setBt1_sidx(String bt1_sidx) {
+		this.bt1_sidx = bt1_sidx;
+	}
+
+
+	public String getBt2_eidx() {
+		return bt2_eidx;
+	}
+
+
+	public void setBt2_eidx(String bt2_eidx) {
+		this.bt2_eidx = bt2_eidx;
+	}
+	
 }

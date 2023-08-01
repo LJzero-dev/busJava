@@ -167,10 +167,17 @@ public class MemberDao {
 
 	public BookInfo getBookInfo(String riidx) {
 		String sql = "SELECT DISTINCT "
-				+ " bs.bs_stime, bi.bi_level, bc.bc_name, ri.ri_idx, ri.ri_sday, ri.ri_acnt, ri.ri_scnt, ri.ri_ccnt, ri.ri_status, bl.bl_type, bl.bt_sidx, bl.bt_eidx, cr.cr_date, cr.cr_payment, cr.cr_pay "
+				+ " bs.bs_stime, bi.bi_level, bc.bc_name, ri.ri_idx, ri.ri_sday, ri.ri_acnt, ri.ri_scnt, ri.ri_ccnt, ri.ri_status, bl.bl_type, bt1.bt_name as bt1_sidx, bt2.bt_name as bt2_eidx, cr.cr_date, cr.cr_payment, "
+				+ " cr_total.total_cr_pay "
+				+ " FROM t_reservation_info ri, t_bus_schedule bs, t_bus_info bi, t_bus_company bc, t_bus_line bl, t_bus_terminal bt1, t_bus_terminal bt2, t_count_rinfo cr, (SELECT ri_idx, SUM(cr_pay) AS total_cr_pay FROM t_count_rinfo GROUP BY ri_idx) cr_total "
+				+ " WHERE  ri.bs_idx = bs.bs_idx and bs.bi_idx = bi.bi_idx and bi.bc_idx = bc.bc_idx and bs.bl_idx = bl.bl_idx and bl.bt_sidx = bt1.bt_idx and bl.bt_eidx = bt2.bt_idx and ri.ri_idx = cr.ri_idx and ri.ri_idx = cr_total.ri_idx "
+				+ " and ri.ri_idx = '" + riidx + "' ORDER BY ri.ri_sday ASC;";
+		/*String sql = "SELECT DISTINCT "
+				+ " bs.bs_stime, bi.bi_level, bc.bc_name, ri.ri_idx, ri.ri_sday, ri.ri_acnt, ri.ri_scnt, ri.ri_ccnt, ri.ri_status, bl.bl_type, bt1.bt_name as bt1_sidx, bt2.bt_name as bt2_eidx, cr.cr_date, cr.cr_payment, cr.cr_pay "
 				+ " FROM t_reservation_info ri, t_bus_schedule bs, t_bus_info bi, t_bus_company bc, t_bus_line bl, t_bus_terminal bt1, t_bus_terminal bt2, t_count_rinfo cr "
 				+ " WHERE  ri.bs_idx = bs.bs_idx and bs.bi_idx = bi.bi_idx and bi.bc_idx = bc.bc_idx and bs.bl_idx = bl.bl_idx and bl.bt_sidx = bt1.bt_idx and bl.bt_eidx = bt2.bt_idx and ri.ri_idx = cr.ri_idx "
 				+ " and ri.ri_idx = '" + riidx + "' ORDER BY ri.ri_sday ASC";
+		*/
 		BookInfo bi = jdbc.queryForObject(sql, new RowMapper<BookInfo>() {
 			@Override
 			public BookInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -185,11 +192,11 @@ public class MemberDao {
 				rs.getString("ri_idx"),
 				rs.getString("cr_payment"),
 				rs.getString("cr_date"),
-				rs.getInt("bt_sidx"),
-				rs.getInt("bt_eidx"),
+				rs.getString("bt1_sidx"),
+				rs.getString("bt2_eidx"),
 				rs.getString("bi_level"),
 				rs.getString("bc_name"),
-				rs.getInt("cr_pay"),
+				rs.getInt("total_cr_pay"),
 				getBusSeatList(rs.getString("ri_idx")));
 						
 	            return bi;
@@ -198,7 +205,38 @@ public class MemberDao {
 		
 		return bi;
 	}
+
+	public int getrealCancel(String riidx) {
+		String sql = "update t_reservation_info set ri_status = '예매취소' where ri_idx = '" + riidx + "' ";
+		int result = jdbc.update(sql);
+		return result;
+	}
 	
+	public paymoneyInfo getpaymoneyList(String mi_id) {
+		String sql = " SELECT DISTINCT mi.mi_pmoney, mph.mph_pmoney, cr_total.total_cr_pmoney, bt1.bt_name AS bt_sidx, bt2.bt_name AS bt_eidx, mph.mph_date, cr.cr_date, ri.ri_idx, IF(bl.bl_type='b', '고속', '시외') AS bl_type "
+				+ " FROM t_member_info mi, t_member_pmoney_history mph, t_reservation_info ri, t_bus_schedule bs, t_bus_line bl, t_bus_terminal bt1,t_bus_terminal bt2, t_count_rinfo cr,"
+				+ " (SELECT ri_idx, SUM(cr_pmoney) AS total_cr_pmoney FROM t_count_rinfo GROUP BY ri_idx) cr_total WHERE mi.mi_id = mph.mi_id and mi.mi_id = ri.mi_id and ri.bs_idx = bs.bs_idx and bs.bl_idx = bl.bl_idx and bl.bt_sidx = bt1.bt_idx and bl.bt_eidx = bt2.bt_idx "
+				+ " and ri.ri_idx = cr.ri_idx and ri.ri_idx = cr_total.ri_idx and mi.mi_id='test1' AND cr_total.total_cr_pmoney > 0 ";
+		paymoneyInfo pi = jdbc.queryForObject(sql, new RowMapper<paymoneyInfo>() {
+			@Override
+			public paymoneyInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+				paymoneyInfo pi = new paymoneyInfo();
+				pi.setBt_eidx(rs.getString("bt_eidx"));
+				pi.setBt_sidx(rs.getString("bt_sidx"));
+				pi.setMph_date(rs.getString("mph_date"));
+				pi.setCr_date(rs.getString("cr_date"));
+				pi.setMi_pmoney(rs.getInt("mi_pmoney"));
+				pi.setMph_pmoney(rs.getInt("mph_pmoney"));
+				pi.setTotal_cr_pmoney(rs.getInt("total_cr_pmoney"));
+				pi.setRi_idx(rs.getString("ri_idx"));
+				pi.setBl_type(rs.getString("bl_type"));
+				
+	            return pi;
+			}
+		});
+
+		return pi;
+	}
 
 }
 

@@ -383,7 +383,16 @@ public class MemberCtrl {
 	}
 
 	@GetMapping("/payMoney")
-	public String paymoney() {
+	public String paymoney(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		HttpSession session = request.getSession();
+		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
+		String mi_id = loginInfo.getMi_id();
+		
+		paymoneyInfo pi = memberSvc.getpaymoneyList(mi_id);
+		
+		request.setAttribute("pi", pi);
+		
 		return "/member/paymoney";
 	}
 	@GetMapping("/coupon")
@@ -592,5 +601,30 @@ public class MemberCtrl {
 		request.setAttribute("args", args);
 		
 		return "member/booking_detail";
+	}
+	
+	@GetMapping("/cancel")
+	public String cancel() {
+		return "popup/cancel";
+	}
+	
+	@GetMapping("/realCancel")
+	public String realCancel(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		String riidx = request.getParameter("riidx");
+		
+		int result = memberSvc.getrealCancel(riidx);
+		
+		if (result != 1) {
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('예매취소에 실패하였습니다.');");
+			out.println("history.back();");
+			out.println("</script>");
+			out.close();
+		} 
+		
+		return "redirect:/memberMypage";
 	}
 }
