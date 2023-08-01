@@ -51,9 +51,18 @@ function adultGyesan(sale) {
 	var children = document.getElementById("children");
 	var numericSale = parseInt(sale.replace(/,/g, ''), 10); // 쉼표 제거 후 정수로 변환
 	
-	adult.value = numericSale.toLocaleString('ko-KR');
-	teenager.value = Math.floor(numericSale * 0.8).toLocaleString('ko-KR');
-	children.value = Math.floor(numericSale * 0.5).toLocaleString('ko-KR');
+	// 쉼표(,)를 모두 제거한 숫자 문자열을 생성
+	var numericSale = parseInt(sale.replace(/,/g, ''), 10);
+	
+	if (!isNaN(numericSale)) { // 숫자가 아닌 경우(NaN)를 체크
+	  adult.value = numericSale.toLocaleString('ko-KR');
+	  teenager.value = Math.floor(numericSale * 0.8).toLocaleString('ko-KR');
+	  children.value = Math.floor(numericSale * 0.5).toLocaleString('ko-KR');
+	} else {
+	  adult.value = '';
+	  teenager.value = '';
+	  children.value = '';
+	}
 }
 
 function restrictAdult(input) {
