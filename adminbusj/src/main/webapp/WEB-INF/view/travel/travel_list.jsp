@@ -67,72 +67,80 @@
 		<div class="d-flex justify-content-between p-1 align-items-center">
 			<p class="h3 text-primary">버스터미널</p>
 			<div class="d-flex justify-content-between float_right">
-			<button type="button" class="btn waves-effect waves-light btn-primary btn-lg" value="">추가</button>
+			<button type="button" class="btn waves-effect waves-light btn-primary btn-lg mr-2" value="">글등록</button>
+			<button type="button" class="btn waves-effect waves-light btn-primary btn-lg" value="">미게시로변경</button>
 			</div>		
 		</div>
 		<div class="card">
-		<table class="table text-center">
+		<table class="table text-center mb-0">
 			<colgroup>
+				<col width="5%">
+				<col width="5%">
 				<col width="10%">
 				<col width="10%">
-				<col width="12%">
-				<col width="*">
+				<col width="*%">
 				<col width="10%">
 				<col width="10%">
-				<col width="10%">
-				<col width="10%">
-				<col width="12%">
 			</colgroup>
             <thead class="bg-primary text-white">
                 <tr>
-                    <th>출발시간</th>
-                    <th>도착시간</th>
-                    <th>회사명</th>
-                    <th>차량번호</th>
-                    <th>등급</th>
-                    <th>성인요금</th>
-                    <th>청소년요금</th>
-                    <th>아동요금</th>
-                    <th>삭제</th>
+                    <th><input type="checkbox" /></th>
+                    <th>No</th>
+                    <th>지역</th>
+                    <th>분류</th>
+                    <th>장소명</th>
+                    <th>작성일</th>
+                    <th>게시여부</th>
                 </tr>
             </thead>   
-            <tbody class="border border-primary ">
+            <tbody class="border border-primary text-black ">
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-					<td></td>
-					<td></td>
-                    <td></td>
-                    <td></td>
+                    <td><input type="checkbox" /></td>
+                    <td>20</td>
+                    <td>서울</td>
+                    <td><span class="badge badge-pill badge-primary">액티비티</span></td>
+                    <td>남산타워</td>
+					<td>23.08.03</td>
+					<td>Y</td>
                 </tr>
             </tbody>
 			<tbody class="border border-primary">
             	<tr>
-            		<td colspan="8">운행중인 시간표가 없습니다.</td>
-            	</tr>
-            </tbody>		
-			<tbody class="border border-primary">
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><input type="checkbox" /></td>
+                    <td>20</td>
+                    <td>서울</td>
+                    <td><span class="badge badge-pill badge-primary">맛집</span></td>
+                    <td>남산타워</td>
+					<td>23.08.03</td>
+					<td>Y</td>
                 </tr>
-            </tbody>
+            </tbody>		
         </table>
 		</div>
 		</div>
 	</div>
 </div>
+<nav aria-label="Page navigation example m-auto">
+	<ul class="pagination m-auto">
+	    <li class="page-item">
+	        <a class="page-link" href="javascript:void(0)" aria-label="Previous">
+	            <span aria-hidden="true">«</span>
+	            <span class="sr-only">Previous</span>
+	        </a>
+	    </li>
+	    <li class="page-item"><a class="page-link" href="javascript:void(0)">1</a></li>
+	    <li class="page-item"><a class="page-link" href="javascript:void(0)">2</a></li>
+	    <li class="page-item"><a class="page-link" href="javascript:void(0)">3</a></li>
+	    <li class="page-item">
+	        <a class="page-link" href="javascript:void(0)" aria-label="Next">
+	            <span aria-hidden="true">»</span>
+	            <span class="sr-only">Next</span>
+	        </a>
+	    </li>
+	</ul>
+</nav>
 </div>
+
 <div class="modal fade" id="AddLine" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
