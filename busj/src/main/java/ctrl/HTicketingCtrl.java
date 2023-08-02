@@ -121,5 +121,15 @@ public class HTicketingCtrl {
 		return "ticketing/h_ticket_step3";
 	}
 	
+	@PostMapping("/hTicketingStep04P")
+	public String hTicketingStep04P(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		HttpSession session = request.getSession();
+		
+		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
+
+		return "ticketing/h_ticket_step4p";
+	}
+	
 	
 }

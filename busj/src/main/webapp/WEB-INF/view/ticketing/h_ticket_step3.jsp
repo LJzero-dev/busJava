@@ -11,6 +11,9 @@ int leftSeat = Integer.parseInt(request.getParameter("left-seat"));
 
 List<SeatInfo> seatList = (List<SeatInfo>)session.getAttribute("seatList");
 
+String action = "";
+if (mode.equals("p"))	action = "hTicketingStep04P";
+else					action = "hTicketingStep04W";
 %>
 <section class="probootstrap_section">
 	<div class="container">
@@ -106,22 +109,20 @@ List<SeatInfo> seatList = (List<SeatInfo>)session.getAttribute("seatList");
 			</table>
 		</div>
 	</div>
+	<form name="frmSeat" action="<%=action %>" method="post">
 	<div class="row justify-content-center">
+		<input type="hidden" name="totalPrice" id="totalP" value="" />
 		<div class="col-md-6 text-center">
 			<p>좌석선택 <%=leftSeat %>/<%=totalSeat %></p>
-<%if(ri1.getLevel().equals("우등")) { %>
-			<div class="seat-bg seat28 ml-auto">
-<% } else if (ri1.getLevel().equals("프리미엄")) { %>
-			<div class="seat-bg seat18 ml-auto">
-<% } %>
-			<div class="seat-list">
+			<div class="seat-bg <%= ri1.getLevel().equals("우등") ? "seat28" : "seat18" %> ml-auto">
+				<div class="seat-list">
 <% for (SeatInfo si : seatList) { %>
-			<span class="seat-box <% if (si.getReserved_yn().equals("Y")) { %>disabled<% } %> <% if (si.getSi_seat() > 24) %>last_seat <% if (si.getSi_seat() == 28) { %>last<% }%>">
-				<input type="checkbox" name="seatBoxDtl" id="seatNum_<%=si.getSi_seat() %>" value="<%=si.getSi_seat() %>" onclick="getSeat(this);" <% if (si.getReserved_yn().equals("Y")) { %>disabled<% } %>>
-				<label for="seatNum_<%=si.getSi_seat() %>"><%=si.getSi_seat() %></label>
-			</span>
+				<span class="seat-box <% if (si.getReserved_yn().equals("Y")) { %>disabled<% } %> <% if (si.getSi_seat() > 24) %>last_seat <% if (si.getSi_seat() == 28) { %>last<% }%>">
+					<input type="checkbox" name="seatBoxDtl" id="seatNum_<%=si.getSi_seat() %>" value="<%=si.getSi_seat() %>" onclick="getSeat(this);" <% if (si.getReserved_yn().equals("Y")) { %>disabled<% } %>>
+					<label for="seatNum_<%=si.getSi_seat() %>"><%=si.getSi_seat() %></label>
+				</span>
 <% } %>
-			</div>
+				</div>
 			</div>
 		</div>
 		<div class="col-md-6">
@@ -209,10 +210,14 @@ List<SeatInfo> seatList = (List<SeatInfo>)session.getAttribute("seatList");
 			</div>
 		</div>
 	</div>
+	</form>
 	</div>
 </section>
 <%@ include file="../_inc/foot.jsp" %>
 <script>
+
+const selectedValues = [];
+const seats = document.getElementsByName("seatBoxDtl");
 function setCnt(op) {
 	if ( $("#totalCnt").text() == 10 && (op == 'plusA' || op == 'plusT' || op == 'plusC')) {
 		alert("최대 예약 가능 인원은 10명입니다.");
@@ -223,17 +228,18 @@ function setCnt(op) {
 	let teen = parseInt($("#teen").val());
 	let child = parseInt($("#child").val());
 	
+	// 연산자가 마이너스이고 해당 필드가 0인경우 미리 return하여 아래 배열에 영향을 주지않도록 함 (어른은 기본 1선택)
+	if ((op == 'minusA' && adult === 1) || (op == 'minusT' && teen === 0) || (op == 'minusC' && child === 0)) {
+	    return;
+	}
 	
 	// 어른 필드 계산시
-	if (op == 'minusA' && !(adult < 1)) {
+	if (op == 'minusA' && !(adult < 2)) {
 		$("#adult").val(adult - 1);
 		adult--;
-		
-		
 	} else if (op == 'plusA' && !(adult > 9)) {
 		$("#adult").val(adult + 1);
 		adult++;
-		
 	}
 	
 	// 청소년 필드 계산시
@@ -249,11 +255,11 @@ function setCnt(op) {
 	if (op == 'minusC' && !(child < 1)) {
 		$("#child").val(child - 1);
 		child--;
-		$("#child2").text(child);
 	} else if (op == 'plusC' && !(child > 9)) {
 		$("#child").val(child + 1);
 		child++;
 	}
+	
 	
 	$("#adult2").text(adult);	$("#teen2").text(teen);	$("#child2").text(child);
 	$("#priceA").text(formatNumber(adult * <%=ri1.getPrice()%>));
@@ -262,17 +268,39 @@ function setCnt(op) {
 	  
 	$("#totalCnt").text(adult + teen + child);
 	$("#totalPrice").text(formatNumber(adult * <%=ri1.getPrice()%> + teen * <%=ri1.getPrice()%> * 0.8 + child * <%=ri1.getPrice()%> * 0.5));
+	$("#totalP").val((adult * <%=ri1.getPrice()%> + teen * <%=ri1.getPrice()%> * 0.8 + child * <%=ri1.getPrice()%> * 0.5));
+
+	let seatsCnt = 0;
+	for (let i = 0; i < seats.length; i++) {
+		if (seats[i].checked) {
+			seatsCnt++;
+		}
+	}
 	
+	if (op == 'minusA' || op == 'minusT' || op == 'minusC') {
+		if (seatsCnt == selectedValues.length) {
+			selectedValues.splice(selectedValues.length - 1);
+			$("#seatArr").text(selectedValues.join(", "));
+			for (let i = seats.length - 1; i >= 0 ; i--) {
+				if (seats[i].checked) {
+					seats[i].checked = false;
+					return;
+				}
+			}
+		}
+		
+		if (selectedValues.length == 0) {
+			$("#seatArr").text("좌석을 선택해주세요.");
+		}
+	}
 }
 
 function formatNumber(number) {
 	  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-const selectedValues = [];
-
 function getSeat(obj) {
-	const seats = document.getElementsByName("seatBoxDtl");	
+		
 	const value = obj.value;
 	const index = selectedValues.indexOf(value);	// 체크한 값이 배열에 이미 있는지 확인을 위한 변수
 	
@@ -313,13 +341,10 @@ $(document).ready(function() {
 	// 기본적으로 성인1명의 표 값이 보이는 상태로 로딩
 	
 	$("#submitBtn").click(function() {
-		const seats = document.getElementsByName("seatBoxDtl");
-		
-		for (let i = 0; i < seats.length; i++) {
-			if (seats[i].checked == false) {
-				alert("좌석을 선택해주세요.");
-				return;
-			}
+		if (!(selectedValues.length == parseInt($("#totalCnt").text()))) {
+			alert("좌석을 선택해주세요.");
+		} else {
+			document.frmSeat.submit();
 		}
 	});
 });
