@@ -23,9 +23,9 @@
           </div>
           <button type="submit" class="btn btn-primary btn-block" >로그인</button>
         </form>
-        <div class="d-flex justify-content-center mT3">
-	   <a href="memberJoinStep1" class="mR1">회원가입</a>
-	   <a href="memberFind">아이디/비밀번호 찾기</a>
+        <div class="d-flex justify-content-center mt-2">
+		   <a href="memberJoinStep1" class="mr-3">회원가입</a>
+		   <a href="memberFind">아이디/비밀번호 찾기</a>
 	   </div>
       </div>
     </div>
