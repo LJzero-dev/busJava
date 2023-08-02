@@ -1,6 +1,9 @@
 package svc;
 
+import java.sql.SQLException;
 import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
 
 import dao.*;
 import vo.*;
@@ -97,11 +100,6 @@ public class MemberSvc {
 		return bi;
 	}
 
-	public int getrealCancel(String riidx) {
-		int result = memberDao.getrealCancel(riidx);
-		return result;
-	}
-
 	public List<paymoneyInfo> getpaymoneyList(String mi_id) {
 		List<paymoneyInfo> pList = memberDao.getpaymoneyList(mi_id);
 		return pList;
@@ -112,4 +110,9 @@ public class MemberSvc {
 		return mphList;
 	}
 
+	@Transactional(rollbackFor = SQLException.class) 
+	public int getrealCancel(String riidx, String mi_id) {
+		int result = memberDao.getrealCancel(riidx, mi_id);
+		return result;
+	}
 }

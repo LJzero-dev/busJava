@@ -23,9 +23,9 @@ switch (bi.getBl_type()) {
 NumberFormat nf = NumberFormat.getInstance();
 String formattedNumber = "";
 
-if (bi.getTatal_cr_pay() > 1000) {
+if (bi.getTotal_cr_pay() > 1000) {
     nf = NumberFormat.getInstance();
-    formattedNumber = nf.format(bi.getTatal_cr_pay());
+    formattedNumber = nf.format(bi.getTotal_cr_pay());
     // 이제 formattedNumber는 세 자리마다 쉼표가 찍힌 숫자를 문자열 형태로 저장합니다.
 }
 

@@ -1,5 +1,8 @@
 package config;
 
+import org.springframework.jdbc.datasource.*;			//트랜잭션 추가
+import org.springframework.transaction.*;				//트랜잭션 추가
+import org.springframework.transaction.annotation.*;	//트랜잭션 추가
 import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.tomcat.jdbc.pool.*;
@@ -12,7 +15,17 @@ import svc.*;
 import vo.*;
 import static config.DbConfig.*;
 
+@Configuration
+@EnableTransactionManagement 
 public class MemberConfig {	
+	
+	@Bean
+	public PlatformTransactionManager transactionManager() {
+		DataSourceTransactionManager tm = new DataSourceTransactionManager();
+		tm.setDataSource(dataSource());
+		return tm;
+	}
+	
 	@Bean
 	public MemberDao memberDao() {
 		return new MemberDao(dataSource());
@@ -45,5 +58,6 @@ public class MemberConfig {
 
         return mailSender;
     }
+	
 }
 

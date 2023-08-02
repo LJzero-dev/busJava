@@ -615,19 +615,13 @@ public class MemberCtrl {
 	@GetMapping("/realCancel")
 	public String realCancel(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
+		HttpSession session = request.getSession();
+		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
 		String riidx = request.getParameter("riidx");
+		String mi_id =  loginInfo.getMi_id();
 		
-		int result = memberSvc.getrealCancel(riidx);
-		
-		if (result != 1) {
-			response.setContentType("text/html; charset=utf-8");
-			PrintWriter out = response.getWriter();
-			out.println("<script>");
-			out.println("alert('예매취소에 실패하였습니다.');");
-			out.println("history.back();");
-			out.println("</script>");
-			out.close();
-		} 
+		int result = memberSvc.getrealCancel(riidx, mi_id);
+	
 		
 		return "redirect:/memberMypage";
 	}

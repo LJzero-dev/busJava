@@ -9,18 +9,19 @@ public class BookInfo {
 	
 	/* detail 부분 */
 	private String cp_payment, cp_date, cr_age, cr_payment, cr_date, bt_name, bt_area, bt_type, bt_status, bi_level, bc_name;
-	private int cp_idx, cp_pay,cr_idx, cr_pmoney, cr_coupon, cr_pay, bt_idx, bl_adult, total_cr_pay;
-	private String bt1_sidx, bt2_eidx;
+	private int cp_idx, cp_pay,cr_idx, cr_pmoney, cr_coupon, cr_pay, bt_idx, bl_adult, total_cr_pay, pd_real_price;
+	private String bt1_sidx, bt2_eidx, pd_payment;
 	
 
+	
+	
 
-	public int getTatal_cr_pay() {
-		return total_cr_pay;
-	}
-
-
-	public void setTatal_cr_pay(int tatal_cr_pay) {
-		this.total_cr_pay = tatal_cr_pay;
+	public BookInfo(String ri_sday, String bs_stime, int pd_real_price, String pd_payment) {
+		super();
+		this.ri_sday = ri_sday;
+		this.bs_stime = bs_stime;
+		this.pd_real_price = pd_real_price;
+		this.pd_payment = pd_payment;
 	}
 
 
@@ -70,12 +71,19 @@ public class BookInfo {
 	public List<BusSeatList> getBusSeatList() {
 		return busSeatList;
 	}
-	
 
 	public void setBusSeatList(List<BusSeatList> busSeatList) {
 		this.busSeatList = busSeatList;
 	}
 	
+	public int getTotal_cr_pay() {
+		return total_cr_pay;
+	}
+
+	public void setTotal_cr_pay(int total_cr_pay) {
+		this.total_cr_pay = total_cr_pay;
+	}
+
 	public String getRi_idx() {
 		return ri_idx;
 	}
@@ -316,5 +324,25 @@ public class BookInfo {
 	public void setBt2_eidx(String bt2_eidx) {
 		this.bt2_eidx = bt2_eidx;
 	}
+	
+	public String getPd_payment() {
+		return pd_payment;
+	}
+
+
+	public void setPd_payment(String pd_payment) {
+		this.pd_payment = pd_payment;
+	}
+
+
+	public int getPd_real_price() {
+		return pd_real_price;
+	}
+
+
+	public void setPd_real_price(int pd_real_price) {
+		this.pd_real_price = pd_real_price;
+	}
+
 	
 }

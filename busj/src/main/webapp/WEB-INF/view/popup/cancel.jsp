@@ -76,6 +76,6 @@ String riidx = request.getParameter("riidx");
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-  <button type="button" id="btnSubmit" class="btn btn-primary" data-dismiss="modal" onclick="location.href='realCancel?riidx=<%=riidx %>'">동의</button>
+  <button type="button" id="btnSubmit" class="btn btn-primary" data-dismiss="modal" onclick="location.href='realCancel?riidx=<%=riidx %>&'">동의</button>
 </div>
 <%@ include file="../_inc/foot.jsp" %>

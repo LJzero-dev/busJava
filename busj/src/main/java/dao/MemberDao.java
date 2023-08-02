@@ -9,6 +9,10 @@ import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.support.*;
 import vo.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
 public class MemberDao {
 	private JdbcTemplate jdbc;
 
@@ -205,12 +209,6 @@ public class MemberDao {
 		
 		return bi;
 	}
-
-	public int getrealCancel(String riidx) {
-		String sql = "update t_reservation_info set ri_status = '예매취소' where ri_idx = '" + riidx + "' ";
-		int result = jdbc.update(sql);
-		return result;
-	}
 	
 	public List<paymoneyInfo> getpaymoneyList(String mi_id) {
 		String sql = " SELECT DISTINCT cr_total.total_cr_pmoney, bt1.bt_name AS bt_sidx, bt2.bt_name AS bt_eidx, cr.cr_date, ri.ri_idx, bl_type "
@@ -248,6 +246,73 @@ public class MemberDao {
 			});
 		return mphList;
 	}
+	
+	public int getrealCancel(String riidx, String mi_id) {
+		String sday="", stime="";
+		int result = 0;
+		String sql = "select DISTINCT ri.ri_sday, bs.bs_stime, pd.pd_payment, pd.pd_real_price "
+				+ " from t_reservation_info ri, t_bus_schedule bs, t_payment_detail pd "
+				+ " where ri.bs_idx = bs.bs_idx and ri.ri_idx = pd.ri_idx and ri.mi_id='" + mi_id + "' and ri.ri_idx='" + riidx + "' ";
+
+		BookInfo bi = jdbc.queryForObject(sql, new RowMapper<BookInfo>() {
+			@Override
+			public BookInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+				BookInfo bi = new BookInfo(
+				rs.getString("ri_sday"),
+				rs.getString("bs_stime"),
+				rs.getInt("pd_real_price"),
+				rs.getString("pd_payment"));
+				
+				return bi;
+			}
+		});
+		
+		// 1. 예매정보조회 - 날짜 및 시간 출력
+		sday = bi.getRi_sday(); stime = bi.getBs_stime(); 
+		int realPrice = bi.getPd_real_price();
+		
+		// 2.1 날짜 및 시간 LocalDateTime 객체로 변환
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime departTime = LocalDateTime.parse(sday + " " + stime, formatter);
+
+        // 2.2 현재 시간과의 차이 계산
+        LocalDateTime now = LocalDateTime.now();
+        long diffMinutes = ChronoUnit.MINUTES.between(now, departTime);
+
+        // 3. 취소 수수료 결정
+        int cancelPrice;
+        if (diffMinutes >= 2 * 24 * 60) {
+        	cancelPrice = 0;
+        } else if (diffMinutes >= 24 * 60) {
+        	cancelPrice = (realPrice/100) * 5;
+        } else if (diffMinutes >= 60) {
+        	cancelPrice = (realPrice/100) * 10;
+        } else {
+        	cancelPrice = (realPrice/100) * 30;
+        }
+
+
+        // 4. 예매 취소 처리
+        sql = "UPDATE t_reservation_info SET ri_status = '예매취소' WHERE mi_id= '" + mi_id + "' and ri_idx = '" + riidx + "' " ;
+        result += jdbc.update(sql);
+// System.out.println(sql);
+        
+        // 5. 환불 처리 및 수수료 반영
+        // 결제 금액이 수수료 금액으로 변경 취소 수수료를 결제 내역에 추가.
+        sql = "UPDATE t_payment_detail SET pd_real_price = "+ cancelPrice + ", pd_total_price = "+ cancelPrice + " "
+        		+ ", pd_payment = '" + bi.getPd_payment() + "' "
+        		+ " WHERE mi_id = '" + mi_id + "' and ri_idx = '" + riidx + "' " ;    
+        result += jdbc.update(sql);
+        
+        // 6.취소한 자리에 예매를 위해 t_reservation_detail 의 정보는 삭제 해준다
+        sql = "DELETE FROM t_reservation_detail WHERE ri_idx = '" + riidx + "' ";
+        result += jdbc.update(sql);     
+
+
+// System.out.println(result);        
+        return result;
+	}
+	
 }
 
 
