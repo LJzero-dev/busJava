@@ -37,6 +37,20 @@ public class HTicketingSvc {
 		return seatList;
 	}
 
+	public int chargeAmount(String miid, String payment, int chargePmoney, int totalPmoney) {
+		int result = 0;
+		
+		// 페이머니 충전내역 Insert
+		result += hTicketingDao.chargeAmountIn(miid, payment, chargePmoney, totalPmoney);
+		
+		// 회원정보 테이블 Update
+		result += hTicketingDao.chargeAmountUp(miid, totalPmoney);
+		
+		System.out.println(result);
+		return chargePmoney;
+	}
+
+
 	
 	
 }

@@ -3,8 +3,8 @@ package vo;
 public class ReservationInfo {
 	private int	ri_idx,	bs_idx,	ri_acnt, ri_scnt, ri_ccnt, si_idx;
 	private String mi_id, ri_sday, ri_status, ri_date, ri_type;
-	private String mode, sdate, sspot, espot, stime, etime, comname, level;	// 왕복편도 구분, 탑승일, 출발장소, 도착장소, 노선번호, 출발, 도착시간, 어른가격, 버스회사, 버스등급
-	private int linenum, price;
+	private String mode, sdate, sspot, espot, stime, etime, comname, level, seat;	// 왕복편도 구분, 탑승일, 출발장소, 도착장소, 출발, 도착시간, 버스회사, 버스등급, seat 목록
+	private int linenum, price, adultcnt, teencnt, childcnt;	// 노선번호, 어른가격, 어른매수, 청소년매수, 아동매수
 	public int getRi_idx() {
 		return ri_idx;
 	}
@@ -130,6 +130,24 @@ public class ReservationInfo {
 	}
 	public void setLevel(String level) {
 		this.level = level;
+	}
+	public int getAdultcnt() {
+		return adultcnt;
+	}
+	public void setAdultcnt(int adultcnt) {
+		this.adultcnt = adultcnt;
+	}
+	public int getTeencnt() {
+		return teencnt;
+	}
+	public void setTeencnt(int teencnt) {
+		this.teencnt = teencnt;
+	}
+	public int getChildcnt() {
+		return childcnt;
+	}
+	public void setChildcnt(int childcnt) {
+		this.childcnt = childcnt;
 	}
 	
 

@@ -50,7 +50,7 @@ if (loginInfo != null)	isLogin = true;
 			</div>
 			</li>
 			<li class="nav-item"><a class="nav-link" href="recommendTrip">추천 여행지</a></li>
-			<li class="nav-item"><a class="nav-link" href="buyAgree">페이머니 구매</a></li>
+			<li class="nav-item"><a class="nav-link" href="pmoneyInfo">페이머니 구매</a></li>
 			<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">고객지원</a>
         	<div class="dropdown-menu">

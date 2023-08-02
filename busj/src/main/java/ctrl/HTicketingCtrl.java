@@ -20,6 +20,40 @@ public class HTicketingCtrl {
 		this.hTicketingSvc = hTicketingSvc;
 	}
 
+	@GetMapping("/pmoneyInfo")
+	public String pmoneyInfo() {
+		return "member/paymoney_info";
+	}
+	
+	@GetMapping("/pmoneyCharge1")
+	public String pmoneyCharge1() {
+		return "popup/paymoney_charge1";
+	}
+	
+	@GetMapping("/pmoneyCharge2")
+	public String pmoneyCharge2() {
+		return "popup/paymoney_charge2";
+	}
+	
+	@PostMapping("/chargePmoney")
+	@ResponseBody
+	public int chargePmoney(HttpServletRequest request, @RequestParam String payment, @RequestParam int chargePmoney) {
+	// chargePmoney에 해당하는 값을 해당 회원의 아이디에 충전후 충전금액 리턴
+		HttpSession session = request.getSession();
+		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
+		String miid = loginInfo.getMi_id();
+		
+		if (payment.equals("card")) payment = "카드";
+		else if (payment.equals("bankbook")) payment = "무통장입금";
+		else if (payment.equals("simplepay")) payment = "간편결제";
+		
+		int totalPmoney = chargePmoney + (chargePmoney / 10);	// 실 충전금액
+		
+		hTicketingSvc.chargeAmount(miid, payment, chargePmoney, totalPmoney);
+		return chargePmoney;
+		
+	}
+	
 	@GetMapping("/hTicketingStep01")
 	public String hTicketingStep01() {
 		return "ticketing/h_ticket_step1";
@@ -124,10 +158,21 @@ public class HTicketingCtrl {
 	@PostMapping("/hTicketingStep04P")
 	public String hTicketingStep04P(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
-		HttpSession session = request.getSession();
+		int acnt = Integer.parseInt(request.getParameter("adult"));
+		int tcnt = Integer.parseInt(request.getParameter("teen"));
+		int ccnt = Integer.parseInt(request.getParameter("child"));
+		String[] seats1 = request.getParameterValues("seatBoxDtl");
 		
-		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
+		
+		HttpSession session = request.getSession();
 
+		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
+		ri1.setAdultcnt(acnt);
+		ri1.setTeencnt(tcnt);
+		ri1.setChildcnt(ccnt);
+		session.setAttribute("ri1", ri1);
+		session.setAttribute("seats1", seats1);
+		
 		return "ticketing/h_ticket_step4p";
 	}
 	

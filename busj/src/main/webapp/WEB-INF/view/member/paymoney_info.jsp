@@ -1,82 +1,50 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import = "java.util.*" %>
-<%@ include file="../_inc/head.jsp" %>
+<%@ include file="../_inc/head.jsp"%>
 <%
 request.setCharacterEncoding("utf-8");
-ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
-String[] seats1 = (String[])session.getAttribute("seats1");
-String seatList = "";
-for (String seat : seats1) {
-	seatList += ", " + seat;
-}
-seatList = seatList.substring(2);
-
-int base_price = Integer.parseInt(request.getParameter("totalPrice"));
 %>
 <section class="probootstrap_section">
-	<div class="container">
-		<div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated">
-			<div class="col-md-12"><h2 class="border-bottom probootstrap-section-heading">고속버스 예매</h2></div>
-			<div class="col-md-8 m-auto">
-			  <div class="progress-bar-custom">
-			    <div class="progress-step">
-			      <div class="step-count"></div>
-			      <div class="step-description">정보 입력</div>
-			    </div>
-			    <div class="progress-step">
-			      <div class="step-count"></div>
-			      <div class="step-description">배차 조회</div>
-			    </div>
-			    <div class="progress-step">
-			      <div class="step-count"></div>
-			      <div class="step-description">좌석 선택</div>
-			    </div>
-			    <div class="progress-step is-active">
-			      <div class="step-count"></div>
-			      <div class="step-description">확인/결제</div>
-			    </div>
-			    <div class="progress-step">
-			      <div class="step-count"></div>
-			      <div class="step-description">예매 결과</div>
-			    </div>
-			  </div>
-			</div>
-		</div>
+      <div class="container">
+        <div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated">
+          <div class="col-md-12">
+            <h2 class="border-bottom probootstrap-section-heading">페이머니 구매</h2>
+          </div>
+        </div>
         <div class="row">
-			<div class="col-md-12 text-center mb-5">
-			  <h4 class="text-left text-primary">승차권정보</h4>
-			  <h5 class="text-left">가는편</h5>
-			  <table class="table">
-			    <colgroup>
-			      <col width="5%">
-			      <col width="15%">
-			      <col width="5%">
-			      <col width="15%">
-			      <col width="15%">
-			      <col width="15%">
-			      <col width="15%">
-			    </colgroup>
-			    <tbody>
-			      <tr>
-			        <td><span class="badge badge-danger">출발지</span></td>
-			        <td><%=ri1.getSspot() %></td>
-			        <td><span class="badge badge-primary">도착지</span></td>
-			        <td><%=ri1.getEspot() %></td>
-			        <td><%=ri1.getSdate() %></td>
-			        <td>출발 <%=ri1.getStime() %></td>
-			        <td>도착 <%=ri1.getEtime() %></td>
-			        <td><%=ri1.getComname() %></td>
-			      </tr>
-			      <tr>
-			        <td colspan="2">예매 매수</td>
-			        <td colspan="2" class="text-left">어른<%=ri1.getAdultcnt() %>, 청소년<%=ri1.getTeencnt() %>, 아동<%=ri1.getChildcnt() %></td>
-			        <td colspan="2">예매 좌석</td>
-			        <td colspan="2" class="text-left"><%=seatList %></td>
-			      </tr>
-			    </tbody>
-			  </table>
-			</div>
-			<div class="col-md-12 mb-3">
+          <div class="col-md-12 text-center mb-5">
+            <h5 class="text-left">이용안내</h5>
+            <table class="table">
+              <colgroup>
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th class="text-center">구분</th>
+                  <th class="text-center">내용</th>
+                  <th class="text-center">구분</th>
+                  <th class="text-center">내용</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>이용권종</td>
+                  <td>20/30/50만원권</td>
+                  <td>사용일</td>
+                  <td>전일(평일, 주말, 공휴일)</td>
+                </tr>
+                <tr>
+                  <td>버스 이용등급</td>
+                  <td>전체버스 이용가능</td>
+                  <td>이용가능 일수</td>
+                  <td>제한없음</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-12 mb-3">
 				<h5 class="text-left"><span class="text-danger">*</span>서비스 이용약관 동의</h5>
 				<div class="scroll-box">
 					<서비스 이용약관><br />
@@ -185,40 +153,6 @@ int base_price = Integer.parseInt(request.getParameter("totalPrice"));
 				</div>
 			</div>
 			<div class="col-md-12 mb-3">
-		        <h5 class="text-left"><span class="text-danger">*</span>운송약관 동의</h5>
-		        <div class="scroll-box">
-		고속버스 운송사업 운송약관<br />
-		시 행 2016. 03. 09.<br />
-		
-		제1조 (목 적) 이 운송약관은(이하 약관이라 한다.) 여객자동차 운수사업법(이하 법이라 한다.) 제9조의 규정에 의하여 고속버스운송회사(이하 회사라 한다.)와 여객간의 운송에 관한 책임한계 및 경영에 필요한 사항을 규정함을 목적으로 한다.<br />
-		제2조 (용어의 정의) 이 약관에 사용하는 용어의 정의는 다음과 같다.<br />
-		1. 승차권이란 여객자동차운수사업법 시행규칙(이하 규칙이라 한다.) 제30조의 규정에 따라 운송을 위하여 회사가 발행하는 증표를 말한다.<br />
-		2. 운임이란 회사에서 법 제8조의 규정에 의하여 관할관청에 신고 수리된 금액을 말한다.<br />
-		3. 여객의 휴대품이란 여객이 소지하는 물품중 제23조의 규격기준에 부합하고 제26조의 소지제한 물품이 아닌 것으로 여객이 차내 반입하는 물품을 말한다.<br />
-		4. 여객의 휴대화물이란 법 제18조의 규정에 의하여 운송되는 화물로 제23조의 규격 기준에 부합하고 제26조의 소지제한 물품이 아닌 것으로 물품적재 장치에 실은 물품을 말한다.<br />
-		5. 인터넷승차권(홈티켓)이란 여객이 전국고속버스운송사업조합에서 운영하는 인터넷 홈페이지 내의 승차권 예약•예매서비스를 통해 지정된 양식으로 여객이 직접 발행한 승차권을 말한다.<br />
-		6. 모바일승차권이란 여객이 전국고속버스운송사업조합에서 지정하는 고속버스 모바일앱내의 승차권 예매 서비스를 통해 휴대폰으로 전송받은 승차권을 말한다.<br />
-		제3조 (약관의 적용)<br />
-		① 이 약관은 회사에 의한 여객의 운송 또는 이에 부수되는 업무에 적용된다.<br />
-		② 이 약관이 관계법규에 저촉된 때에는 적용하지 아니한다.<br />
-		제4조 (여객의 동의) 여객이 회사가 제공하는 승차권 예약•예매서비스를 통해 승차권 예매, 인터넷 승차권(홈티켓), 모바일승차권 구입 발행받은 경우에는 이 약관 및 이에 의하여 정하여진 규정에 동의한 것으로 본다.<br />
-		제5조 (약관의 변경) 이 약관 및 이에 의하여 정하여진 규정은 관할관청의 인가 또는 사업 개선명령에 의하여 변경될 수 있다.<br />
-		제6조 (게시) 회사의 각 영업소에는 여객 운임표, 운송약관, 운행시간표 등을 여객이 보기 쉬운곳에 게시하여야 한다.<br />
-		제7조 (종업원의 안내) 여객은 승, 하차 질서 확립과 안전운행을 위한 회사원의 안내에 따라야 한다.<br />
-		제8조 (운행의 변경) 회사는 천재지변, 악천후, 도로의 정체 기타 불가항력적 사태 및 정부기관의 명령이 있을 때에는 운행의 일부 또는 전부를 취소하거나 운행시간의 변경할 수 있으며 여객 및 휴대화물 등의 운송을 제한할 수 있다.<br />
-		
-		는 여객이 지정하는 제3자의 입회하에 휴대품, 휴대화물의 내용을 조사할 수 있다.<br />
-		제25조 (물품의 소지제한) 여객은 다음 각 호의 물품을 소지할 수 없다. 다만, 품명, 수량, 포장방법에 있어서 회사에서 인정한 것은 제외한다.<br />
-		1. 폭발성 물질, 부식성 물질, 인화성 물질 등 위험물로서 여객에게 위해를 끼칠염려가 있는 물품<br />
-		2. 시체<br />
-		3. 동물(단, 장애인 보조견 및 전용운반상자에 넣은 애완동물 제외)<br />
-		        </div>
-		        <div class="form-check custom ml-0 mt-2">
-		            <input class="form-check-input" type="checkbox" name="agree" id="agree2">
-		            <label class="form-check-label" for="agree2">동의합니다</label>
-		        </div>
-			</div>
-			<div class="col-md-12 mb-3">
 				<h5 class="text-left"><span class="text-danger">*</span>개인정보 수집 및 이용 동의</h5>
 				<div class="scroll-box">
 					개인정보 수집 및 이용 동의<br />
@@ -235,8 +169,8 @@ int base_price = Integer.parseInt(request.getParameter("totalPrice"));
 					시행일자 : 2017년 5월 18일
 				</div>
 	            <div class="form-check custom ml-0 mt-2">
-	                <input class="form-check-input" type="checkbox" name="agree" id="agree3">
-	                <label class="form-check-label" for="agree3">동의합니다</label>
+	                <input class="form-check-input" type="checkbox" name="agree" id="agree2">
+	                <label class="form-check-label" for="agree2">동의합니다</label>
 	            </div>
 			</div>
 			<div class="col-md-12 mb-3">
@@ -254,8 +188,8 @@ int base_price = Integer.parseInt(request.getParameter("totalPrice"));
 					5. 개인정보 제3자 제공 동시 거부 시 승차원 예매 하실 수 없습니다.<br />
 				</div>
 				<div class="form-check custom ml-0 mt-2">
-				    <input class="form-check-input" type="checkbox" name="agree" id="agree4">
-				    <label class="form-check-label" for="agree4">동의합니다</label>
+				    <input class="form-check-input" type="checkbox" name="agree" id="agree3">
+				    <label class="form-check-label" for="agree3">동의합니다</label>
 				</div>
 			</div>
 			<div class="col-md-12">
@@ -265,110 +199,65 @@ int base_price = Integer.parseInt(request.getParameter("totalPrice"));
 				</svg>전체 약관에 동의합니다.</label>
 				</div>
 			</div>
+          
         </div>
-        <div class="row">
-          <div class="col-md-4 text-center mb-5 mt-5">
-            <h4 class="text-left text-primary">쿠폰 적용</h4>
-            <div class="d-flex justify-content-between">
-              <p class="h5">쿠폰</p>
-              <div>
-              <!-- 쿠폰 없을경우 -->
-         <p class="h6">-</p>
-         <!-- 쿠폰 있을경우 -->
-         <div class="d-flex align-items-center">
-           <p class="h6 mb-0 mr-3">1개</p>
-           <button type="button" class="btn btn-primary btn-sm">쿠폰 적용</button>
-         </div>
-         <!-- 쿠폰 적용 후-->
-         <div class="d-flex align-items-center">
-           <p class="h6 mb-0 mr-3">버스 무료 탑승권</p>
-           <p class="h5 mb-0 mr-3">-30,000</p>
-         </div>
-         </div>
-       </div>
-     </div>
-     <div class="col-md-5 text-center mb-5 mt-5">
-       <h4 class="text-left text-primary">결제 방법</h4>
-       <div class="d-flex">
-       <div class="form-check custom">
-         <input class="form-check-input" type="radio" name="payment" id="payment1" value="카드" checked>
-         <label class="form-check-label" for="payment1">카드</label>
-       </div>
-       <div class="form-check custom">
-         <input class="form-check-input" type="radio" name="payment" id="payment2" value="무통장입금">
-         <label class="form-check-label" for="payment2">무통장입금</label>
-       </div>
-       <div class="form-check custom">
-         <input class="form-check-input" type="radio" name="payment" id="payment3" value="간편결제">
-         <label class="form-check-label" for="payment3">간편결제</label>
-       </div>
-       <div class="form-check custom">
-         <input class="form-check-input" type="radio" name="payment" id="payment4" value="페이머니">
-         <label class="form-check-label" for="payment4">페이머니</label>
-       </div>
-       <div class="form-check custom">
-         <input class="form-check-input" type="radio" name="payment" id="payment5" value="쿠폰" hidden>
-         <label class="form-check-label" for="payment5" hidden>쿠폰</label>
-       </div>
-     </div>
-     <div id="pmoney_view" style="display: none;">
-       <div>
-        <p class="h5 text-left">잔액 270,000</p>
-        <p class="text-danger text-left">잔액이 부족합니다. 충전 후 이용해 주세요.</p>
-       </div>
-       <div class="justify-content-end d-flex">
-        <button type="button" class="btn btn-primary align-self-end">충전</button>
-       </div>
-     </div>
-     </div>
-     <div class="col-md-3 mb-5 mt-5">
-       <div class="total">
-         <div class="d-flex justify-content-between">
-           <p class="h6">예매금액</p>
-           <p id="basePrice" class="h5"></p>
-         </div>
-         <div class="d-flex justify-content-between">
-           <p class="h6">쿠폰사용</p>
-           <p class="h5">-</p>
-         </div>
-         <hr />
-         <div class="d-flex justify-content-between">
-           <p class="h6">총 결제금액</p>
-           <p id="realPrice" class="h5"></p>
-         </div>
-         <button type="button" class="btn btn-primary btn-block mt-4">결제하기</button>
-       </div>
-     </div>
-   </div>
-	</div>
+        <div class="btn-wrap">
+        <button type="button" id="submitBtn" class="btn btn-lg btn-primary">충전하기</button>
+        </div>
+      </div>
+<div class="modal fade" id="ViewModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
 </section>
-<%@ include file="../_inc/foot.jsp" %>
+<%@ include file="../_inc/foot.jsp"%>
 <script>
+function openModal() {
+	$('#ViewModal .modal-content').load("/busj/pmoneyCharge1");
+	$('#ViewModal').modal()
+  }
 
-const pmoneybox = document.getElementById('pmoney_view');
-const paymentChks = document.getElementsByName('payment');
+	let agreeChks = document.getElementsByName("agree");
+	$("#chkAllL").on('click', function() {
+		$(".allchkbox").toggleClass("active");
+		if ($(".allchkbox").hasClass("active")) {
+			for (let i = 0; i < agreeChks.length ; i++) {
+				agreeChks[i].checked = true;
+			}
+		} else {
+			for (let i = 0; i < agreeChks.length ; i++) {
+				agreeChks[i].checked = false;
+			}
+		}
+	})
+	
+	document.addEventListener("click", function(e) {
+	if (e.target && e.target.name === "agree") {
+    	var chksChecked = 0;
+    	for (let i = 0; i < agreeChks.length; i++) {
+        	var checkbox = agreeChks[i];
+        	if (checkbox.checked) {
+            	chksChecked++;
+         	}
+      	}
 
-for (let i = 0; i < paymentChks.length; i++) {
-	paymentChks[i].onclick = function() {
-    const chkValue = document.querySelector('input[type=radio][name=payment]:checked');
-    if (chkValue.value === '페이머니') {
-      pmoneybox.style.display = 'block';
-    } else {
-      pmoneybox.style.display = 'none';
-    }
-  };
-}
-
-const agreeChks = document.getElementsByName("agree");
-const basePrice = <%=base_price %>;
-$("#basePrice").text(basePrice.toLocaleString());
-$("#realPrice").text(basePrice.toLocaleString());
-
-$(document).ready(function() {
-
+      	if (agreeChks.length === chksChecked) {
+      		$(".allchkbox").addClass("active");
+      	} else {
+      		$(".allchkbox").removeClass("active");
+      	}
+   	}
 });
 
+	$("#submitBtn").on('click', function() {
+		if (!$(".allchkbox").hasClass("active")) {
+			alert("약관에 동의해주세요.");
+			return;
+		}
+		
+		openModal();
+		
+	})
 </script>
-
-
-    

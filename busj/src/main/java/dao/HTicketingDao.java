@@ -125,6 +125,19 @@ public class HTicketingDao {
 		return seatList;
 	}
 
+	public int chargeAmountIn(String miid, String payment, int chargePmoney, int totalPmoney) {
+		String sql = "INSERT INTO T_MEMBER_PMONEY_HISTORY(mi_id, mph_payment, mph_real_price, mph_pmoney) values "
+				+ "('" + miid + "', '" + payment + "', " + chargePmoney + ", " + totalPmoney + ") ";
+		int result = jdbc.update(sql);
+		return result;
+	}
+
+	public int chargeAmountUp(String miid, int totalPmoney) {
+		String sql = "UPDATE T_MEMBER_INFO SET mi_pmoney = mi_pmoney + " + totalPmoney + " WHERE mi_id = '" + miid + "'";
+		int result = jdbc.update(sql);
+		return result;
+	}
+
 
 	
 
