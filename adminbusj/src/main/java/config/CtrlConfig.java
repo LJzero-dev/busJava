@@ -31,4 +31,9 @@ public class CtrlConfig {
 		terminalCtrl.setTerminalSvc(terminalSvc);
 		return terminalCtrl;
 	}
+	
+	@Bean
+	public TravelCtrl travelCtrl() {
+		return new TravelCtrl();
+	}
 }
