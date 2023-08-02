@@ -17,15 +17,7 @@ function openModal(area) {
 	$('#AddTerminal').modal();
 }
 </script>
-<body>
-<section class="probootstrap_section">
-<div class="page-wrapper">     
-<div class="preloader">
-    <div class="lds-ripple">
-        <div class="lds-pos"></div>
-        <div class="lds-pos"></div>
-    </div>
-</div>
+<div class="page-wrapper">
 <div class="page-breadcrumb">
 	<div class="row">
 		<div class="col-7 align-self-center">

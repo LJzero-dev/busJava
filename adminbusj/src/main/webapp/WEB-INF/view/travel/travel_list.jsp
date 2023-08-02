@@ -1,14 +1,152 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../_inc/head.jsp" %>
-<body>
-<section class="probootstrap_section">
-<div class="page-wrapper">     
-<div class="preloader">
-    <div class="lds-ripple">
-        <div class="lds-pos"></div>
-        <div class="lds-pos"></div>
-    </div>
+<div class="page-wrapper">
+<div class="page-breadcrumb">
+	<div class="row">
+		<div class="col-7 align-self-center">
+			<h3 class="page-title text-truncate text-dark font-weight-medium mb-1">추천여행지 관리</h3>
+		</div>
+	</div>
 </div>
+<div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <table class="table table-sm custom">
+                                <colgroup>
+                                    <col width="20%">
+                                    <col width="*">
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row" class="text-center bg-gray align-middle">검색어</th>
+                                        <td class="text-left">
+                                            <div class="d-flex">
+                                                <select class="form-control w-auto" id="">
+                                                    <option>전체</option>
+                                                    <option>지역</option>
+                                                    <option>장소명</option>
+                                                </select>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                        </td> 
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-center bg-gray">분류</th>
+                                        <td class="text-left">
+                                        <div class="d-flex">
+                                            <div class="form-check form-check-inline">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                    <label class="custom-control-label" for="customCheck1">전체</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                    <label class="custom-control-label" for="customCheck1">맛집</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                    <label class="custom-control-label" for="customCheck1">명소</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                    <label class="custom-control-label" for="customCheck1">액티비티</label>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-center bg-gray align-middle">게시여부</th>
+                                        <td class="text-left">
+                                            <div class="d-flex">
+                                                <select class="form-control w-auto" id="">
+                                                    <option>전체</option>
+                                                    <option>게시</option>
+                                                    <option>미게시</option>
+                                                </select>
+                                            </div>
+                                        </td> 
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center">
+                            <button type="button" class="btn waves-effect waves-light btn-secondary mb-2">검색</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <table class="table table-bordered table-hover text-center">
+                                <colgroup>
+                                	<col width="2%">
+                                    <col width="5%">
+                                    <col width="20%">
+                                    <col width="20%">
+                                    <col width="15%">
+                                    <col width="10%">
+                                </colgroup>
+                                <thead class="bg-primary text-white">
+                                    <tr>
+                                    	<th scope="col">
+                                    		<div class="custom-control custom-checkbox">
+	                                            <input type="checkbox" class="custom-control-input" id="customCheck2">
+	                                            <label class="custom-control-label" for="customCheck2"><!-- 라벨 지우면 깨져요 --></label>
+											</div>
+                                    	</th>
+                                        <th scope="col">No</th>
+                                        <th scope="col">아이디</th>
+                                        <th scope="col">이메일</th>
+                                        <th scope="col">가입일시</th>
+                                        <th scope="col">상태</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    	<th scope="row" class="text-center">
+                                    		<div class="custom-control custom-checkbox">
+	                                            <input type="checkbox" class="custom-control-input" id="customCheck2">
+	                                            <label class="custom-control-label" for="customCheck2"><!-- 라벨 지우면 깨져요 --></label>
+											</div>
+                                    	</th>
+                                        <th scope="row" class="text-center">1</th>
+                                        <td class="text-left">Mark</td>
+                                        <td class="text-left">Otto</td>
+                                        <td>2023.07.19 13:00</td>
+                                        <td><span class="badge badge-primary">정상</span></td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-end p-1 align-items-center">
+								<button type="button" class="btn waves-effect waves-light btn-light mr-2" value="">글등록</button>
+								<button type="button" class="btn waves-effect waves-light btn-light" value="">미게시로변경</button>	
+							</div>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                              <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                  <span aria-hidden="true">&laquo;</span>
+                                </a>
+                              </li>
+                              <li class="page-item"><a class="page-link" href="#">1</a></li>
+                              <li class="page-item"><a class="page-link" href="#">2</a></li>
+                              <li class="page-item"><a class="page-link" href="#">3</a></li>
+                              <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                  <span aria-hidden="true">&raquo;</span>
+                                </a>
+                              </li>
+                            </ul>
+                          </nav>
+                    </div>
+                    </div>
+                </div>
+            </div>
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-lg-12">

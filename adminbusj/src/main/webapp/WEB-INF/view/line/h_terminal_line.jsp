@@ -163,15 +163,7 @@ function scheduleAdd(blidx){
 .form-control { text-align:center; }
 .paddingRL { padding:10px 30px; }
 </style>
-<body>
-<section class="probootstrap_section">
-<div class="page-wrapper">     
-<div class="preloader">
-    <div class="lds-ripple">
-        <div class="lds-pos"></div>
-        <div class="lds-pos"></div>
-    </div>
-</div>
+<div class="page-wrapper">
 <div class="page-breadcrumb">
 	<div class="row">
 		<div class="col-7 align-self-center">
