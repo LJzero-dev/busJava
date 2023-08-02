@@ -102,9 +102,14 @@ public class MemberSvc {
 		return result;
 	}
 
-	public paymoneyInfo getpaymoneyList(String mi_id) {
-		paymoneyInfo pi = memberDao.getpaymoneyList(mi_id);
-		return pi;
+	public List<paymoneyInfo> getpaymoneyList(String mi_id) {
+		List<paymoneyInfo> pList = memberDao.getpaymoneyList(mi_id);
+		return pList;
+	}
+
+	public List<paymoneyInfo> getmphList(String mi_id) {
+		List<paymoneyInfo> mphList = memberDao.getmphList(mi_id);
+		return mphList;
 	}
 
 }

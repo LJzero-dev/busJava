@@ -212,32 +212,42 @@ public class MemberDao {
 		return result;
 	}
 	
-	public paymoneyInfo getpaymoneyList(String mi_id) {
-		String sql = " SELECT DISTINCT mi.mi_pmoney, mph.mph_pmoney, cr_total.total_cr_pmoney, bt1.bt_name AS bt_sidx, bt2.bt_name AS bt_eidx, mph.mph_date, cr.cr_date, ri.ri_idx, IF(bl.bl_type='b', '고속', '시외') AS bl_type "
-				+ " FROM t_member_info mi, t_member_pmoney_history mph, t_reservation_info ri, t_bus_schedule bs, t_bus_line bl, t_bus_terminal bt1,t_bus_terminal bt2, t_count_rinfo cr,"
-				+ " (SELECT ri_idx, SUM(cr_pmoney) AS total_cr_pmoney FROM t_count_rinfo GROUP BY ri_idx) cr_total WHERE mi.mi_id = mph.mi_id and mi.mi_id = ri.mi_id and ri.bs_idx = bs.bs_idx and bs.bl_idx = bl.bl_idx and bl.bt_sidx = bt1.bt_idx and bl.bt_eidx = bt2.bt_idx "
-				+ " and ri.ri_idx = cr.ri_idx and ri.ri_idx = cr_total.ri_idx and mi.mi_id='test1' AND cr_total.total_cr_pmoney > 0 ";
-		paymoneyInfo pi = jdbc.queryForObject(sql, new RowMapper<paymoneyInfo>() {
-			@Override
-			public paymoneyInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-				paymoneyInfo pi = new paymoneyInfo();
-				pi.setBt_eidx(rs.getString("bt_eidx"));
-				pi.setBt_sidx(rs.getString("bt_sidx"));
-				pi.setMph_date(rs.getString("mph_date"));
-				pi.setCr_date(rs.getString("cr_date"));
-				pi.setMi_pmoney(rs.getInt("mi_pmoney"));
-				pi.setMph_pmoney(rs.getInt("mph_pmoney"));
-				pi.setTotal_cr_pmoney(rs.getInt("total_cr_pmoney"));
-				pi.setRi_idx(rs.getString("ri_idx"));
-				pi.setBl_type(rs.getString("bl_type"));
-				
+	public List<paymoneyInfo> getpaymoneyList(String mi_id) {
+		String sql = " SELECT DISTINCT cr_total.total_cr_pmoney, bt1.bt_name AS bt_sidx, bt2.bt_name AS bt_eidx, cr.cr_date, ri.ri_idx, bl_type "
+				+ "FROM t_reservation_info ri, t_bus_schedule bs, t_bus_line bl, t_bus_terminal bt1,t_bus_terminal bt2, t_count_rinfo cr, "
+				+ "(SELECT ri_idx, SUM(cr_pmoney) AS total_cr_pmoney FROM t_count_rinfo GROUP BY ri_idx) cr_total "
+				+ "WHERE ri.bs_idx = bs.bs_idx and bs.bl_idx = bl.bl_idx and bl.bt_sidx = bt1.bt_idx and bl.bt_eidx = bt2.bt_idx "
+				+ "and ri.ri_idx = cr.ri_idx and ri.ri_idx = cr_total.ri_idx and ri.mi_id='" + mi_id + "' AND cr_total.total_cr_pmoney > 0 "
+				+ " AND cr.cr_date >= DATE_SUB(NOW(), INTERVAL 3 MONTH) ";
+		List<paymoneyInfo> pList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
+				paymoneyInfo pi = new paymoneyInfo(
+				rs.getString("bt_eidx"),
+				rs.getString("bt_sidx"),
+				rs.getString("cr_date"),
+				rs.getString("ri_idx"),
+				rs.getString("bl_type"),
+				rs.getInt("total_cr_pmoney"));
+		
 	            return pi;
-			}
-		});
-
-		return pi;
+			});
+		return pList;
 	}
 
+	public List<paymoneyInfo> getmphList(String mi_id) {
+		String sql = "select mph_date, mph_payment, mph_pmoney, mph_idx, mph_real_price "
+				+ " from t_member_pmoney_history where mi_id =  '"+ mi_id+"' AND mph_date >= DATE_SUB(NOW(), INTERVAL 3 MONTH) ";
+		List<paymoneyInfo> mphList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
+				paymoneyInfo pi = new paymoneyInfo(
+				rs.getString("mph_date"),
+				rs.getString("mph_payment"),
+				rs.getInt("mph_pmoney"),
+				rs.getInt("mph_idx"),
+				rs.getInt("mph_real_price"));
+		
+	            return pi;
+			});
+		return mphList;
+	}
 }
 
 

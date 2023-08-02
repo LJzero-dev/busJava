@@ -389,9 +389,13 @@ public class MemberCtrl {
 		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
 		String mi_id = loginInfo.getMi_id();
 		
-		paymoneyInfo pi = memberSvc.getpaymoneyList(mi_id);
+		List<paymoneyInfo> pList = memberSvc.getpaymoneyList(mi_id);
+		List<paymoneyInfo> mphList = memberSvc.getmphList(mi_id);
 		
-		request.setAttribute("pi", pi);
+		
+		request.setAttribute("loginInfo", loginInfo);
+		request.setAttribute("pList", pList);
+		request.setAttribute("mphList", mphList);
 		
 		return "/member/paymoney";
 	}
