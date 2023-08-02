@@ -5,10 +5,15 @@
 <%
 request.setCharacterEncoding("utf-8");
 List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("terminalList");
+String kind = request.getParameter("kind");
+String tmp = "고속";
+if (!kind.equals("h"))
+	tmp = "시외";
 %>
 <script>
 function openModal(area) {
-	$('#AddTerminal .modal-content').load("/adminbusj/terminalAdd?area=" + area);
+	var kind = "<%=request.getParameter("kind") %>";
+	$('#AddTerminal .modal-content').load("/adminbusj/terminalAdd?area=" + area + "&kind=" + kind);
 	$('#AddTerminal').modal();
 }
 </script>
@@ -24,7 +29,7 @@ function openModal(area) {
 <div class="page-breadcrumb">
 	<div class="row">
 		<div class="col-7 align-self-center">
-			<h3 class="page-title text-truncate text-dark font-weight-medium mb-1">고속버스 터미널 관리</h3>
+			<h3 class="page-title text-truncate text-dark font-weight-medium mb-1"><%=tmp %>버스 터미널 관리</h3>
 		</div>
 	</div>
 </div> 
@@ -41,7 +46,7 @@ function openModal(area) {
 for (TerminalInfo terminal : terminalList) {
 	if (terminal.getBt_area().equals("서울")) {
 %>
-<li><a href="terminalLine?bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
+<li><a href="terminalLine?kind=<%=kind %>&bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
 <%
 	}
 }
@@ -58,7 +63,7 @@ for (TerminalInfo terminal : terminalList) {
 for (TerminalInfo terminal : terminalList) {
 	if (terminal.getBt_area().equals("경기도")) {
 %>
-<li><a href="terminalLine?bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
+<li><a href="terminalLine?kind=<%=request.getParameter("kind") %>&bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
 <%
 	}
 }
@@ -75,7 +80,7 @@ for (TerminalInfo terminal : terminalList) {
 for (TerminalInfo terminal : terminalList) {
 	if (terminal.getBt_area().equals("강원도")) {
 %>
-<li><a href="terminalLine?bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
+<li><a href="terminalLine?kind=<%=request.getParameter("kind") %>&bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
 <%
 	}
 }
@@ -92,7 +97,7 @@ for (TerminalInfo terminal : terminalList) {
 for (TerminalInfo terminal : terminalList) {
 	if (terminal.getBt_area().equals("경상북도")) {
 %>
-<li><a href="terminalLine?bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
+<li><a href="terminalLine?kind=<%=request.getParameter("kind") %>&bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
 <%
 	}
 }
@@ -109,7 +114,7 @@ for (TerminalInfo terminal : terminalList) {
 for (TerminalInfo terminal : terminalList) {
 	if (terminal.getBt_area().equals("경상남도")) {
 %>
-<li><a href="terminalLine?bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
+<li><a href="terminalLine?kind=<%=request.getParameter("kind") %>&bt_idx=<%=terminal.getBt_idx() %>&bt_name=<%=terminal.getBt_name() %>"><%=terminal.getBt_name() %></a></li>
 <%
 	}
 }

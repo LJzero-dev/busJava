@@ -8,27 +8,32 @@ request.setCharacterEncoding("utf-8");
 
 List<BusLineInfo> busLineList = (List<BusLineInfo>)request.getAttribute("busLineList");
 List<BusInfo> busInfo = (List<BusInfo>)request.getAttribute("busInfo");
-
+String kind = request.getParameter("kind");
+String tmp11 = "고속";
+if (!kind.equals("h"))
+	tmp11 = "시외";
 %>
 <script>
 function delLine(lineNum) {
 	var bt_idx = <%=request.getParameter("bt_idx") %>;
 	var bt_name = "<%=request.getParameter("bt_name") %>";
+	var kind = "<%=kind%>";
 	if(confirm("해당 노선을 정말 삭제하시겠습니까?\n삭제 후 복구 불가능합니다.")){
-		location.href="LineDel?bt_idx=" + bt_idx + "&bt_name=" + bt_name + "&lineNum=" + lineNum;
+		location.href="LineDel?kind=" + kind + "&bt_idx=" + bt_idx + "&bt_name=" + bt_name + "&lineNum=" + lineNum;
 	}
 }
 
 function openModal(area) {
 	var bt_name = "<%=request.getParameter("bt_name") %>";
-	$('#AddLine .modal-content').load("/adminbusj/popUpLineAdd?bt_idx=" + 
+	var kind = "<%=kind%>";
+	$('#AddLine .modal-content').load("/adminbusj/popUpLineAdd?kind=" + kind + "&bt_idx=" + 
 	<%=request.getParameter("bt_idx")%> + "&bt_name=" + bt_name);
 	$('#AddLine').modal();
 }
 
-function companyChange(){
-	var inputStateValue = document.getElementById('company').value;
-	var numberOptions = document.getElementById('number').options;
+function companyChange(num){
+	var inputStateValue = document.getElementById("company"+ num).value;
+	var numberOptions = document.getElementById("number"+ num).options;
 
 	for (var i = 0; i < numberOptions.length; i++) {
 		var option = numberOptions[i];
@@ -43,54 +48,88 @@ function companyChange(){
 		
 	}
 }
+
 var chk = true;
-function numberChange(blidx){
-	var number = document.getElementById('number').value;
+var n1 = 0, n2 = 0, n3 = 0;
+function numberChange(blidx) {
+	var number = document.getElementById('number' + blidx).value;
 	var arr = number.split(":");
 	var carId = arr[1];
-	
+	var kind = "<%=kind%>";
+
 	if (carId != "") {
 		$.ajax({
-			type : "POST", 				
-			url : "./changeLevel", 
-			data : {"number" : carId}, 		
-			success : function(chkRs){	
+			type: "POST",
+			url: "./changeLevel",
+			data: { "number": carId, "kind": kind },
+			success: function (chkRs) {
 				var msg = "";
-				if (chkRs == 0) {	
+				if (chkRs == 0) {
 					msg = "<input type='text' class='text-center mt-1' id='level' style='width:100px; border:0; text-align:center' value='우등' readonly='readonly' />";
-					
-					if (!chk) {
-						var sale1Value = parseFloat(document.getElementById("common" + blidx).value.replace(",", "")) / 1.5;
-	                    var sale2Value = parseFloat(document.getElementById("teenager" + blidx).value.replace(",", "")) / 1.5;
-	                    var sale3Value = parseFloat(document.getElementById("child" + blidx).value.replace(",", "")) / 1.5;
-	                    document.getElementById('common' + blidx).value = formatNumber(sale1Value) + "원";
-	                    document.getElementById('teenager' + blidx).value = formatNumber(sale2Value) + "원";
-	                    document.getElementById('child' + blidx).value = formatNumber(sale3Value) + "원";
-	                    chk = true;
+					if (kind == 'h') {
+						if (!chk) {
+							updateValues(blidx, kind, 1/1.5);
+							chk = true;
+						}
+					} else {
+						if (!chk) {
+							updateValues(blidx, kind, 1.5);
+							chk = true;
+						}
 					}
 					
-				} else {	
-					msg = "<input type='text' class='text-center mt-1' id='level' style='width:100px; border:0; text-align:center' value='프리미엄' readonly='readonly' />";
-					
-					if (chk) {
-						var sale1Value = parseFloat(document.getElementById('common' + blidx).value.replace(",", "")) * 1.5;
-	                    var sale2Value = parseFloat(document.getElementById('teenager' + blidx).value.replace(",", "")) * 1.5;
-	                    var sale3Value = parseFloat(document.getElementById('child' + blidx).value.replace(",", "")) * 1.5;
-	                    document.getElementById('common' + blidx).value = formatNumber(sale1Value) + "원";
-	                    document.getElementById('teenager' + blidx).value = formatNumber(sale2Value) + "원";
-	                    document.getElementById('child' + blidx).value = formatNumber(sale3Value) + "원";
-	                    chk = false;
+				} else {
+					if (kind == 'h') {
+						msg = "<input type='text' class='text-center mt-1' id='level' style='width:100px; border:0; text-align:center' value='프리미엄' readonly='readonly' />";
+						if (chk) {
+							updateValues(blidx, kind, 1.5);
+							chk = false;
+						}
+					} else {
+						msg = "<input type='text' class='text-center mt-1' id='level' style='width:100px; border:0; text-align:center' value='일반' readonly='readonly' />";
+						if (chk) {
+							updateValues(blidx, kind, 1/1.5);
+							chk = false;
+						} 
 					}
-					
-                    
 				}
-				$("#msg").html(msg);
+				$("#msg" + blidx).html(msg);
 			}
 		});
 	}
 }
 
-function formatNumber(number) {
+function updateValues(blidx, kind, factor) {
+	if (chk) {
+		n1 =  parseFloat(document.getElementById("common" + blidx).value.replace(",", ""));	
+		n2 =  parseFloat(document.getElementById("teenager" + blidx).value.replace(",", ""));
+		n3 =  parseFloat(document.getElementById("child" + blidx).value.replace(",", ""));
+	}
+	var sale1Value = parseFloat(document.getElementById("common" + blidx).value.replace(",", ""));
+	var sale2Value = parseFloat(document.getElementById("teenager" + blidx).value.replace(",", ""));
+	var sale3Value = parseFloat(document.getElementById("child" + blidx).value.replace(",", ""));
+	sale1Value = Math.round(sale1Value);
+	sale2Value = Math.round(sale2Value);
+	sale3Value = Math.round(sale3Value);
+	document.getElementById('common' + blidx).value = formatNumber("c", sale1Value, factor) + "원";
+	document.getElementById('teenager' + blidx).value = formatNumber("t", sale2Value, factor) + "원";
+	document.getElementById('child' + blidx).value = formatNumber("d", sale3Value, factor) + "원";
+}
+
+
+function formatNumber(type, number, factor) {
+	if (!chk) {
+		if (type == "c") {
+			number = Math.ceil(n1);	
+		} else if (type == "t") {
+			number = Math.ceil(n2);
+		} else {
+			number = Math.ceil(n3);
+		}
+		
+	}else {
+		number = Math.ceil(number * factor / 100) * 100;
+	}
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
@@ -112,7 +151,7 @@ function delShcedule(bsidx) {
 	event.preventDefault(); // form 액션 실행을 막음
 }
 
-function scheduleAdd(blidx) {
+function scheduleAdd(blidx){
 	var tbodyElement = document.getElementById("disAdd" + blidx);
 		if (tbodyElement) {
 		tbodyElement.style.display = "";
@@ -136,7 +175,7 @@ function scheduleAdd(blidx) {
 <div class="page-breadcrumb">
 	<div class="row">
 		<div class="col-7 align-self-center">
-			<h3 class="page-title text-truncate text-dark font-weight-medium mb-1"><%=request.getParameter("bt_name") %>고속버스 터미널 시간표 관리
+			<h3 class="page-title text-truncate text-dark font-weight-medium mb-1"><%=request.getParameter("bt_name") %> <%=tmp11 %>버스 터미널 시간표 관리
 			<button type="button" class="btn waves-effect waves-light btn-primary ml-5" 
 			onclick="openModal();">노선추가</button>
 			</h3>
@@ -144,21 +183,30 @@ function scheduleAdd(blidx) {
 	</div>
 </div> 
 <div class="container-fluid">
-
+<% if(busLineList.size() == 0) {
+	
+%>
+	<div class="col-lg-12">
+		<div class="d-flex justify-content-between p-1 align-items-center">
+			<p class="h3 text-primary">등록된 노선이 없습니다.</p>
+		</div>
+	</div>
+<% } %>
 <% for (BusLineInfo bl : busLineList) { %>
 	<div class="row">
 		<div class="col-lg-12">
 		<div class="d-flex justify-content-between p-1 align-items-center">
-			<p class="h3 text-primary"><%=bl.getBt_name() %>고속버스터미널</p>
+			<p class="h3 text-primary"><%=bl.getBt_name() %><%=tmp11 %>버스터미널</p>
 			<div class="d-flex justify-content-between float_right">
 			<button type="button" class="btn float-right btn-outline-danger btn-lg mr-1" id="bl_idx" 
 			value="<%=bl.getBl_idx() %>" onclick="delLine(this.value);">노선삭제</button>
-			<button type="button" class="btn waves-effect waves-light btn-primary btn-lg" id="seoul" value="<%=bl.getBl_idx() %>"
+			<button type="button" class="btn waves-effect waves-light btn-primary btn-lg" id="scheduleAd" value="<%=bl.getBl_idx() %>"
 			 onclick="scheduleAdd(this.value);">추가</button>
 			</div>		
 		</div>
 		<div class="card">
 		<form name="frmIn" action="scheduleAdd" method="post">
+		<input type="hidden" name="kind" value="<%=kind %>" />
 		<input type="hidden" name="bl_idx" value="<%=bl.getBl_idx() %>" />
 		<input type="hidden" name="bt_idx" value="<%=request.getParameter("bt_idx") %>" />
 		<input type="hidden" name="bt_name" value="<%=request.getParameter("bt_name") %>" />
@@ -211,33 +259,49 @@ String tmp = "";
 String tmp1 = "";
 String tmp2 = "";
 
-if (bs.getBi_level().equals("프리미엄")) {
-	tmp += Math.round(bl.getBl_adult() * 1.5 * 0.8);
-	tmp1 += Math.round(bl.getBl_adult() * 1.5);
-	tmp2 += Math.round(bl.getBl_adult() * 1.5 * 0.5);
+if (!bs.getBi_level().equals("우등")) {
+    if (kind.equals("h")) {
+        tmp += Math.ceil(bl.getBl_adult() * 1.5 * 0.8 / 100) * 100;
+        tmp1 += Math.ceil((bl.getBl_adult() * 1.5) / 100) * 100;
+        tmp2 += Math.ceil(bl.getBl_adult() * 1.5 * 0.5 / 100) * 100;
+    } else {
+        tmp += Math.ceil(bl.getBl_adult() / 1.5 * 0.8 / 100) * 100;
+        tmp1 += Math.ceil(bl.getBl_adult() / 1.5 / 100) * 100;
+        tmp2 += Math.ceil(bl.getBl_adult() / 1.5 * 0.5 / 100) * 100;
+    }
+
 } else {
-	tmp += Math.round(bl.getBl_adult() * 0.8);
-	tmp1 += Math.round(bl.getBl_adult());
-	tmp2 += Math.round(bl.getBl_adult() * 0.5);	
+    tmp += Math.ceil(bl.getBl_adult() * 0.8 / 100) * 100;
+    tmp1 += Math.ceil(bl.getBl_adult() / 100) * 100;
+    tmp2 += Math.ceil(bl.getBl_adult() * 0.5 / 100) * 100;
 }
+	
 StringBuffer sb = new StringBuffer();
 StringBuffer sb1 = new StringBuffer();
 StringBuffer sb2 = new StringBuffer();
 
-sb.append(tmp);
-if (tmp.length() > 7)
-	sb.insert(3, ",");
-sb.insert(2, ",");
+int tmpInt = (int) Math.ceil(Double.parseDouble(tmp));
+int tmp1Int = (int) Math.ceil(Double.parseDouble(tmp1));
+int tmp2Int = (int) Math.ceil(Double.parseDouble(tmp2));
 
-sb1.append(tmp1);
-if (tmp1.length() > 7)
-	sb1.insert(3, ",");
-sb1.insert(2, ",");
 
-sb2.append(tmp2);
-if (tmp2.length() > 7)
-	sb2.insert(3, ",");
-sb2.insert(2, ",");
+sb.append(tmpInt);
+if (sb.length() < 5)
+	sb.insert(1, ",");
+else 
+	sb.insert(2, ",");
+
+sb1.append(tmp1Int);
+if (sb1.length() < 5)
+	sb1.insert(1, ",");
+else 
+	sb1.insert(2, ",");
+
+sb2.append(tmp2Int);
+if (sb2.length() < 5)
+	sb2.insert(1, ",");
+else 
+	sb2.insert(2, ",");
 
 
 %>
@@ -273,7 +337,7 @@ sb2.insert(2, ",");
                     	<input type="text" name="time2" id="time2" class="timepicker mt-1" >
                     </td>
                     <td style="padding:10px 20px;">
-                    <select class="form-control text-center" id="company" name="company" onchange="companyChange();">
+                    <select class="form-control text-center" id="company<%=bl.getBl_idx() %>" name="company" onchange="companyChange(<%=bl.getBl_idx() %>);">
                     	<option value="">회사명</option>
                     	<option>금호고속</option>
                     	<option>동부고속</option>
@@ -282,7 +346,7 @@ sb2.insert(2, ",");
                     </select>
                     </td>
                     <td style="padding:10px 50px;">
-                    <select class="form-control text-center" id="number" name="number" onchange="numberChange(<%=bl.getBl_idx() %>);">
+                    <select class="form-control text-center" id="number<%=bl.getBl_idx() %>" name="number" onchange="numberChange(<%=bl.getBl_idx() %>);">
                     	<option value="">차량번호</option>
 <% for (BusInfo bi : busInfo) { %>
 						<option value="<%=bi.getBc_name() %>:<%=bi.getBi_num() %>"><%=bi.getBi_num() %></option>
@@ -290,40 +354,51 @@ sb2.insert(2, ",");
                     </select>
                     </td>
                     <td style="padding:10px 20px;">
-                    <span id="msg"><input type='text' class='text-center mt-1' id='level' style='width:100px; border:0; text-align:center' value='우등' readonly='readonly' /></span>
+                    <span id="msg<%=bl.getBl_idx()%>"><input type='text' class='text-center mt-1' id='level' style='width:100px; border:0; text-align:center' value='우등' readonly='readonly' /></span>
                     </td>
 <%
+String tmp = "";
 String tmp1 = "";
 String tmp2 = "";
-String tmp3 = "";
-tmp1 += Math.round(bl.getBl_adult());
-tmp2 += Math.round(bl.getBl_adult() * 0.8);
-tmp3 += Math.round(bl.getBl_adult() * 0.5);
+
+tmp += Math.ceil(bl.getBl_adult() * 0.8 / 100) * 100;
+tmp1 += Math.ceil(bl.getBl_adult() / 100) * 100;
+tmp2 += Math.ceil(bl.getBl_adult() * 0.5 / 100) * 100;
+	
+StringBuffer sb = new StringBuffer();
 StringBuffer sb1 = new StringBuffer();
 StringBuffer sb2 = new StringBuffer();
-StringBuffer sb3 = new StringBuffer();
 
-sb1.append(tmp1);
-if (tmp1.length() > 7)
-	sb1.insert(3, ",");
-sb1.insert(2, ",");
+int tmpInt = (int) Math.ceil(Double.parseDouble(tmp));
+int tmp1Int = (int) Math.ceil(Double.parseDouble(tmp1));
+int tmp2Int = (int) Math.ceil(Double.parseDouble(tmp2));
 
-sb2.append(tmp2);
-if (tmp2.length() > 7)
-	sb2.insert(3, ",");
-sb2.insert(2, ",");
 
-sb3.append(tmp3);
-if (tmp3.length() > 7)
-	sb3.insert(3, ",");
-sb3.insert(2, ",");
+sb.append(tmpInt);
+if (sb.length() < 5)
+	sb.insert(1, ",");
+else 
+	sb.insert(2, ",");
+
+sb1.append(tmp1Int);
+if (sb1.length() < 5)
+	sb1.insert(1, ",");
+else 
+	sb1.insert(2, ",");
+
+sb2.append(tmp2Int);
+if (sb2.length() < 5)
+	sb2.insert(1, ",");
+else 
+	sb2.insert(2, ",");
 
 %>
                     <td><input type="text" id="common<%=bl.getBl_idx() %>" class="text-center mt-1" style="width:100px; border:0; text-align:center" 
                     value="<%=sb1 %>원" readonly="readonly" /></td>
                     <td><input type="text" id="teenager<%=bl.getBl_idx() %>" class="text-center mt-1" style="width:100px; border:0; text-align:center" 
+                    value="<%=sb %>원" readonly="readonly" /></td>
+                    <td><input type="text" id="child<%=bl.getBl_idx() %>" class="text-center mt-1" style="width:100px; border:0; text-align:center" 
                     value="<%=sb2 %>원" readonly="readonly" /></td>
-                    <td><input type="text" id="child<%=bl.getBl_idx() %>" class="text-center mt-1" style="width:100px; border:0; text-align:center" value="<%=sb3 %>원" readonly="readonly" /></td>
                     <td><input class="btn waves-effect waves-light btn-primary" type="submit" value="등록" /></td>
                 </tr>
             </tbody>

@@ -13,8 +13,13 @@ public class TerminalDao {
 		 this.jdbc = new JdbcTemplate(dataSource);
 	}
 	
-	public List<TerminalInfo> getTerminalList() {
-		String sql = "select * from t_bus_terminal where bt_type != 'c'";
+	public List<TerminalInfo> getTerminalList(String kind) {
+		String where = "";
+		if (kind.equals("h"))
+			where = " where bt_type != 'c'";
+		else
+			where = " where bt_type != 'b'";
+		String sql = "select * from t_bus_terminal " + where;
 		List<TerminalInfo> terminalList = jdbc.query(sql, 
 				(ResultSet rs, int rowNum) -> {
 					TerminalInfo ti = new TerminalInfo();
@@ -28,28 +33,37 @@ public class TerminalDao {
 		return terminalList;
 	}
 
-	public int chkTerminal(String name) {
-		String sql = "select count(*) from t_bus_terminal where bt_name = '" + name + "' and (bt_type = 'a' or bt_type = 'b')";
+	public int chkTerminal(String name, String kind) {
+		String where = "";
+		if (kind.equals("h"))			where = " where (bt_type = 'a' or bt_type = 'b')";
+		else 							where = " where (bt_type = 'a' or bt_type = 'c')";
+		String sql = "select count(*) from t_bus_terminal " + where + " and bt_name = '" + name + "' " ;
 		int result = jdbc.queryForObject(sql, Integer.class);
 		return result;
 	}
 	
-	public int terminalInsert(String name, String area) {
+	public int terminalInsert(String name, String area, String kind) {
+		String where = "";
+		if (kind.equals("h"))			where = "b";
+		else							where = "c";
 		String sql = "select count(*) from t_bus_terminal where bt_name = '" + name + "'";
 		int result = jdbc.queryForObject(sql, Integer.class);
 		if (result == 1) {
 			sql = "update t_bus_terminal set bt_type = 'a' where bt_name= '" + name + "'";
 			result = jdbc.update(sql);
 		} else {
-			sql = "insert into t_bus_terminal(bt_name, bt_area, bt_type) values('" + name + "', '" + area + "', 'b')";
+			sql = "insert into t_bus_terminal(bt_name, bt_area, bt_type) values('" + name + "', '" + area + "', '" + where + "')";
 			result = jdbc.update(sql);
 		}
 		return result;
 	}
 
-	public List<BusLineInfo> getBusLine(int bt_idx) {
-		String sql = "select a.*, b.bt_name from t_bus_line a, t_bus_terminal b where a.bt_eidx = b.bt_idx and bt_sidx = " + bt_idx + 
-				" and bl_type = '고속' and bl_status = 'y'";
+	public List<BusLineInfo> getBusLine(int bt_idx, String kind) {
+		String where = "";
+		if (kind.equals("h"))			where = " and bl_type = '고속'";
+		else							where = " and bl_type = '시외'";
+		String sql = "select a.*, b.bt_name from t_bus_line a, t_bus_terminal b where a.bt_eidx = b.bt_idx and bt_sidx = " + bt_idx  
+			 + where + " and bl_status = 'y'";
 		List<BusLineInfo> busLineList = jdbc.query(sql, 
 				(ResultSet rs, int rowNum) -> {
 					BusLineInfo bl = new BusLineInfo(rs.getInt("bl_idx"), rs.getInt("bt_sidx"), rs.getInt("bt_eidx"), 
@@ -80,10 +94,20 @@ public class TerminalDao {
 		return result;
 	}
 
-	public List<TerminalInfo> getTerminalListPop(int bt_idx) {
-		String sql = "SELECT DISTINCT t1.* FROM t_bus_terminal t1 WHERE t1.bt_idx NOT IN "
-				+ "(SELECT bt_eidx FROM t_bus_line WHERE bt_sidx = " + bt_idx + " and bl_status != 'n') and bt_idx != " + 
-				bt_idx + " and bt_type != 'c'";
+	public List<TerminalInfo> getTerminalListPop(int bt_idx, String kind) {
+		String where = "";
+		String where2 = "";
+		if (kind.equals("h")) {
+			where = " where bt_type != 'c'";
+			where2 = " and bl_type='고속'";
+		}
+		else {
+			where = " where bt_type != 'b'";
+			where2 = " and bl_type='시외'";
+		}
+		String sql = "SELECT DISTINCT t1.* FROM t_bus_terminal t1 " + where + " and t1.bt_idx NOT IN "
+				+ "(SELECT bt_eidx FROM t_bus_line WHERE bt_sidx = " + bt_idx + " and bl_status = 'y' " + where2 + ") and bt_idx != " + 
+				bt_idx;
 		List<TerminalInfo> terminalList = jdbc.query(sql, 
 				(ResultSet rs, int rowNum) -> {
 					TerminalInfo ti = new TerminalInfo();
@@ -97,14 +121,23 @@ public class TerminalDao {
 		return terminalList;
 	}
 
-	public int AddLineIn(int bt_sidx, int bt_eidx, int adult) {
-		String sql = "INSERT INTO t_bus_line (bt_sidx, bt_eidx, bl_type, bl_adult) VALUES (" + bt_sidx + ", " + bt_eidx + ", '고속', " + adult + ")";
+	public int AddLineIn(String kind, int bt_sidx, int bt_eidx, int adult) {
+		String where = "";
+		if (kind.equals("h"))			where = "고속";
+		else 							where = "시외";
+		String sql = "INSERT INTO t_bus_line (bt_sidx, bt_eidx, bl_type, bl_adult) VALUES (" + bt_sidx + ", " + bt_eidx + ", '" + 
+				where + "', " + adult + ")";
 		int result = jdbc.update(sql);
 		return result;
 	}
 
-	public List<BusInfo> getBusInfo() {
-		String sql = "select * from t_bus_info a, t_bus_company b where a.bc_idx = b.bc_idx and bi_status = 'y'";
+	public List<BusInfo> getBusInfo(String kind) {
+		String where = "";
+		if (kind.equals("h"))
+			where = " and bi_level != '일반'";
+		else 
+			where = " and bi_level != '프리미엄'";
+		String sql = "select * from t_bus_info a, t_bus_company b where a.bc_idx = b.bc_idx and bi_status = 'y'" + where;
 		List<BusInfo> busInfo = jdbc.query(sql, 
 				(ResultSet rs, int rowNum) -> {
 					BusInfo bi = new BusInfo();
@@ -128,11 +161,16 @@ public class TerminalDao {
 		return result;
 	}
 
-	public int changeLevel(String number) {
-		String sql = "select bi_level from t_bus_info where bi_num = '" + number + "'";
+	public int changeLevel(String number, String kind) {
+		String where = "";
+		if (kind.equals("h"))
+			where = " and bi_level != '일반'";
+		else
+			where = " and bi_level != '프리미엄'";
+		String sql = "select bi_level from t_bus_info where bi_num = '" + number + "'" + where;
 		String tmp = jdbc.queryForObject(sql, String.class);
 		int result = 0;
-		if (tmp.equals("프리미엄"))		result++;
+		if (!tmp.equals("우등"))		result++;
 		return result;
 	}
 

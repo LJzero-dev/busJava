@@ -2,6 +2,7 @@
 <%
 request.setCharacterEncoding("utf-8");
 String area = request.getParameter("area");
+String kind = request.getParameter("kind");
 %>
 <html>
 <head>
@@ -17,9 +18,10 @@ String area = request.getParameter("area");
 </head>
 <script>
 function chkTerminal(name) {
+	var kind = "<%=kind%>";
 	if (name.length >= 2) {
 		$.ajax({
-			type : "POST", url : "./chkTerminal", data : {"name" : name},
+			type : "POST", url : "./chkTerminal", data : {"name" : name, "kind" : kind},
 			success : function(chkRs){
 				var msg = "";
 				if (chkRs == 0) {
@@ -50,6 +52,7 @@ function chkTerminal(name) {
 </button>
 </div>
 <form name="frm" action="terminalIn" method="post">
+<input type="hidden" name="kind" id="kind" value="<%=kind %>" />
 <input type="hidden" name="chkName" id="chkName" value="n" />
 <input type="hidden" name="area" id="area" value="<%=area %>" />
 <div class="modal-body">

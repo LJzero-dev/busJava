@@ -79,11 +79,11 @@ function onlyNum(obj) {
                                 aria-expanded="false"><i data-feather="repeat" class="feather-icon"></i><span
                                     class="hide-menu">노선관리 </span></a>
                             <ul aria-expanded="false" class="collapse  first-level base-level-line">
-                                <li class="sidebar-item"><a href="terminal" class="sidebar-link"><span
+                                <li class="sidebar-item"><a href="terminal?kind=h" class="sidebar-link"><span
                                             class="hide-menu"> 고속버스 관리
                                         </span></a>
                                 </li>
-                                <li class="sidebar-item"><a href="form-input-grid.html" class="sidebar-link"><span
+                                <li class="sidebar-item"><a href="terminal?kind=s" class="sidebar-link"><span
                                             class="hide-menu"> 시외버스 관리
                                         </span></a>
                                 </li>

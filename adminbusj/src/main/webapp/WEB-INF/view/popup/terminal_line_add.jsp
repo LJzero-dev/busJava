@@ -5,6 +5,7 @@
 request.setCharacterEncoding("utf-8");
 String bt_name = request.getParameter("bt_name");
 List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("terminalList");
+String kind = request.getParameter("kind");
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -78,6 +79,7 @@ function restrictAdult(input) {
     </div>
     <form name="frm" action="AddLine" method="post">
     <div class="modal-body">
+    <input type="hidden" name="kind" value="<%=kind %>"/>
     <input type="hidden" name="bt_sidx" value="<%=request.getParameter("bt_idx") %>"/>
     <input type="hidden" name="bt_name" value="<%=bt_name %>"/>
       <table class="table text-center">
