@@ -96,7 +96,7 @@ public class STicketingDao {
 		System.out.println(ri_sday1);
 		String sql =  "SELECT bi.bi_idx, bi.bi_num, bs.bs_idx, si.si_idx, si.si_seat, "
 					+ "    CASE "
-					+ "        WHEN rd.ri_idx IS NOT NULL and ri.ri_sday = " + ri_sday1.replace(".", "-") + " THEN 'Y' "
+					+ "        WHEN rd.ri_idx IS NOT NULL and ri.ri_sday = DATE('" + ri_sday1.replace(".", "-") + "') THEN 'Y' "
 					+ "        ELSE 'N' "
 					+ "    END AS reserved_yn "
 					+ "FROM t_bus_info bi "
@@ -108,7 +108,7 @@ public class STicketingDao {
 					+ "WHERE "
 					+ "    bs.bs_isuse = 'y' and "
 					+ "    bs.bs_idx = " + bsidx;
-//		System.out.println(sql);
+		System.out.println(sql);
 		List<SeatInfo> seatList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
 			SeatInfo si = new SeatInfo();
 			si.setSi_idx(rs.getInt("si_idx"));

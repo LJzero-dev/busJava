@@ -115,6 +115,8 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 		</div>
 	</div>
 	<form name="frmSeat" action="<%=action %>" method="post">
+		<input type="hidden" name="selectedSeats" id="selectedSeats" value="">
+		<input type="hidden" name="totalPrice" id="totalP" value="">
 	<div class="row justify-content-center">
 		<div class="col-md-6 text-center">
 			<p>좌석선택 <%=leftseat %> / <%=totalseat %></p>
@@ -230,6 +232,7 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 <script>
 const selectedValues = [];	// 좌석배열
 const seats = document.getElementsByName("seatBoxDtl");
+const selectedSeatsInput = document.getElementById("selectedSeats");
 
 function setCnt(op) {	// 매수 선택필드의 [-] / [+] 버튼 클릭 시 
 	let totalCnt = 0;
@@ -332,9 +335,9 @@ function getSeat(obj) {
 	}
 	
 	if (index === -1) {
-	    selectedValues.push(value);
+	    selectedValues.push(value);			// 선택한 좌석을 배열에 추가
 	  } else {
-	    selectedValues.splice(index, 1);
+	    selectedValues.splice(index, 1);	// 선택을 해제한 좌석을 배열에서 제거
 	  }
 	
 	// 배열 오름차순 정렬
@@ -342,7 +345,8 @@ function getSeat(obj) {
 	  return a - b;
 	});
 	
-	$("#seatArr").text(selectedValues.join(", "));
+	$("#seatArr").text(selectedValues.join(","));
+	selectedSeatsInput.value = selectedValues.join(",");	// 선택된 좌석 값을 hidden input에 설정
 	
 	if (selectedValues.length == 0) {
 		$("#seatArr").text("좌석을 선택해주세요.");
@@ -355,14 +359,16 @@ $(document).ready(function() {
 	// 기본적으로 성인1명의 표 값이 보이는 상태로 로딩
 	
 	$("#submitBtn").click(function() {
-		// 총 인원이 0이고 좌석이 선택되지 않은 경우를 확인합니다.
+		// 총 인원이 선택이 0이고 좌석이 선택되지 않은 경우
 		let totalHeadcount = parseInt($("#totalCnt").text());
+		document.getElementById("totalPrice").value = parseInt($("#totalPrice").text().replace(/,/g, ""));
+		
 		if (totalHeadcount === 0 && selectedValues.length === 0) {
 			alert("인원이 선택되지 않았습니다.\n인원 선택 후 좌석을 선택해주세요.");
-			return false; // 폼 제출을 막습니다.
+			return false;
 		} else if (selectedValues.length !== totalHeadcount) {
 			alert("좌석을 모두 선택해주세요.");
-			return false; // 폼 제출을 막습니다.
+			return false;
 		} else {
 			document.frmSeat.submit();
 		}

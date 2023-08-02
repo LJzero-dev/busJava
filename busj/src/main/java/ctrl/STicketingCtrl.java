@@ -35,14 +35,14 @@ public class STicketingCtrl {
 	@GetMapping("/sLineSch")
 	@ResponseBody
 	public List<LineInfo> sLineSch(@RequestParam int btsidx) {
-		// btsidx에 해당하는 터미널 목록을 조회한 결과로 List<LineInfo>를 반환
+	// btsidx에 해당하는 터미널 목록을 조회한 결과로 List<LineInfo>를 반환
 		List<LineInfo> lineList = sTicketingSvc.getArrivalLineList(btsidx);
         return lineList;
 	}
 	
 	@PostMapping("/sTicketingStep02")
 	public String sTicketingStep02(HttpServletRequest request) throws Exception {
-		// step1에서 보낸 mode, 가는 날(가는 날 / 오는 날), 출발터미널, 도착터미널 정보를 가지고 해당하는 노선의 시간표와 잔여 좌석 정보를 select
+	// step1에서 보낸 mode, 가는 날(가는 날 / 오는 날), 출발터미널, 도착터미널 정보를 가지고 해당하는 노선의 시간표와 잔여 좌석 정보를 select
 		request.setCharacterEncoding("utf-8");
 		
 		String mode = request.getParameter("mode");
@@ -73,8 +73,8 @@ public class STicketingCtrl {
 	
 	@PostMapping("/sTicketingStep03")
 	public String sTicketingStep03(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		// bs_idx로 버스 운영시간표 (출발시간, 도착시간) / bi_idx로 조인해서 버스 좌석 정보 (좌석 번호) 가져오기
-		// 예매된 좌석은 선택이 되지 않게 (checkbox 비활성화)
+	// bs_idx로 버스 운영시간표 (출발시간, 도착시간) / bi_idx로 조인해서 버스 좌석 정보 (좌석 번호) 가져오기
+	// 예매된 좌석은 선택이 되지 않게 (checkbox 비활성화)
 		request.setCharacterEncoding("utf-8");
 		int bsidx = Integer.parseInt(request.getParameter("bsidx"));
 		
@@ -90,8 +90,7 @@ public class STicketingCtrl {
 		HttpSession session = request.getSession();	
 		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
 		
-		if (ri1 == null) {
-		    // ri1 객체가 null인 경우에 대한 처리
+		if (ri1 == null) {	// ri1 객체가 null인 경우에 대한 처리
 		    out.println("<script>");
 		    out.println("alert('시간이 경과되었습니다.\\예매를 다시 시도해주세요.')");
 		    out.println("location.href='sTicketingStep01';");
@@ -110,6 +109,55 @@ public class STicketingCtrl {
 		request.setAttribute("seatList", seatList);
 		
 		return "ticketing/s_ticket_step3";
+	}
+	
+	@PostMapping("/sTicketingStep04P")
+	public String sTicketingStep04P(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	// 
+		request.setCharacterEncoding("utf-8");
+		
+		HttpSession session = request.getSession();	
+		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
+		
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		
+		if (ri1 == null) {	// ri1 객체가 null인 경우에 대한 처리
+		    out.println("<script>");
+		    out.println("alert('시간이 경과되었습니다.\\예매를 다시 시도해주세요.')");
+		    out.println("location.href='sTicketingStep01';");
+		    out.println("</script>");
+		}
+		
+		/*
+		 * System.out.println(request.getParameter("riacnt"));
+		 * System.out.println(request.getParameter("riscnt"));
+		 * System.out.println(request.getParameter("riccnt"));
+		 * System.out.println(request.getParameter("selectedSeats"));
+		 * System.out.println(request.getParameter("totalPrice"));
+		 */
+		
+		return "ticketing/s_ticket_step4p";
+	}
+	
+	@PostMapping("/sTicketingStep04W")
+	public String sTicketingStep04W(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	// 
+		HttpSession session = request.getSession();	
+		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
+		ReservationInfo ri2 = (ReservationInfo)session.getAttribute("ri2");
+		
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		
+		if (ri1 == null || ri2 == null) {	// ri1, ri2 객체가 null인 경우에 대한 처리
+		    out.println("<script>");
+		    out.println("alert('시간이 경과되었습니다.\\예매를 다시 시도해주세요.')");
+		    out.println("location.href='sTicketingStep01';");
+		    out.println("</script>");
+		}
+		
+		return "ticketing/s_ticket_step4w";
 	}
 
 }
