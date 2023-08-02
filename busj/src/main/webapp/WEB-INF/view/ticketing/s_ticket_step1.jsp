@@ -254,6 +254,11 @@ $(document).ready(function() {
       });
 
 	$("#schBtn").click(function() {
+		if ($("#btsname").val() == "" || $("#btename").val() == "") {
+			alert("출발지와 도착지를 선택해주세요.");
+			return false;
+		}
+		
 		if ($("#mode").val() == 'w' ) {	// 왕복인경우
 			if (!($("#ri_sday1").val() == "") || !($("#sday3").val() == "")) {	// 편도 가는날이 비어있지 않고 왕복 오는날이 비어있지 않으면
 				// 통과 로직
@@ -262,10 +267,7 @@ $(document).ready(function() {
 				return false;
 			}
 		}
-		
-		if ($("#sPoint") == "" && $("#ePoint") == "") {
-			alert("출발지와 도착지를 선택해주세요.");
-		}
+	
 		document.frmLineInfo.submit();
 	}); 
 	

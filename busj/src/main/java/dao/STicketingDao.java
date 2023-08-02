@@ -29,7 +29,8 @@ public class STicketingDao {
 	public List<LineInfo> getArrivalLineList(int btsidx) {
 	// 출/도착지 팝업 jsp파일에서 출발지를 선택 하면 선택한 터미널에서 출발하는 노선의 정보를 가져오는 메서드
 		String sql = "SELECT bl.*, bt.bt_name, bt.bt_area FROM t_bus_line bl JOIN t_bus_terminal bt " + 
-				" ON bl.bt_eidx = bt.bt_idx WHERE bt_sidx = ? and bl_status = 'y' and bl_type = '시외'";
+				" ON bl.bt_eidx = bt.bt_idx WHERE bt_sidx = ? and bl_status = 'y' and bl_type = '시외'"
+				;
 		// 노선테이블과 터미널테이블 조인 / 출발지가 ?인 도착지 
 		RowMapper<LineInfo> rowMapper = (rs, rowNum) -> {
             LineInfo li = new LineInfo();
@@ -92,22 +93,30 @@ public class STicketingDao {
 
 	public List<SeatInfo> getSeatList(int bsidx, String ri_sday1) {
 	// 받아온 시간표인덱스로 버스번호를 구해 좌석개수를 가져오고 선택된 날짜와 시간표에 예매된 좌석이 있는지 체크
+		System.out.println(ri_sday1);
 		String sql =  "SELECT bi.bi_idx, bi.bi_num, bs.bs_idx, si.si_idx, si.si_seat, "
 					+ "    CASE "
-					+ "        WHEN rd.ri_idx IS NOT NULL THEN '예약완료' "
-					+ "        ELSE '예약가능' "
+					+ "        WHEN rd.ri_idx IS NOT NULL and ri.ri_sday = " + ri_sday1.replace(".", "-") + " THEN 'Y' "
+					+ "        ELSE 'N' "
 					+ "    END AS reserved_yn "
 					+ "FROM t_bus_info bi "
 					+ "    INNER JOIN t_bus_schedule bs ON bi.bi_idx = bs.bi_idx "
 					+ "    INNER JOIN t_seat_info si ON bi.bi_idx = si.bi_idx "
 					+ "    INNER JOIN t_bus_line bl ON bs.bl_idx = bl.bl_idx "
 					+ "    LEFT JOIN t_reservation_detail rd ON si.si_idx = rd.si_idx "
-					+ "    LEFT JOIN t_reservation_info ri ON rd.ri_idx = ri.ri_idx AND (ri.ri_status IS NULL OR ri.ri_status <> 'C') "
+					+ "    LEFT JOIN t_reservation_info ri ON rd.ri_idx = ri.ri_idx AND ri.ri_status <> '예매취소' "
 					+ "WHERE "
 					+ "    bs.bs_isuse = 'y' and "
-					+ "    bs.bs_idx = " + bsidx + " and "
-					+ "    ri.ri_sday = '" + ri_sday1.replace(".", "-") + "'";
-		return null;
+					+ "    bs.bs_idx = " + bsidx;
+//		System.out.println(sql);
+		List<SeatInfo> seatList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
+			SeatInfo si = new SeatInfo();
+			si.setSi_idx(rs.getInt("si_idx"));
+			si.setSi_seat(rs.getInt("si_seat"));
+			si.setReserved_yn(rs.getString("reserved_yn"));
+			return si;
+		});
+		return seatList;
 	}
 	
 }

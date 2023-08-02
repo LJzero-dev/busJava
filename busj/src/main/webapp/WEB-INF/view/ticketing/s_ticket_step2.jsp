@@ -10,9 +10,9 @@ String ri_sday3 = request.getParameter("ri_sday3");
 String btsname = request.getParameter("btsname");
 String btename = request.getParameter("btename");
 
-System.out.println(ri_sday1);
-System.out.println(ri_sday2);
-System.out.println(ri_sday3);
+// System.out.println(ri_sday1);
+// System.out.println(ri_sday2);
+// System.out.println(ri_sday3);
 List<ReservationStep2> scheduleList = (List<ReservationStep2>)request.getAttribute("scheduleList");
 ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
 

@@ -44,6 +44,7 @@ public class STicketingCtrl {
 	public String sTicketingStep02(HttpServletRequest request) throws Exception {
 		// step1에서 보낸 mode, 가는 날(가는 날 / 오는 날), 출발터미널, 도착터미널 정보를 가지고 해당하는 노선의 시간표와 잔여 좌석 정보를 select
 		request.setCharacterEncoding("utf-8");
+		
 		String mode = request.getParameter("mode");
 		String ri_sday1 = request.getParameter("ri_sday1");		String ri_sday2 = request.getParameter("ri_sday2");
 		String ri_sday3 = request.getParameter("ri_sday3");
@@ -83,16 +84,31 @@ public class STicketingCtrl {
 		int totalseat = Integer.parseInt(request.getParameter("totalseat"));
 		int leftseat = Integer.parseInt(request.getParameter("leftseat"));
 		
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		
 		HttpSession session = request.getSession();	
 		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
+		
+		if (ri1 == null) {
+		    // ri1 객체가 null인 경우에 대한 처리
+		    out.println("<script>");
+		    out.println("alert('시간이 경과되었습니다.\\예매를 다시 시도해주세요.')");
+		    out.println("location.href='sTicketingStep01';");
+		    out.println("</script>");
+		}
+		
 		ri1.setBs_idx(bsidx);		ri1.setComname(bcname);		ri1.setLevel(bilevel);	ri1.setPrice(bladult);
 		ri1.setStime(stime);		ri1.setEtime(etime);		
+
+		if (request.getParameter("ri_sday1") != null && !request.getParameter("ri_sday1").equals("")) 
+			ri1.setSdate(request.getParameter("ri_sday1"));	
 		
-		String ri_sday1 = request.getParameter("ri_sday1");			// 예매 2단계에서 날짜를 바꾸게 되면 받아오는 값
-		if (ri_sday1 != null && !ri_sday1.equals(""))	ri1.setSdate(ri_sday1);	// 바뀐 값이 있으면 세션에 다시 담기
+		String ri_sday1 = ri1.getSdate();					// 바뀐 값이 있으면 세션에 다시 담기
 		
 		List<SeatInfo> seatList = sTicketingSvc.getSeatList(bsidx, ri_sday1);
-			
+		request.setAttribute("seatList", seatList);
+		
 		return "ticketing/s_ticket_step3";
 	}
 
