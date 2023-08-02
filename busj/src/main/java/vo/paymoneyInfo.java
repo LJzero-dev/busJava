@@ -1,8 +1,58 @@
 package vo;
 
+import java.sql.ResultSet;
+import java.util.List;
+
 public class paymoneyInfo {
-	private String bt_sidx, bt_eidx, mph_date, cr_date, ri_idx, bl_type;
-	private int mi_pmoney, mph_pmoney, cr_pmoney, total_cr_pmoney;
+	private String bt_sidx, bt_eidx, mph_date, cr_date, ri_idx, bl_type, mph_payment;
+	private int mi_pmoney, mph_pmoney, cr_pmoney, total_cr_pmoney, mph_idx, mph_real_price;
+
+	
+	public paymoneyInfo(String mph_date, String mph_payment, int mph_pmoney, int mph_idx, int mph_real_price) {
+		super();
+		this.mph_date = mph_date;
+		this.mph_payment = mph_payment;
+		this.mph_pmoney = mph_pmoney;
+		this.mph_idx = mph_idx;
+		this.mph_real_price = mph_real_price;
+	}
+
+	public paymoneyInfo(String bt_sidx, String bt_eidx, String cr_date, String ri_idx, String bl_type,
+			int total_cr_pmoney) {
+		super();
+		this.bt_sidx = bt_sidx;
+		this.bt_eidx = bt_eidx;
+		this.cr_date = cr_date;
+		this.ri_idx = ri_idx;
+		this.bl_type = bl_type;
+		this.total_cr_pmoney = total_cr_pmoney;
+	}
+	
+
+	public String getMph_payment() {
+		return mph_payment;
+	}
+
+	public void setMph_payment(String mph_payment) {
+		this.mph_payment = mph_payment;
+	}
+
+	public int getMph_idx() {
+		return mph_idx;
+	}
+
+	public void setMph_idx(int mph_idx) {
+		this.mph_idx = mph_idx;
+	}
+
+	public int getMph_real_price() {
+		return mph_real_price;
+	}
+
+	public void setMph_real_price(int mph_real_price) {
+		this.mph_real_price = mph_real_price;
+	}
+
 	public String getBt_sidx() {
 		return bt_sidx;
 	}
@@ -64,6 +114,38 @@ public class paymoneyInfo {
 		this.total_cr_pmoney = total_cr_pmoney;
 	}
 	
-	
-	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
