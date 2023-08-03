@@ -95,6 +95,7 @@ public class STicketingCtrl {
 		    out.println("alert('시간이 경과되었습니다.\\예매를 다시 시도해주세요.')");
 		    out.println("location.href='sTicketingStep01';");
 		    out.println("</script>");
+		    out.close();
 		}
 		
 		ri1.setBs_idx(bsidx);		ri1.setComname(bcname);		ri1.setLevel(bilevel);	ri1.setPrice(bladult);
@@ -127,8 +128,9 @@ public class STicketingCtrl {
 		    out.println("alert('시간이 경과되었습니다.\\예매를 다시 시도해주세요.')");
 		    out.println("location.href='sTicketingStep01';");
 		    out.println("</script>");
+		    out.close();
 		} else {
-			ri1.setAdultcnt(Integer.parseInt(request.getParameter("riacnt")));
+			ri1.setRi_acnt(Integer.parseInt(request.getParameter("riacnt")));
 		}
 		
 		// 연령별 좌석 매수, 예매좌석 번호, 총 예매 금액(연령별 예매금액)
@@ -159,6 +161,7 @@ public class STicketingCtrl {
 		    out.println("alert('시간이 경과되었습니다.\\예매를 다시 시도해주세요.')");
 		    out.println("location.href='sTicketingStep01';");
 		    out.println("</script>");
+		    out.close();
 		}
 		
 		return "ticketing/s_ticket_step4w";

@@ -28,7 +28,7 @@ public class STicketingSvc {
 	}
 	
 	public List<ReservationStep2> getScheduleList(int blidx, String ri_sday1) {
-	// 구해온 노선에 운영되는 시간표를 ScheduleInfo형 scheduleList인스턴스로 받아옴
+	// 구해온 노선에 운영되는 시간표를 ReservationStep2형 scheduleList인스턴스로 받아옴
 		List<ReservationStep2> scheduleList = sTicketingDao.getScheduleList(blidx, ri_sday1);
 		return scheduleList;
 	}

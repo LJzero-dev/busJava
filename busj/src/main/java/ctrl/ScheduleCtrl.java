@@ -24,6 +24,23 @@ public class ScheduleCtrl {
 		return "raceinfo/schedule";
 	}
 	
+	@PostMapping("/getSchedule")
+	@ResponseBody
+	public List<ReservationStep2> getSchedule(HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		
+		String sPoint = request.getParameter("sPoint");
+		String ePoint = request.getParameter("ePoint");
+		String busType = request.getParameter("busType");
+		String risday = request.getParameter("risday");
+		
+		int blidx = scheduleSvc.getLineidx(sPoint, ePoint, busType);
+		
+		List<ReservationStep2>scheduleList = scheduleSvc.getScheduleList(blidx, risday);
+		
+		return scheduleList;
+	}
+	
 	@GetMapping("/arrivaltime")
 	public String arrivaltime() {
 		return "raceinfo/arrivaltime";

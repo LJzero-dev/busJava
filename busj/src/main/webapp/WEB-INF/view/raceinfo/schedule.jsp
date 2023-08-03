@@ -15,11 +15,11 @@
 		<div class="form-group">
 			<div class="col-md">
 				<div class="form-check custom">
-					<input class="form-check-input" type="radio" name="busType" id="highBus" value="option1" checked>
+					<input class="form-check-input" type="radio" name="busType" id="highBus" value="고속" checked>
 						<label class="form-check-label" for="highBus">고속</label>
 				</div>
 				<div class="form-check custom">
-					<input class="form-check-input" type="radio" name="busType" id="slowBus" value="option2">
+					<input class="form-check-input" type="radio" name="busType" id="slowBus" value="시외">
 						<label class="form-check-label" for="slowBus">시외</label>
 				</div>
 			</div>
@@ -31,7 +31,7 @@
 					<label for="sday1">가는날</label>
 					<div class="probootstrap-date-wrap">
 						<span class="icon ion-calendar"></span> 
-						<input type="text" id="sday1" class="form-control" value="" readonly>
+						<input type="text" id="risday" class="form-control" value="" readonly>
 					</div>
 					</div>
 				</div>
@@ -57,7 +57,7 @@
              
 				<div class="row mb-3">
 				<div class="col-md">
-					<input type="submit" id="schBtn" value="조회하기" class="btn btn-primary btn-block">	<!-- ID부여 -->
+					<input type="button" id="schBtn" value="조회하기" class="btn btn-primary btn-block">	<!-- ID부여 -->
 				</div>
 				</div>
 				<div class="row mb-3">
@@ -67,7 +67,13 @@
 				</div>
 		</div>
 	</form>
-	</div>  
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center mb-5"> 
+			<div id="timetable">
+			</div>
+		</div>	
+	</div>	 
 </div>
 <div class="modal fade" id="ViewModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -112,35 +118,9 @@ $(document).ready(function() {
         clearStartAndEndLocations(); // 함수 호출하여 출발지와 도착지 초기화
     });
 	
-	$("#ri_sday1").val(getToday());
-	$("#ri_sday2").val(getToday());
-	
-	$(".progress-bar-custom.2").hide();
-	$(".nav-item").click(function() {
-		let navLink = $(this).find(".nav-link");
-		let tabIndex = $(this).index();
-      
-		// active 상태에서 클릭시 아무런 변화없음
-		if (navLink.hasClass("active"))	return;
+	$("#risday").val(getToday());
 
-		navLink.toggleClass("show");
-		let progressBarCustom = $(".progress-bar-custom." + (tabIndex + 1));
-		if (navLink.hasClass("show")) {
-			if (tabIndex === 0) {	// 편도 클릭 시
-				$("#mode").val("p");
-				$(".progress-bar-custom.1").css("display","");
-				$(".progress-bar-custom.2").css("display","none");
-			} else if (tabIndex === 1) {	 // 왕복 클릭 시
-				$("#mode").val("w");
-				$(".progress-bar-custom.1").css("display","none");
-				$(".progress-bar-custom.2").css("display","");
-			}
-		} 
-
-		$(".nav-item").not(this).find(".nav-link").removeClass("show");
-	});
-    
-	$("#sday1").datepicker({	// 편도 가는 날
+	$("#risday").datepicker({	// 편도 가는 날
       format: "yyyy.mm.dd"
       , autoclose: true
       , startDate: "0d"	// 오늘 이후의 날짜만 선택할 수 있도록 시작 날짜를 오늘로 설정
@@ -151,40 +131,7 @@ $(document).ready(function() {
       , })
       .datepicker("setDate",'now')		// 날짜 선택기를 현재 날짜로 설정
       .on('changeDate', function(e) {	
-        $("#ri_sday1").val($(this).val());	// 왕복 가는 날, 오는 날 값 설정
-        $("#sday2").val($(this).val());
-      });
-
-      $("#sday2").datepicker({	// 왕복 가는 날
-      format: "yyyy.mm.dd"
-      , autoclose: true
-      , startDate: "0d"
-      , endDate: "+30d"
-      , language: "kr"
-      , showMonthAfterYear: true
-      , weekStart: 1
-      , })
-      .datepicker("setDate",'now')
-      .on('changeDate', function(e) {
-        $("#ri_sday1").val($(this).val());
-        $("#sday1").val($(this).val());
-        $("#ri_sday2").val($(this).val());
-        $("#sday3").datepicker("setStartDate", new Date($( "#sday2" ).datepicker("getDate")));	// 왕복 오는 날의 시작값을 왕복 가는 날 값으로 설정
-      });
-
-    $("#sday3").datepicker({	// 왕복 오는 날
-      format: "yyyy.mm.dd"
-      , autoclose: true
-      , startDate: "0d"
-      , endDate: "+30d"
-      , language: "kr"
-      , showMonthAfterYear: true
-      , weekStart: 1
-      , })
-      .datepicker("setDate",'now')
-      .on('changeDate', function(e) {
-        $("#sday2").datepicker("setEndDate", new Date($("#sday3").datepicker("getDate")));	// 왕복 가는 날의 종료값을 왕복 오는 날 값으로 설정
-        $("#ri_sday3").val($(this).val());
+        $("#risday").val($(this).val());
       });
 
 	$("#schBtn").click(function() {
@@ -196,16 +143,16 @@ $(document).ready(function() {
 		const sPoint = $("#sPoint").val();
 		const ePoint = $("#ePoint").val();
 		// 체크 선택여부를 통해 고속인지 시외인지 구분
-		const isHighBusSelected = $("#highBus").prop("checked");
-		const isSlowBusSelected = $("#slowBus").prop("checked");
+		const busType = $("input[name=busType]:checked").val();
+		const risday = $("#risday").val();
 		
 		$.ajax({
-			url: url,
-			type: "POST",
-            data: { startLocation: startLocation, endLocation: endLocation },
+			type: "POST", 
+			url: "./getSchedule",
+			data: { sPoint: sPoint, ePoint: ePoint, busType : busType, risday : risday },
             dataType: "json",
             success: function(response) {
-                // 서버로부터 받은 데이터를 이용하여 테이블 생성
+            	 // 서버로부터 받은 데이터를 이용하여 테이블 생성
                 const timetableData = response.timetable;
 
                 let tableHTML = "<table><thead><tr><th>출발시간</th><th>도착시간</th><th>버스 타입</th></tr></thead><tbody>";
