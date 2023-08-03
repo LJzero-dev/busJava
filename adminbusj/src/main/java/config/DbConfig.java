@@ -34,4 +34,16 @@ public class DbConfig {
 		terminalSvc.setTerminalDao(terminalDao());
 		return terminalSvc;
 	}
+	
+	@Bean
+	public TravelDao travelDao() {
+		return new TravelDao(dataSource());
+	}
+	
+	@Bean
+	public TravelSvc travelSvc() {
+		TravelSvc travelSvc = new TravelSvc();
+		travelSvc.setTravelDao(travelDao());
+		return travelSvc;
+	}
 }

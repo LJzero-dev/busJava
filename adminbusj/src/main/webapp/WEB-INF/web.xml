@@ -26,6 +26,13 @@
          </param-value>
       </init-param>
       <load-on-startup>1</load-on-startup>
+      <!-- 파일 업로드를 위한 추가 부분 시작 -->
+		<multipart-config>
+			<max-file-size>20971520</max-file-size><!-- 20MB : 업로드되는 파일의 최대 크기 -->
+			<max-request-size>41943040</max-request-size><!-- 40MB : 한 번에 올릴 수 있는 최대 크기 -->
+			<file-size-threshold>20971520</file-size-threshold><!-- 20MB : 메모리 사용용량 -->
+		</multipart-config>
+		<!-- 파일 업로드를 위한 추가 부분 종료 -->
    </servlet>
 
    <servlet-mapping>
@@ -66,5 +73,6 @@
       <url-pattern>*.jspx</url-pattern>
    </servlet-mapping>
 <!-- js, jq, css 파일등 맵핑 끝 -->
+
 
 </web-app>
