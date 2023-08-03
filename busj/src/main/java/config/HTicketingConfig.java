@@ -7,7 +7,13 @@ import dao.*;
 import svc.*;
 import vo.*;
 import static config.DbConfig.*;
+import org.springframework.jdbc.datasource.*;	// 트랜잭션 추가
+import org.springframework.transaction.*;	 // 트랜잭션 추가
+import org.springframework.transaction.annotation.*;	// 트랜잭션 추가
 
+
+@Configuration
+@EnableTransactionManagement
 public class HTicketingConfig {
 	
 	@Bean

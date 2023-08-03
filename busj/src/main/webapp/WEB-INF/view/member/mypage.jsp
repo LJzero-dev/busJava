@@ -15,7 +15,7 @@ String mi_id = mi.getMi_id();
 <section class="probootstrap_section">
       <div class="container">
         <div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated">
-          <div class="col-md-12">
+          <div class="col-md-6">
             <h2 class="border-bottom probootstrap-section-heading">마이페이지</h2>
           </div>
         </div>
@@ -50,7 +50,7 @@ String mi_id = mi.getMi_id();
                   </div>
                 </a>
               </li>
-              <li>
+<%--               <li>
                 <a href="/busj/coupon">
                   <div class="h-100 d-flex justify-content-center align-items-center flex-column">
                   <img src="${pageContext.request.contextPath}/resources/images/Money.svg" />
@@ -65,7 +65,8 @@ String mi_id = mi.getMi_id();
                   <p class="h5 mt-3">내 스탬프</p>
                   </div>
                 </a>
-              </li>
+              </li> 
+--%>
             </ul>
         </div>
       </div>

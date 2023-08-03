@@ -27,7 +27,7 @@ public class BookInfo {
 
 	public BookInfo(int ri_acnt, int ri_scnt, int ri_ccnt, String ri_status, String ri_sday, String bs_stime,
 			String bl_type, String ri_idx, String cr_payment, String cr_date, String bt1_sidx, String bt2_eidx, String bi_level,
-			String bc_name, int total_cr_pay, List<BusSeatList> busSeatList) {
+			String bc_name, int total_cr_pay, int pd_real_price,List<BusSeatList> busSeatList) {
 		super();
 		this.ri_acnt = ri_acnt;
 		this.ri_scnt = ri_scnt;
@@ -44,6 +44,7 @@ public class BookInfo {
 		this.bi_level = bi_level;
 		this.bc_name = bc_name;
 		this.total_cr_pay = total_cr_pay;
+		this.pd_real_price = pd_real_price;
 		this.busSeatList = busSeatList;
 	}
 

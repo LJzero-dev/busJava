@@ -2,6 +2,8 @@ package dao;
 
 import java.util.*;
 import java.sql.*;
+import java.time.LocalDate;
+
 import javax.sql.*;
 
 import org.apache.tomcat.jdbc.pool.DataSource.*;
@@ -125,18 +127,99 @@ public class HTicketingDao {
 		return seatList;
 	}
 
-	public int chargeAmountIn(String miid, String payment, int chargePmoney, int totalPmoney) {
+	public int chargeAmountIn(String uid, String payment, int chargePmoney, int totalPmoney) {
 		String sql = "INSERT INTO T_MEMBER_PMONEY_HISTORY(mi_id, mph_payment, mph_real_price, mph_pmoney) values "
-				+ "('" + miid + "', '" + payment + "', " + chargePmoney + ", " + totalPmoney + ") ";
+				+ "('" + uid + "', '" + payment + "', " + chargePmoney + ", " + totalPmoney + ") ";
 		int result = jdbc.update(sql);
 		return result;
 	}
 
-	public int chargeAmountUp(String miid, int totalPmoney) {
-		String sql = "UPDATE T_MEMBER_INFO SET mi_pmoney = mi_pmoney + " + totalPmoney + " WHERE mi_id = '" + miid + "'";
+	public int chargeAmountUp(MemberInfo loginInfo, String uid, int totalPmoney) {
+		String sql = "UPDATE T_MEMBER_INFO SET mi_pmoney = mi_pmoney + " + totalPmoney + " WHERE mi_id = '" + loginInfo.getMi_id() + "'";
+		
+		// 세션에 담긴 회원의 페이머니 재설정
+		loginInfo.setMi_pmoney(loginInfo.getMi_pmoney() + totalPmoney);
+		
 		int result = jdbc.update(sql);
 		return result;
 	}
+	
+	private String getReservationId() {
+	// 예약번호를 만드는 메서드. 다른곳에서 쓰지 않으므로 private로 선언
+		String ri_idx = "";
+		LocalDate today = LocalDate.now();	// yyyy-mm-dd
+		String td = (today + "").substring(2).replace("-", "");	// yymmdd
+		
+		String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		Random rnd = new Random();
+		String eng = alpha.charAt(rnd.nextInt(26)) + "" + alpha.charAt(rnd.nextInt(26));
+		
+		String sql = "SELECT MAX(RIGHT(ri_idx, 4)) seq FROM T_RESERVATION_INFO WHERE LEFT(ri_idx, 6) = '" + td + "' ";
+		
+		Integer maxIdx = jdbc.queryForObject(sql, Integer.class);
+		int nextIdx = (maxIdx != null) ? maxIdx + 1 : 1001; 
+		
+		ri_idx = td + eng + nextIdx;
+		
+		return ri_idx;
+	}
+	
+	private int getScheduleNum(int blidx, String stime) {
+	// 노선번호와 출발시각으로 bs_idx를 구해옴. 다른곳에서 쓰지 않으므로 private 선언
+		int bs_idx = 0;
+		
+		String sql = "SELECT bs_idx FROM T_BUS_SCHEDULE WHERE bl_idx = ? and bs_stime = ?";
+		bs_idx = jdbc.queryForObject(sql, Integer.class, blidx, stime);
+		return bs_idx;
+	}
+
+	public String reservationIn(MemberInfo loginInfo, ReservationInfo ri1) {
+		String ri_idx = getReservationId();
+		int bs_idx = getScheduleNum(ri1.getLinenum(), ri1.getStime());
+
+		String sql = "INSERT INTO T_RESERVATION_INFO (ri_idx, bs_idx, mi_id, ri_sday, ri_acnt, ri_scnt, ri_ccnt, ri_status) VALUES ('" +
+			ri_idx + "', " + bs_idx + ", '" + loginInfo.getMi_id() + "', '" + ri1.getSdate() + "', " + ri1.getRi_acnt() + ", " + ri1.getRi_scnt() + ", " + ri1.getRi_ccnt() + ", '예매')";
+		jdbc.update(sql);
+		
+		return ri_idx;
+	}
+
+	public void reservationSeatIn(String result, String[] seats1) {
+		for (String seat : seats1) {
+			String sql = "INSERT INTO T_RESERVATION_DETAIL (ri_idx, si_idx) VALUES ('" + result + "', '" + seat + "')";
+			System.out.println(sql);
+			jdbc.update(sql);
+		}
+	}
+
+	public void reservationUserUp(MemberInfo loginInfo, ReservationInfo ri1, int totalP) {
+		String sql = "UPDATE T_MEMBER_INFO SET MI_PMONEY = MI_PMONEY - " + totalP + " WHERE MI_ID = '" + loginInfo.getMi_id() + "'";
+		System.out.println(sql);
+		jdbc.update(sql);
+	}
+
+	public void reservationPayIn(String result, MemberInfo loginInfo, ReservationInfo ri1, int totalP) {
+	// 회원 결제내역 테이블 insert
+		String sql = "INSERT INTO T_PAYMENT_DETAIL (ri_idx, mi_id, pd_payment, pd_total_price, pd_real_price) VALUES ('" +
+				result + "', '" + loginInfo.getMi_id() + "', '"+ ri1.getPayment() + "', " + totalP + ", " + totalP + ")";
+		System.out.println(sql);
+		jdbc.update(sql);
+	}
+
+	public void reservationCntIn(String result, ReservationInfo ri1, int totalP) {
+		String sql;
+		if (ri1.getPayment().equals("페이머니")) {
+			sql = "INSERT INTO T_COUNT_RINFO (ri_idx, cr_payment, cr_pmeony) VALUES ('" + result + "', '" + ri1.getPayment() + "', " + totalP + ")";
+		} else {
+			sql = "INSERT INTO T_COUNT_RINFO (ri_idx, cr_payment, cr_pay) VALUES ('" + result + "', '" + ri1.getPayment() + "', " + totalP + ")";
+		}
+		
+		jdbc.update(sql);
+	}
+	
+	
+
+
 
 
 	

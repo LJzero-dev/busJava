@@ -621,7 +621,14 @@ public class MemberCtrl {
 		String mi_id =  loginInfo.getMi_id();
 		
 		int result = memberSvc.getrealCancel(riidx, mi_id);
-	
+		
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.println("<script>");
+		out.println("alert('예매가 취소처리 되었습니다.');");
+		out.println("location.href='/busj/memberMypage';");
+		out.println("</script>");
+		out.close();
 		
 		return "redirect:/memberMypage";
 	}
