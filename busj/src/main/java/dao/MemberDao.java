@@ -172,9 +172,9 @@ public class MemberDao {
 	public BookInfo getBookInfo(String riidx) {
 		String sql = "SELECT DISTINCT "
 				+ " bs.bs_stime, bi.bi_level, bc.bc_name, ri.ri_idx, ri.ri_sday, ri.ri_acnt, ri.ri_scnt, ri.ri_ccnt, ri.ri_status, bl.bl_type, bt1.bt_name as bt1_sidx, bt2.bt_name as bt2_eidx, cr.cr_date, cr.cr_payment, "
-				+ " cr_total.total_cr_pay "
-				+ " FROM t_reservation_info ri, t_bus_schedule bs, t_bus_info bi, t_bus_company bc, t_bus_line bl, t_bus_terminal bt1, t_bus_terminal bt2, t_count_rinfo cr, (SELECT ri_idx, SUM(cr_pay) AS total_cr_pay FROM t_count_rinfo GROUP BY ri_idx) cr_total "
-				+ " WHERE  ri.bs_idx = bs.bs_idx and bs.bi_idx = bi.bi_idx and bi.bc_idx = bc.bc_idx and bs.bl_idx = bl.bl_idx and bl.bt_sidx = bt1.bt_idx and bl.bt_eidx = bt2.bt_idx and ri.ri_idx = cr.ri_idx and ri.ri_idx = cr_total.ri_idx "
+				+ " cr_total.total_cr_pay, pd.pd_real_price "
+				+ " FROM t_payment_detail pd, t_reservation_info ri, t_bus_schedule bs, t_bus_info bi, t_bus_company bc, t_bus_line bl, t_bus_terminal bt1, t_bus_terminal bt2, t_count_rinfo cr, (SELECT ri_idx, SUM(cr_pay) AS total_cr_pay FROM t_count_rinfo GROUP BY ri_idx) cr_total "
+				+ " WHERE ri.ri_idx = pd.ri_idx and ri.bs_idx = bs.bs_idx and bs.bi_idx = bi.bi_idx and bi.bc_idx = bc.bc_idx and bs.bl_idx = bl.bl_idx and bl.bt_sidx = bt1.bt_idx and bl.bt_eidx = bt2.bt_idx and ri.ri_idx = cr.ri_idx and ri.ri_idx = cr_total.ri_idx "
 				+ " and ri.ri_idx = '" + riidx + "' ORDER BY ri.ri_sday ASC;";
 		/*String sql = "SELECT DISTINCT "
 				+ " bs.bs_stime, bi.bi_level, bc.bc_name, ri.ri_idx, ri.ri_sday, ri.ri_acnt, ri.ri_scnt, ri.ri_ccnt, ri.ri_status, bl.bl_type, bt1.bt_name as bt1_sidx, bt2.bt_name as bt2_eidx, cr.cr_date, cr.cr_payment, cr.cr_pay "
@@ -201,6 +201,7 @@ public class MemberDao {
 				rs.getString("bi_level"),
 				rs.getString("bc_name"),
 				rs.getInt("total_cr_pay"),
+				rs.getInt("pd_real_price"),
 				getBusSeatList(rs.getString("ri_idx")));
 						
 	            return bi;
@@ -299,9 +300,16 @@ public class MemberDao {
         
         // 5. 환불 처리 및 수수료 반영
         // 결제 금액이 수수료 금액으로 변경 취소 수수료를 결제 내역에 추가.
-        sql = "UPDATE t_payment_detail SET pd_real_price = "+ cancelPrice + ", pd_total_price = "+ cancelPrice + " "
-        		+ ", pd_payment = '" + bi.getPd_payment() + "' "
-        		+ " WHERE mi_id = '" + mi_id + "' and ri_idx = '" + riidx + "' " ;    
+		/*
+		  sql = "UPDATE t_payment_detail SET pd_real_price = "+ cancelPrice +
+		  ", pd_total_price = "+ cancelPrice + " " + ", pd_payment = '" +
+		  bi.getPd_payment() + "' " + " WHERE mi_id = '" + mi_id + "' and ri_idx = '" +
+		  riidx + "' " ; result += jdbc.update(sql);
+		*/
+        
+        sql = "UPDATE t_count_rinfo  SET cr_pay = "+ cancelPrice + " "
+        		+ ", cr_payment = '" + bi.getPd_payment() + "' "
+        		+ " WHERE ri_idx = '" + riidx + "' " ;    
         result += jdbc.update(sql);
         
         // 6.취소한 자리에 예매를 위해 t_reservation_detail 의 정보는 삭제 해준다

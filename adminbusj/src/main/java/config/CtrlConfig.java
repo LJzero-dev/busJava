@@ -10,6 +10,9 @@ public class CtrlConfig {
 	@Autowired
 	private TerminalSvc terminalSvc;
 	
+	@Autowired
+	private TravelSvc travelSvc;
+	
 	@Bean
 	public IndexCtrl indexCtrl() {
 		return new IndexCtrl();
@@ -34,6 +37,8 @@ public class CtrlConfig {
 	
 	@Bean
 	public TravelCtrl travelCtrl() {
-		return new TravelCtrl();
+		TravelCtrl travelCtrl = new TravelCtrl();
+		travelCtrl.setTravelSvc(travelSvc);
+		return travelCtrl;
 	}
 }
