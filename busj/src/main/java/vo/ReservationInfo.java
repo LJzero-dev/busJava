@@ -3,8 +3,8 @@ package vo;
 public class ReservationInfo {
 	private int	ri_idx,	bs_idx,	ri_acnt, ri_scnt, ri_ccnt, si_idx;
 	private String mi_id, ri_sday, ri_status, ri_date, ri_type;
-	private String mode, sdate, sspot, espot, stime, etime, comname, level, seat;	// 왕복편도 구분, 탑승일, 출발장소, 도착장소, 출발, 도착시간, 버스회사, 버스등급, seat 목록
-	private int linenum, price, adultcnt, teencnt, childcnt;	// 노선번호, 어른가격, 어른매수, 청소년매수, 아동매수
+	private String mode, sdate, sspot, espot, stime, etime, comname, level, seat, payment;	// 왕복편도 구분, 탑승일, 출발장소, 도착장소, 출발, 도착시간, 버스회사, 버스등급, seat 목록, 결제방식
+	private int linenum, price;	// 노선번호, 어른가격
 	public int getRi_idx() {
 		return ri_idx;
 	}
@@ -107,18 +107,6 @@ public class ReservationInfo {
 	public void setEtime(String etime) {
 		this.etime = etime;
 	}
-	public int getLinenum() {
-		return linenum;
-	}
-	public void setLinenum(int linenum) {
-		this.linenum = linenum;
-	}
-	public int getPrice() {
-		return price;
-	}
-	public void setPrice(int price) {
-		this.price = price;
-	}
 	public String getComname() {
 		return comname;
 	}
@@ -131,24 +119,30 @@ public class ReservationInfo {
 	public void setLevel(String level) {
 		this.level = level;
 	}
-	public int getAdultcnt() {
-		return adultcnt;
+	public String getSeat() {
+		return seat;
 	}
-	public void setAdultcnt(int adultcnt) {
-		this.adultcnt = adultcnt;
+	public void setSeat(String seat) {
+		this.seat = seat;
 	}
-	public int getTeencnt() {
-		return teencnt;
+	public int getLinenum() {
+		return linenum;
 	}
-	public void setTeencnt(int teencnt) {
-		this.teencnt = teencnt;
+	public void setLinenum(int linenum) {
+		this.linenum = linenum;
 	}
-	public int getChildcnt() {
-		return childcnt;
+	public int getPrice() {
+		return price;
 	}
-	public void setChildcnt(int childcnt) {
-		this.childcnt = childcnt;
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	public String getPayment() {
+		return payment;
+	}
+	public void setPayment(String payment) {
+		this.payment = payment;
 	}
 	
-
+	
 }

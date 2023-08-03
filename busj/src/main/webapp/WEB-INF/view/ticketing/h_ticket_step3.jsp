@@ -96,9 +96,9 @@ else					action = "hTicketingStep04W";
 			  </colgroup>
 			  <tbody>
 			    <tr>
-			      <td><span class="badge badge-danger">출발지</span></td>
+			      <td class="align-middle"><span class="badge badge-danger">출발지</span></td>
 			      <td><%=ri1.getSspot() %></td>
-			      <td><span class="badge badge-primary">도착지</span></td>
+			      <td class="align-middle"><span class="badge badge-primary">도착지</span></td>
 			      <td><%=ri1.getEspot() %></td>
 			      <td><%=ri1.getSdate() %></td>
 			      <td>출발 <%=ri1.getStime() %></td>
@@ -111,7 +111,7 @@ else					action = "hTicketingStep04W";
 	</div>
 	<form name="frmSeat" action="<%=action %>" method="post">
 	<div class="row justify-content-center">
-		<input type="hidden" name="totalPrice" id="totalP" value="" />
+		<input type="hidden" name="basePrice" id="baseP" value="" />
 		<div class="col-md-6 text-center">
 			<p>좌석선택 <%=leftSeat %>/<%=totalSeat %></p>
 			<div class="seat-bg <%= ri1.getLevel().equals("우등") ? "seat28" : "seat18" %> ml-auto">
@@ -205,7 +205,7 @@ else					action = "hTicketingStep04W";
 			    <span id="priceC">0</span>
 			  </div>
 			  <hr />
-			  <p class="h5 text-right mb-5">총 <span id="totalPrice"></span>원</p>
+			  <p class="h5 text-right mb-5">총 <span id="basePrice"></span>원</p>
 			<button type="button" id="submitBtn" class="btn btn-primary btn-block">선택완료</button>
 			</div>
 		</div>
@@ -267,8 +267,8 @@ function setCnt(op) {
 	$("#priceC").text(formatNumber(child * <%=ri1.getPrice()%> * 0.5));
 	  
 	$("#totalCnt").text(adult + teen + child);
-	$("#totalPrice").text(formatNumber(adult * <%=ri1.getPrice()%> + teen * <%=ri1.getPrice()%> * 0.8 + child * <%=ri1.getPrice()%> * 0.5));
-	$("#totalP").val((adult * <%=ri1.getPrice()%> + teen * <%=ri1.getPrice()%> * 0.8 + child * <%=ri1.getPrice()%> * 0.5));
+	$("#basePrice").text(formatNumber(adult * <%=ri1.getPrice()%> + teen * <%=ri1.getPrice()%> * 0.8 + child * <%=ri1.getPrice()%> * 0.5));
+	$("#baseP").val((adult * <%=ri1.getPrice()%> + teen * <%=ri1.getPrice()%> * 0.8 + child * <%=ri1.getPrice()%> * 0.5));
 
 	let seatsCnt = 0;
 	for (let i = 0; i < seats.length; i++) {

@@ -16,6 +16,9 @@ public class CtrlConfig {
 	@Autowired
 	private STicketingSvc sTicketingSvc;
 	
+	@Autowired
+	private ScheduleSvc scheduleSvc;
+	
 	@Bean
 	public IndexCtrl indexCtrl() {
 		return new IndexCtrl();
@@ -45,6 +48,13 @@ public class CtrlConfig {
 		STicketingCtrl sTicketingCtrl = new STicketingCtrl();
 		sTicketingCtrl.setSTicketingSvc(sTicketingSvc);
 		return sTicketingCtrl;
+	}
+	
+	@Bean
+	public ScheduleCtrl scheduleCtrl() {
+		ScheduleCtrl scheduleCtrl = new ScheduleCtrl();
+		scheduleCtrl.setScheduleSvc(scheduleSvc);
+		return scheduleCtrl;
 	}
 
 }

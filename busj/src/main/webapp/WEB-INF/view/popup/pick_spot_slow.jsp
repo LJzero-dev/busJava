@@ -56,7 +56,7 @@ if (schTField == null || schTField.equals(""))	schTField = "";		// 검색을 하
 	</div>	
 </form>	
 	<hr />
-<form name="frmPoint" action="selectSSpot" method="post">	
+<form name="frmPoint" method="post">	
 	<div class="form-row">
 	<div class="col-md-6 mb-3">
 		<label for="sPointPop">출발지</label>
@@ -249,10 +249,10 @@ $("#btnSubmit").on('click', function() {
 		alert("출발지와 도착지를 선택해주세요.");
 		return;
 	}
-	$("#btsname").val(($("#sPointPop").val()));
-	$("#btename").val(($("#ePointPop").val()));
-	let btsname = $("#btsname").val();
-	let btename = $("#btename").val();
+	$("#sPoint").val(($("#sPointPop").val()));
+	$("#ePoint").val(($("#ePointPop").val()));
+	let btsname = $("#sPoint").val();
+	let btename = $("#ePoint").val();
 	
 	$('#ViewModal').modal('hide');
 	

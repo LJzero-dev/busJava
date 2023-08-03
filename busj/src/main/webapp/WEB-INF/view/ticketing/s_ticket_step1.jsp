@@ -128,13 +128,13 @@
 				<div class="col-md">
 					<div class="form-group">
 					<label for="btsname">출발지</label>
-					<input type="text" class="form-control" id="btsname" name="btsname" data-toggle="modal" data-target="#ViewModal" role="button" readonly onclick="openModal();">
+					<input type="text" class="form-control" id="sPoint" name="sPoint" data-toggle="modal" data-target="#ViewModal" role="button" readonly onclick="openModal();">
 					</div>
 				</div>
 				<div class="col-md">
 					<div class="form-group">
 					<label for="btename">도착지</label>
-					<input type="text" class="form-control" id="btename" name="btename" readonly>
+					<input type="text" class="form-control" id="ePoint" name="ePoint" readonly>
 					</div>
 				</div>
 				</div>
@@ -254,7 +254,7 @@ $(document).ready(function() {
       });
 
 	$("#schBtn").click(function() {
-		if ($("#btsname").val() == "" || $("#btename").val() == "") {
+		if ($("#sPoint").val() == "" || $("#ePoint").val() == "") {
 			alert("출발지와 도착지를 선택해주세요.");
 			return false;
 		}

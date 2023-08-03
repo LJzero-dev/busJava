@@ -7,8 +7,8 @@ String mode = request.getParameter("mode");
 String ri_sday1 = request.getParameter("ri_sday1");
 String ri_sday2 = request.getParameter("ri_sday2");
 String ri_sday3 = request.getParameter("ri_sday3");
-String btsname = request.getParameter("btsname");
-String btename = request.getParameter("btename");
+String btsname = request.getParameter("sPoint");
+String btename = request.getParameter("ePoint");
 
 // System.out.println(ri_sday1);
 // System.out.println(ri_sday2);
