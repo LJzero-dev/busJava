@@ -427,6 +427,7 @@ $("#paySubmitBtn").on('click', function() {
 	
 	if (paymentOpt == '페이머니' && myPmoney < basePrice) {
 		alert("페이머니의 잔액이 부족합니다. \n충전 후 이용해 주세요.");
+		return;
 	}
 	
 	document.frmPayInfo.submit();

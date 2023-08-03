@@ -197,8 +197,15 @@ public class HTicketingCtrl {
 		String[] seats1 = (String[]) session.getAttribute("seats1");
 		
 		ri1.setPayment(payment);
+	
+		String seatWhere = " WHERE BS.bi_idx = SI.bi_idx AND BS.bl_idx = " + ri1.getLinenum() + " AND BS.bs_stime = '" + ri1.getStime() + "'";
+		for (int i = 0 ; i < seats1.length ; i++) {
+				if (i == 0) seatWhere += " and (SI.si_seat = " + seats1[i];
+				else		seatWhere += " or SI.si_seat = " + seats1[i];
+		}
+		seatWhere += ")";
 
-		hTicketingSvc.reservationIn(loginInfo, ri1, seats1);
+		hTicketingSvc.reservationIn(loginInfo, ri1, seatWhere);
 
 		return "ticketing/h_ticket_step5p";
 	}

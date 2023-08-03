@@ -183,18 +183,26 @@ public class HTicketingDao {
 		
 		return ri_idx;
 	}
+	
+	public List<String> getSeat(String seatWhere) {
+		String sql = "SELECT SI.si_idx " + 
+				"FROM T_BUS_SCHEDULE BS, T_SEAT_INFO SI " + seatWhere;
+		List<String> seatArr = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
+			return Integer.toString(rs.getInt("si_idx"));
+		});
 
-	public void reservationSeatIn(String result, String[] seats1) {
-		for (String seat : seats1) {
+		return seatArr;
+	}
+
+	public void reservationSeatIn(String result, List<String> seatArr) {
+		for (String seat : seatArr) {
 			String sql = "INSERT INTO T_RESERVATION_DETAIL (ri_idx, si_idx) VALUES ('" + result + "', '" + seat + "')";
-			System.out.println(sql);
 			jdbc.update(sql);
 		}
 	}
 
 	public void reservationUserUp(MemberInfo loginInfo, ReservationInfo ri1, int totalP) {
 		String sql = "UPDATE T_MEMBER_INFO SET MI_PMONEY = MI_PMONEY - " + totalP + " WHERE MI_ID = '" + loginInfo.getMi_id() + "'";
-		System.out.println(sql);
 		jdbc.update(sql);
 	}
 
@@ -202,20 +210,21 @@ public class HTicketingDao {
 	// 회원 결제내역 테이블 insert
 		String sql = "INSERT INTO T_PAYMENT_DETAIL (ri_idx, mi_id, pd_payment, pd_total_price, pd_real_price) VALUES ('" +
 				result + "', '" + loginInfo.getMi_id() + "', '"+ ri1.getPayment() + "', " + totalP + ", " + totalP + ")";
-		System.out.println(sql);
 		jdbc.update(sql);
 	}
 
 	public void reservationCntIn(String result, ReservationInfo ri1, int totalP) {
 		String sql;
 		if (ri1.getPayment().equals("페이머니")) {
-			sql = "INSERT INTO T_COUNT_RINFO (ri_idx, cr_payment, cr_pmeony) VALUES ('" + result + "', '" + ri1.getPayment() + "', " + totalP + ")";
+			sql = "INSERT INTO T_COUNT_RINFO (ri_idx, cr_payment, cr_pmoney) VALUES ('" + result + "', '" + ri1.getPayment() + "', " + totalP + ")";
 		} else {
 			sql = "INSERT INTO T_COUNT_RINFO (ri_idx, cr_payment, cr_pay) VALUES ('" + result + "', '" + ri1.getPayment() + "', " + totalP + ")";
 		}
 		
 		jdbc.update(sql);
 	}
+
+	
 	
 	
 

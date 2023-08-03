@@ -34,7 +34,7 @@ List<paymoneyInfo> mphList = (List<paymoneyInfo>)request.getAttribute("mphList")
 <% } else { %>	           	
 	            <tr>
                   <td class="text-left">
-                    <p class="mb-0"><%=mi.getMi_pmoney() %> 원</p>
+                    <p class="h2 mb-0"><%=mi.getMi_pmoney() %> 원</p>
                   </td>
                   <td colspan="2" class="text-right"><button type="button" class="btn btn-primary" onclick="location.href=''" />충전하기</td>
                 </tr>
@@ -62,8 +62,7 @@ List<paymoneyInfo> mphList = (List<paymoneyInfo>)request.getAttribute("mphList")
                     <p class="mb-0"><%=pl.getBl_type() %>버스 예매</p>
                     <p class="mb-0"><%=pl.getBt_sidx() %> -> <%=pl.getBt_eidx() %></p>
                   </td>
-                  <td class="text-right">사용일시</td>
-                  <td class="text-right"><%=pl.getCr_date() %></td>
+                  <td class="text-right"><span class="font-weight-bold mr-1">사용일시</span> <%=pl.getCr_date() %></td>
                 </tr>
 <% } %>
               </tbody>
@@ -91,8 +90,7 @@ List<paymoneyInfo> mphList = (List<paymoneyInfo>)request.getAttribute("mphList")
                     <p class="mb-0"><%=mpl.getMph_pmoney() %>원권 충전</p>
                     <p class="mb-0">10% 추가 적립</p>
                   </td>
-                  <td class="text-right">충전일시</td>
-                  <td class="text-right"><%=mpl.getMph_date() %></td>
+                  <td class="text-right"><span class="font-weight-bold mr-1">충전일시</span> <%=mpl.getMph_date() %></td>
                 </tr>
 <% } %>
               </tbody>

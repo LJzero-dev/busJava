@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import = "java.util.*" %>
+<%@ page import = "java.time.*" %>
+<%@ page import = "java.time.format.*" %>
 <%@ include file="../_inc/head.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
@@ -10,6 +12,11 @@ for (String seat : seats1) {
 	seatList += ", " + seat;
 }
 seatList = seatList.substring(2);
+
+LocalDateTime nowDateTime = LocalDateTime.now();
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd E요일 HH:mm");
+String formattedDateTime = nowDateTime.format(formatter);
+String payment = request.getParameter("paymentOpt");
 %>
 <section class="probootstrap_section">
 	<div class="container">
@@ -76,7 +83,7 @@ seatList = seatList.substring(2);
 			      	<th colspan="2" class="text-center">예매 매수</th>
 			        <td colspan="2" class="text-left">어른 <%=ri1.getRi_acnt() %>명, 청소년 <%=ri1.getRi_scnt() %>명, 아동 <%=ri1.getRi_ccnt() %>명</td>
 			        <th colspan="2" class="text-center">예매 좌석</th>
-			        <td colspan="2" class="text-left"></td>
+			        <td colspan="2" class="text-left"><%=seatList %></td>
 			      </tr>
 			    </tbody>
 			  </table>
@@ -93,15 +100,15 @@ seatList = seatList.substring(2);
 			    <tbody>
 			      <tr>
 			        <th class="text-center">결제일시</th>
-			        <td></td>
+			        <td><%=formattedDateTime %></td>
 			        <th class="text-center">결제방법</th>
-			        <td></td>
+			        <td><%=payment %></td>
 			      </tr>
 			      <tr>
 			        <th class="text-center">할인금액</th>
-			        <td></td>
+			        <td>-</td>
 			        <th class="text-center">결제금액</th>
-			        <td></td>
+			        <td id="realPrice" class="text-right"></td>
 			      </tr>
 			    </tbody>
 			  </table>
@@ -110,27 +117,19 @@ seatList = seatList.substring(2);
 				<li>승차권 예매와 관련한 문의사항은 콜센터로 문의해주시기 바랍니다.</li>
 			</ul>
 			<div class="btn-wrap mt-2">
-        		<button type="button" id="submitBtn" class="btn btn-lg btn-primary">예매 확인</button>
+        		<button type="button" id="ChkBtn" class="btn btn-lg btn-primary">예매 확인</button>
         	</div>
 			</div>
 			
 </section>
 <%@ include file="../_inc/foot.jsp" %>
 <script>
+const realPrice = <%=ri1.getPrice()%> * ( <%=ri1.getRi_acnt()%> + <%=ri1.getRi_scnt()%> + <%=ri1.getRi_ccnt()%> );
+$("#realPrice").text(realPrice.toLocaleString());
 
-// const pmoneybox = document.getElementById('pmoney_view');
-// const paymentChks = document.getElementsByName('paymentOpt');
-<%-- const myPmoney = <%=loginInfo.getMi_pmoney() %>; --%>
-<%-- const basePrice = <%=base_price %>; --%>
-
-// $("#basePrice").text(basePrice.toLocaleString());
-// $("#realPrice").text(basePrice.toLocaleString());
-// $("#myPmoney").text(myPmoney.toLocaleString());
-
-// $(document).ready(function() {
-
-// });
-
+$("#ChkBtn").click(function() {
+	location.href = "/busj/booking";
+})
 </script>
 
 

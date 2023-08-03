@@ -221,7 +221,7 @@ button.btn-sm { padding: 0.25rem 0.5rem; font-size: 0.875rem;}
 
 /* mypage */
 .mypage {list-style: none; display: flex; width: 100%; justify-content: space-between; padding-left: 0;}
-.mypage li { width: 19%;}
+.mypage li { width: 31%;}
 .mypage li a {display: block;  color: #333; height: 200px; border: 1px solid #c0c0c0;}
 .mypage li a:hover {transition: unset; border: 2px solid #007e2f;}
 

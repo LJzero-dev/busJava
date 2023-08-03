@@ -37,7 +37,10 @@ if (bi.getTotal_cr_pay() > 1000) {
       <div class="col-md-12">
         <h2 class="border-bottom probootstrap-section-heading">예매 정보</h2>
       </div>
-<table class="table" class="thead-light">
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+	<table class="table" class="thead-light">
 	<colgroup>
 		<col width="25%">
 		<col width="25%">
@@ -45,26 +48,26 @@ if (bi.getTotal_cr_pay() > 1000) {
 		<col width="25%">
 	</colgroup>
 	<tr>
-		<th scope="col">예매번호</th><td><%=bi.getRi_idx() %></td>
-		<th scope="col">버스구분</th><td><%=busType %></td>
+		<th scope="col" class="text-center">예매번호</th><td><%=bi.getRi_idx() %></td>
+		<th scope="col" class="text-center">버스구분</th><td><%=busType %></td>
 	</tr>
 	<tr>
-		<th scope="col">출발지</th><td><%=bi.getBt1_sidx() %></td>
-		<th scope="col">도착지</th><td><%=bi.getBt2_eidx() %></td>
+		<th scope="col" class="text-center">출발지</th><td><%=bi.getBt1_sidx() %></td>
+		<th scope="col" class="text-center">도착지</th><td><%=bi.getBt2_eidx() %></td>
 	</tr>
 	<tr>
-		<th scope="col">출발일자</th><td><%=bi.getRi_sday() %></td>
-		<th scope="col">출발시간</th><td><%=bi.getBs_stime() %></td>
+		<th scope="col" class="text-center">출발일자</th><td><%=bi.getRi_sday() %></td>
+		<th scope="col" class="text-center">출발시간</th><td><%=bi.getBs_stime() %></td>
 	</tr>
 	<tr>
-		<th scope="col">버스등급</th><td><%=bi.getBi_level() %></td>
-		<th scope="col">버스회사</th><td><%=bi.getBc_name() %></td>
+		<th scope="col" class="text-center">버스등급</th><td><%=bi.getBi_level() %></td>
+		<th scope="col" class="text-center">버스회사</th><td><%=bi.getBc_name() %></td>
 	</tr>
 	<tr>
-		<th scope="col">매수</th><td>어른 <%=bi.getRi_acnt() %>,
+		<th scope="col" class="text-center">매수</th><td>어른 <%=bi.getRi_acnt() %>,
 		청소년 <%=bi.getRi_scnt() %>,
 		아동 <%=bi.getRi_ccnt() %></td>
-		<th scope="col">좌석</th><td>
+		<th scope="col" class="text-center">좌석</th><td>
 <% 
 StringBuilder seats = new StringBuilder();
 if (bi.getBusSeatList().size() > 0) {
@@ -80,8 +83,8 @@ if (bi.getBusSeatList().size() > 0) {
 </td>
 	</tr>
 	<tr>
-		<th scope="col">상태</th><td><%=bi.getRi_status() %></td>
-		<th scope="col">환불금액</th>
+		<th scope="col" class="text-center">상태</th><td><%=bi.getRi_status() %></td>
+		<th scope="col" class="text-center">환불금액</th>
 <% if (!bi.getRi_status().equals("예매취소")) { %>
 		<td>-</td>
 <% } else { 
@@ -93,9 +96,7 @@ if (bi.getBusSeatList().size() > 0) {
 <% }%>
 	</tr>
 </table>
-<br />
-<br />
-결제정보
+<h5 class="text-left">결제정보</h5>
 <table class="table" class="thead-light">
 	<colgroup>
 		<col width="25%">
@@ -104,12 +105,12 @@ if (bi.getBusSeatList().size() > 0) {
 		<col width="25%">
 	</colgroup>
 	<tr>
-		<th scope="col">결제일자</th><td><%=bi.getCr_date().substring(0,11) %></td>
-		<th scope="col">결제시간</th><td><%=bi.getCr_date().substring(11,16) %></td>
+		<th scope="col" class="text-center">결제일자</th><td><%=bi.getCr_date().substring(0,11) %></td>
+		<th scope="col" class="text-center">결제시간</th><td><%=bi.getCr_date().substring(11,16) %></td>
 	</tr>
 	<tr>
-		<th scope="col">결제수단</th><td><%=bi.getCr_payment() %></td>
-		<th scope="col">결제금액</th><td id="pay"><%=formattedNumber %>원</td>
+		<th scope="col" class="text-center">결제수단</th><td><%=bi.getCr_payment() %></td>
+		<th scope="col" class="text-center">결제금액</th><td id="pay"><%=formattedNumber %>원</td>
 	</tr>
 </table>
 <div class="btn-wrap">
@@ -122,6 +123,7 @@ if (bi.getBusSeatList().size() > 0) {
       </div>
 
 </div>
+      </div>
       </div>
       <div class="modal fade" id="ViewModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">

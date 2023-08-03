@@ -8,7 +8,6 @@ String sDate = request.getParameter("sDate1-1");
 String eDate = request.getParameter("eDate1-1");
 String sPoint = request.getParameter("sPoint");
 String ePoint = request.getParameter("ePoint");
-int lineNum = Integer.parseInt(request.getParameter("lineNum"));
 
 List<ScheduleInfo> scheduleList = (List<ScheduleInfo>)session.getAttribute("scheduleList");
 %>
@@ -90,6 +89,7 @@ tr.data:hover { cursor: pointer; }
 		                <col width="15%">
 		                <col width="5%">
 		                <col width="15%">
+		                <col width="10%">
 		                <col width="*">
 					</colgroup>
 		            <tbody>
@@ -98,6 +98,7 @@ tr.data:hover { cursor: pointer; }
 		                <td class="align-middle"><%=sPoint %></td>
 		                <td class="align-middle"><span class="badge badge-primary">도착지</span></td>
 		                <td class="align-middle"><%=ePoint %></td>
+		                <td class="align-middle">탑승일</td>
 		                <td class="text-left">
 		                  <div class="w-50">
 		                  <div class="probootstrap-date-wrap">
@@ -145,12 +146,14 @@ tr.data:hover { cursor: pointer; }
 					<input type="hidden" id="left-seat" name="left-seat" value="" />
 					
 <% if (scheduleList.size() > 0) {	// 해당 노선의 시간표가 있는 경우
-for (ScheduleInfo sl : scheduleList) { %>
+for (ScheduleInfo sl : scheduleList) { 
+	int adultPrice = sl.getBl_adult();
+%>
 					<tr class="data" data-bsidx="<%=sl.getBs_idx()%>" data-etime="<%=sl.getBs_etime()%>">
 						<td><%=sl.getBs_stime() %></td>
 					    <td><%=sl.getComname() %>고속</td>
 					    <td><%=sl.getBi_level() %></td>
-					    <td><%=sl.getBl_adult() %></td>
+					    <td><%= String.format("%,d", adultPrice) %></td>
 					    <td><%=sl.getTotal_seat() %></td>
 					    <td><%=sl.getLeft_seat() %></td>
 					</tr>
@@ -192,6 +195,8 @@ for (ScheduleInfo sl : scheduleList) { %>
 <%@ include file="../_inc/foot.jsp" %>
 <script>
 
+
+
 $(document).ready(function() {
 	
     
@@ -209,7 +214,7 @@ $(document).ready(function() {
 		let stime = $(this).find('td:nth-child(1)').text();
 		let comname = $(this).find('td:nth-child(2)').text();
 		let level = $(this).find('td:nth-child(3)').text();
-		let bl_adult = $(this).find('td:nth-child(4)').text();
+		let bl_adult = $(this).find('td:nth-child(4)').text().replace(",", "");
 		let totalseat = $(this).find('td:nth-child(5)').text();
 		let leftseat = $(this).find('td:nth-child(6)').text();
 		
@@ -220,7 +225,7 @@ $(document).ready(function() {
 		$("#bsidx").val(bsidx);
 		$("#bllevel").val(level);
 		$("#comname").val(comname);
-		$("#price").val(bl_adult);
+		$("#price").val(parseInt(bl_adult));
 		$("#stime").val(stime);
 		$("#etime").val(etimeT);
 		$("#total-seat").val(totalseat);

@@ -45,7 +45,12 @@
       </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">확인</button>
+      <button type="button" id="lastBtn" class="btn btn-primary btn-block" data-dismiss="modal">확인</button>
     </div>
 
 <%@ include file="../_inc/foot.jsp" %>
+<script>
+$("#lastBtn").click(function() {
+	location.reload();
+});
+</script>

@@ -15,7 +15,7 @@ String mi_id = mi.getMi_id();
 <section class="probootstrap_section">
       <div class="container">
         <div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <h2 class="border-bottom probootstrap-section-heading">마이페이지</h2>
           </div>
         </div>

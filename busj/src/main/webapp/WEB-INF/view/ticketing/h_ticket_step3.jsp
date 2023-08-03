@@ -194,7 +194,7 @@ else					action = "hTicketingStep04W";
 			  <h4>금액</h4>
 			  <div class="d-flex justify-content-between">
 			    <span>성인 <span id="adult2">0</span>명</span>
-			    <span id="priceA"></span>
+			    <span id="priceA">0</span>
 			  </div>
 			  <div class="d-flex justify-content-between">
 			    <span>청소년 <span id="teen2">0</span>명</span>
@@ -228,13 +228,13 @@ function setCnt(op) {
 	let teen = parseInt($("#teen").val());
 	let child = parseInt($("#child").val());
 	
-	// 연산자가 마이너스이고 해당 필드가 0인경우 미리 return하여 아래 배열에 영향을 주지않도록 함 (어른은 기본 1선택)
-	if ((op == 'minusA' && adult === 1) || (op == 'minusT' && teen === 0) || (op == 'minusC' && child === 0)) {
+	// 연산자가 마이너스이고 해당 필드가 0인경우 미리 return하여 아래 배열에 영향을 주지않도록 함
+	if ((op == 'minusA' && adult === 0) || (op == 'minusT' && teen === 0) || (op == 'minusC' && child === 0)) {
 	    return;
 	}
 	
 	// 어른 필드 계산시
-	if (op == 'minusA' && !(adult < 2)) {
+	if (op == 'minusA' && !(adult < 1)) {
 		$("#adult").val(adult - 1);
 		adult--;
 	} else if (op == 'plusA' && !(adult > 9)) {
@@ -337,8 +337,6 @@ function getSeat(obj) {
 }
 
 $(document).ready(function() {
-	setCnt('plusA');
-	// 기본적으로 성인1명의 표 값이 보이는 상태로 로딩
 	
 	$("#submitBtn").click(function() {
 		if (!(selectedValues.length == parseInt($("#totalCnt").text()))) {
