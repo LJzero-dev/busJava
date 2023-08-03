@@ -22,17 +22,21 @@ switch (bi.getBl_type()) {
 
 NumberFormat nf = NumberFormat.getInstance();
 String formattedNumber = "";
-
 if (bi.getTotal_cr_pay() > 1000) {
     nf = NumberFormat.getInstance();
     formattedNumber = nf.format(bi.getTotal_cr_pay());
     // 이제 formattedNumber는 세 자리마다 쉼표가 찍힌 숫자를 문자열 형태로 저장합니다.
 }
 
+
 %>
 
 <section class="probootstrap_section">
-예매정보
+  <div class="container">
+    <div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated">
+      <div class="col-md-12">
+        <h2 class="border-bottom probootstrap-section-heading">예매 정보</h2>
+      </div>
 <table class="table" class="thead-light">
 	<colgroup>
 		<col width="25%">
@@ -81,16 +85,12 @@ if (bi.getBusSeatList().size() > 0) {
 <% if (!bi.getRi_status().equals("예매취소")) { %>
 		<td>-</td>
 <% } else { 
-	String returnCount = formattedNumber.replace(",", "");  // 콤마 제거
-	Double Count = Double.parseDouble(returnCount);  // 숫자로 변환 
-	Double tmp = Count * 0.8;
-	if (tmp > 1000) {
-	    NumberFormat nft = NumberFormat.getInstance();
-	    String result = nft.format(tmp);  // tmp 값을 세 자리마다 쉼표가 찍힌 문자열로 변환 	%>
-	<!-- Double returnCount = Double.parseDouble(formattedNumber);  -->
-		<td><%=result %></td>
-<% }
-}%>
+	int returnCount = (bi.getPd_real_price() - bi.getTotal_cr_pay());
+	NumberFormat nft = NumberFormat.getInstance();
+	String result = nft.format(returnCount);  // tmp 값을 세 자리마다 쉼표가 찍힌 문자열로 변환 %>
+	<td><%=result %></td>
+
+<% }%>
 	</tr>
 </table>
 <br />
@@ -112,14 +112,18 @@ if (bi.getBusSeatList().size() > 0) {
 		<th scope="col">결제금액</th><td id="pay"><%=formattedNumber %>원</td>
 	</tr>
 </table>
+<div class="btn-wrap">
 <% if (!bi.getRi_status().equals("예매취소")) { %>
       <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#ViewModal" onclick="openModal('<%=bi.getRi_idx() %>');">예매취소</button>
       <button type="submit" class="btn btn-primary" onclick="history.back()">확인</button>
 <% } else { %>
  	  <button type="submit" class="btn btn-primary" onclick="history.back()">확인</button>
 <% } %>
-      
-<div class="modal fade" id="ViewModal" tabindex="-1" role="dialog">
+      </div>
+
+</div>
+      </div>
+      <div class="modal fade" id="ViewModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
         </div>
