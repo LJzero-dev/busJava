@@ -12,7 +12,7 @@ List<paymoneyInfo> mphList = (List<paymoneyInfo>)request.getAttribute("mphList")
       <div class="container">
         <div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated">
           <div class="col-md-12">
-            <h2 class="border-bottom probootstrap-section-heading">내 쿠폰</h2>
+            <h2 class="border-bottom probootstrap-section-heading">내 페이머니</h2>
           </div>
         </div>
         <div class="row">

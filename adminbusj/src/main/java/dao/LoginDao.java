@@ -13,22 +13,19 @@ public class LoginDao {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
-	public MemberInfo getLoginInfo(String uid, String pwd) {
-		String sql = "select * from t_member_info where mi_id = ? and mi_pw = ?";
+	public AdminInfo getLoginInfo(String uid, String pwd) {
+		String sql = "select * from t_admin_info where ai_id = ? and ai_pw = ?";
 		
-		List<MemberInfo> results = jdbcTemplate.query(sql, new RowMapper<MemberInfo>() {
-			public MemberInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-				MemberInfo mi = new MemberInfo();
-				mi.setMi_id(rs.getString("mi_id"));
-	            mi.setMi_pw(rs.getString("mi_pw"));
-	            mi.setMi_name(rs.getString("mi_name"));
-	            mi.setMi_gender(rs.getString("mi_gender"));
-	            mi.setMi_phone(rs.getString("mi_phone"));
-	            mi.setMi_email(rs.getString("mi_email"));
-	            mi.setMi_status(rs.getString("mi_status"));
-	            mi.setMi_date(rs.getString("mi_date"));
-	            mi.setMi_lastlogin(rs.getString("mi_lastlogin"));
-	            return mi;
+		List<AdminInfo> results = jdbcTemplate.query(sql, new RowMapper<AdminInfo>() {
+			public AdminInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+				AdminInfo ai = new AdminInfo();
+				ai.setAi_idx(rs.getInt("ai_idx"));
+				ai.setAi_id(rs.getString("ai_id"));
+				ai.setAi_pw(rs.getString("ai_pw"));
+				ai.setAi_name(rs.getString("ai_name"));
+				ai.setAi_use(rs.getString("ai_use"));
+				ai.setAi_date(rs.getString("ai_date"));
+	            return ai;
 			}
 		}, uid, pwd);
 		// 쿼리에 직접 값을 넣으면 매개변수로 값을 추가할 필요 없음

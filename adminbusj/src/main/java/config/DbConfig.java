@@ -9,7 +9,7 @@ import svc.*;
 @Configuration
 public class DbConfig {
 	@Bean(destroyMethod = "close")
-	public DataSource dataSource() {
+	public static DataSource dataSource() {
 		DataSource ds = new DataSource();
 		ds.setDriverClassName("com.mysql.jdbc.Driver");
 		ds.setUrl("jdbc:mysql://localhost/busjava?characterEncoding=utf8");
@@ -33,5 +33,17 @@ public class DbConfig {
 		TerminalSvc terminalSvc = new TerminalSvc();
 		terminalSvc.setTerminalDao(terminalDao());
 		return terminalSvc;
+	}
+	
+	@Bean
+	public LoginDao loginDao() {
+		return new LoginDao(dataSource());
+	}
+
+	@Bean
+	public LoginSvc loginSvc() {
+		LoginSvc loginSvc = new LoginSvc();
+		loginSvc.setLoginDao(loginDao());
+		return loginSvc;
 	}
 }

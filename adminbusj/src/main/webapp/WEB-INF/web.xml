@@ -23,6 +23,7 @@
             config.MvcConfig
             config.CtrlConfig
             config.DbConfig
+            config.MemberConfig
          </param-value>
       </init-param>
       <load-on-startup>1</load-on-startup>

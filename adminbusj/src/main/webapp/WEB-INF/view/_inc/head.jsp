@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="vo.*" %>
 <%
-
+boolean isLogin = false;
+AdminInfo loginInfo = (AdminInfo)session.getAttribute("loginInfo");
+if (loginInfo != null)	isLogin = true;
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -41,7 +44,7 @@ function onlyNum(obj) {
                     <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
                             class="ti-menu ti-close"></i></a>
                     <div class="navbar-brand">
-                        <a href="index.html">
+                        <a href="/adminbusj">
                             <span class="logo-text">
                                 <img src="${pageContext.request.contextPath}/resources/images/logo.png" alt="homepage" class="dark-logo" width="95%" />
                             </span>
@@ -56,10 +59,14 @@ function onlyNum(obj) {
                     <ul class="navbar-nav float-right">
                         <li class="nav-item">
                             <div class="d-flex">
+                                <% if (!isLogin) { %>	
+                                <button type="button" class="btn waves-effect waves-light btn-primary" onclick="location.href='login'">로그인</button>
+                                <% } else { %>
                                 <a class="nav-link" style="pointer-events: none;" >
-                                    <span class="ml-2 d-none d-lg-inline-block"><span class="text-dark">안녕하세요, test님</span>
+                                    <span class="ml-2 d-none d-lg-inline-block"><span class="text-dark">안녕하세요, <%=loginInfo.getAi_id() %>님</span>
                                 </a>
-                                <button type="button" class="btn waves-effect waves-light btn-primary">로그아웃</button>
+                                <button type="button" class="btn waves-effect waves-light btn-primary" onclick="location.href='logout'">로그아웃</button>
+                                <% }%>
                             </div>
                         </li>
                     </ul>
@@ -70,7 +77,7 @@ function onlyNum(obj) {
             <div class="scroll-sidebar" data-sidebarbg="skin6">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li class="sidebar-item"> <a class="sidebar-link" href="ticket-list.html"
+                        <li class="sidebar-item"> <a class="sidebar-link" href="memberList"
                                 aria-expanded="false"><i data-feather="users" class="feather-icon"></i><span
                                     class="hide-menu">회원 관리
                                 </span></a>

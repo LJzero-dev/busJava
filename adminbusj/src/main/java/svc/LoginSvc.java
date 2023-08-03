@@ -4,14 +4,14 @@ import dao.*;
 import vo.*;
 
 public class LoginSvc {
-	private LoginDao loginDaoSpr;
+	private LoginDao loginDao;
 
-	public void setLoginDaoSpr(LoginDao loginDaoSpr) {
-		this.loginDaoSpr = loginDaoSpr;
+	public void setLoginDao(LoginDao loginDao) {
+		this.loginDao = loginDao;
 	}
 
-	public MemberInfo getLoginInfo(String uid, String pwd) {
-		MemberInfo mi = loginDaoSpr.getLoginInfo(uid, pwd);
-		return mi;
+	public AdminInfo getLoginInfo(String uid, String pwd) {
+		AdminInfo ai = loginDao.getLoginInfo(uid, pwd);
+		return ai;
 	}
 }
