@@ -36,6 +36,7 @@ public class DbConfig {
 	}
 	
 	@Bean
+<<<<<<< HEAD
 	public LoginDao loginDao() {
 		return new LoginDao(dataSource());
 	}
@@ -45,5 +46,16 @@ public class DbConfig {
 		LoginSvc loginSvc = new LoginSvc();
 		loginSvc.setLoginDao(loginDao());
 		return loginSvc;
+=======
+	public TravelDao travelDao() {
+		return new TravelDao(dataSource());
+	}
+	
+	@Bean
+	public TravelSvc travelSvc() {
+		TravelSvc travelSvc = new TravelSvc();
+		travelSvc.setTravelDao(travelDao());
+		return travelSvc;
+>>>>>>> fd39b273896f2f789b252cc46fb2a9df753ef1bd
 	}
 }

@@ -11,10 +11,14 @@ public class CtrlConfig {
 	private TerminalSvc terminalSvc;
 	
 	@Autowired
+<<<<<<< HEAD
 	private LoginSvc loginSvc;
 	
 	@Autowired
 	private MemberSvc memberSvc;
+=======
+	private TravelSvc travelSvc;
+>>>>>>> fd39b273896f2f789b252cc46fb2a9df753ef1bd
 	
 	@Bean
 	public IndexCtrl indexCtrl() {
@@ -42,7 +46,9 @@ public class CtrlConfig {
 	
 	@Bean
 	public TravelCtrl travelCtrl() {
-		return new TravelCtrl();
+		TravelCtrl travelCtrl = new TravelCtrl();
+		travelCtrl.setTravelSvc(travelSvc);
+		return travelCtrl;
 	}
 	
 	@Bean
