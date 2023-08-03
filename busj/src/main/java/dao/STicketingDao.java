@@ -93,7 +93,7 @@ public class STicketingDao {
 
 	public List<SeatInfo> getSeatList(int bsidx, String ri_sday1) {
 	// 받아온 시간표인덱스로 버스번호를 구해 좌석개수를 가져오고 선택된 날짜와 시간표에 예매된 좌석이 있는지 체크
-		System.out.println(ri_sday1);
+//		System.out.println(ri_sday1);
 		String sql =  "SELECT bi.bi_idx, bi.bi_num, bs.bs_idx, si.si_idx, si.si_seat, "
 					+ "    CASE "
 					+ "        WHEN rd.ri_idx IS NOT NULL and ri.ri_sday = DATE('" + ri_sday1.replace(".", "-") + "') THEN 'Y' "
@@ -108,7 +108,7 @@ public class STicketingDao {
 					+ "WHERE "
 					+ "    bs.bs_isuse = 'y' and "
 					+ "    bs.bs_idx = " + bsidx;
-		System.out.println(sql);
+//		System.out.println(sql);
 		List<SeatInfo> seatList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
 			SeatInfo si = new SeatInfo();
 			si.setSi_idx(rs.getInt("si_idx"));

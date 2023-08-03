@@ -345,7 +345,7 @@ function getSeat(obj) {
 	  return a - b;
 	});
 	
-	$("#seatArr").text(selectedValues.join(","));
+	$("#seatArr").text(selectedValues.join(", "));
 	selectedSeatsInput.value = selectedValues.join(",");	// 선택된 좌석 값을 hidden input에 설정
 	
 	if (selectedValues.length == 0) {

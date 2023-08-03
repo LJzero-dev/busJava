@@ -259,3 +259,4 @@ button.w-120p {width: 120px;}
 .border-b td {border-bottom: 1px solid #e9ecef;}
 
 input[type="text"]#adult, input[type="text"]#teen, input[type="text"]#child {background: #fff;}
+input[type="text"]#riacnt, input[type="text"]#riscnt, input[type="text"]#riccnt {background: #fff;}

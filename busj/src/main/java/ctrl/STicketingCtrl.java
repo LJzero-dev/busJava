@@ -48,7 +48,7 @@ public class STicketingCtrl {
 		String mode = request.getParameter("mode");
 		String ri_sday1 = request.getParameter("ri_sday1");		String ri_sday2 = request.getParameter("ri_sday2");
 		String ri_sday3 = request.getParameter("ri_sday3");
-		String btsname = request.getParameter("btsname");		String btename = request.getParameter("btename");
+		String btsname = request.getParameter("sPoint");		String btename = request.getParameter("ePoint");
 		
 		int blidx = sTicketingSvc.getsLineNum(btsname, btename);
 		
@@ -113,7 +113,7 @@ public class STicketingCtrl {
 	
 	@PostMapping("/sTicketingStep04P")
 	public String sTicketingStep04P(HttpServletRequest request, HttpServletResponse response) throws Exception {
-	// 
+	// 회원이 보유한 쿠폰이 있는지
 		request.setCharacterEncoding("utf-8");
 		
 		HttpSession session = request.getSession();	
@@ -127,7 +127,11 @@ public class STicketingCtrl {
 		    out.println("alert('시간이 경과되었습니다.\\예매를 다시 시도해주세요.')");
 		    out.println("location.href='sTicketingStep01';");
 		    out.println("</script>");
+		} else {
+			ri1.setAdultcnt(Integer.parseInt(request.getParameter("riacnt")));
 		}
+		
+		// 연령별 좌석 매수, 예매좌석 번호, 총 예매 금액(연령별 예매금액)
 		
 		/*
 		 * System.out.println(request.getParameter("riacnt"));
