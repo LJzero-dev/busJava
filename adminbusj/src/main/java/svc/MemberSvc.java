@@ -12,9 +12,14 @@ public class MemberSvc {
 		this.memberDao = memberDao;
 	}
 
-	public List<MemberInfo> getmemberList() {
-		List<MemberInfo> memberList = memberDao.getmemberList();
+	public List<MemberInfo> getmemberList(String where, int cpage, int psize) {
+		List<MemberInfo> memberList = memberDao.getmemberList(where, cpage, psize);
 		return memberList;
+	}
+
+	public int getmemberListCount(String where) {
+		int rcnt = memberDao.getFreeListCount(where);
+		return rcnt;
 	}
 	
 }

@@ -18,8 +18,8 @@ public class MemberDao {
 		this.jdbc = new JdbcTemplate(dataSource);
 	}
 
-	public List<MemberInfo> getmemberList() {
-		String sql = "";
+	public List<MemberInfo> getmemberList(String where, int cpage, int psize) {
+		String sql = "select * from t_member_Info " + where + " limit " + ((cpage - 1) * psize) + ", " + psize;
 		List<MemberInfo> memberList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
 			MemberInfo mi = new MemberInfo();
 			mi.setMi_id(rs.getString("mi_id"));
@@ -34,10 +34,16 @@ public class MemberDao {
 			mi.setMi_status(rs.getString("mi_status"));
 			mi.setMi_date(rs.getString("mi_date"));
 			mi.setMi_lastlogin(rs.getString("mi_lastlogin"));
-			
+						
 			return mi;
 		});
 		return memberList;
+	}
+
+	public int getFreeListCount(String where) {
+		String sql = "select count(*) from t_member_info " + where;
+		int rcnt = jdbc.queryForObject(sql, Integer.class);
+		return rcnt;
 	}
 
 }
