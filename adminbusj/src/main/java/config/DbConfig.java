@@ -24,6 +24,19 @@ public class DbConfig {
 	}
 	
 	@Bean
+	public IndexDao indexDao() {
+		return new IndexDao(dataSource());
+	}
+
+	@Bean
+	public IndexSvc indexSvc() {
+		IndexSvc indexSvc = new IndexSvc();
+		indexSvc.setIndexDao(indexDao());
+		return indexSvc;
+	}
+	
+	
+	@Bean
 	public TerminalDao terminalDao() {
 		return new TerminalDao(dataSource());
 	}
