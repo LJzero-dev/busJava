@@ -5,6 +5,7 @@ import java.io.*;
 import java.lang.invoke.CallSite;
 import javax.servlet.http.*;
 import org.springframework.stereotype.*;
+import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import svc.*;
@@ -45,7 +46,21 @@ public class ScheduleCtrl {
 	}
 	
 	@GetMapping("/arrivaltime")
-	public String arrivaltime() {
+	public String arrivaltime(Model model) {
+		List<BusCompanyInfo> busCompany = scheduleSvc.getBusCompany();
+		model.addAttribute("busCompany", busCompany);
+		
 		return "raceinfo/arrivaltime";
+	}
+	
+	@PostMapping("/getDepartureTerminal")
+	public List<TerminalInfo> getDepartureTerminal(HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		
+		String selectedArea = request.getParameter("selectedArea");
+		System.out.println(selectedArea);
+		List<TerminalInfo> departureTerminal = scheduleSvc.getDepartureTerminal(selectedArea);
+		
+		return departureTerminal;
 	}
 }

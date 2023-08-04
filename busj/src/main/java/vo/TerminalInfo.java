@@ -10,6 +10,9 @@ public class TerminalInfo {
 		this.bt_type = bt_type;
 		this.bt_status = bt_status;
 	}
+	
+	public TerminalInfo() {}
+	
 	public int getBt_idx() {
 		return bt_idx;
 	}

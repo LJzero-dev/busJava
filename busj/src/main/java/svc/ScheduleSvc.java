@@ -22,4 +22,16 @@ public class ScheduleSvc {
 		List<ReservationStep2> scheduleList = scheduleDao.getScheduleList(blidx, risday);
 		return scheduleList;
 	}
+
+	public List<BusCompanyInfo> getBusCompany() {
+	// 버스회사 정보를 BusCompanyInfo형 busCompany로
+		List<BusCompanyInfo> busCompany = scheduleDao.getBusCompany();
+		return busCompany;
+	}
+
+	public List<TerminalInfo> getDepartureTerminal(String selectedArea) {
+	// 선택한 출발지역에 있는 터미널 이름
+		List<TerminalInfo> departureTerminal = scheduleDao.getDepartureTerminal(selectedArea);
+		return null;
+	}
 }
