@@ -11,7 +11,7 @@
 	</div>
 	
 	<div class="col-md-8 probootstrap-animate fadeInUp probootstrap-animated m-auto">
-	<form name="frmScheduleInfo" action="sTicketingStep02"  method="post" class="probootstrap-form">
+	<form name="frmScheduleInfo" method="post" class="probootstrap-form">
 		<div class="form-group">
 			<div class="col-md">
 				<div class="form-check custom">

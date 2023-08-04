@@ -58,4 +58,26 @@ public class ScheduleDao {
 		});
 		return scheduleList;
 	}
+
+	public List<BusCompanyInfo> getBusCompany() {
+	// 
+		String sql = "select * from t_bus_company";
+		List<BusCompanyInfo> busCompany = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
+			BusCompanyInfo bc = new BusCompanyInfo(rs.getInt("bc_idx"), rs.getString("bc_name"));
+			return bc;
+		});
+		return busCompany;
+	}
+
+	public List<TerminalInfo> getDepartureTerminal(String selectedArea) {
+	// 
+		String sql = "select bt_name from t_bus_terminal where bt_area like '%" + selectedArea + "%'";
+		System.out.println(sql);
+		List<TerminalInfo> departureTerminal = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
+			TerminalInfo ti = new TerminalInfo();
+			ti.setBt_name(rs.getString("bt_name"));
+			return ti;
+		});
+		return null;
+	}
 }
