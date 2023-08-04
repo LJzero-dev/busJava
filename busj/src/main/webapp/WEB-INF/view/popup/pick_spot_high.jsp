@@ -228,7 +228,8 @@ List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("term
 		      },
 		      dataType: "json",
 		      success: function(data) {
-		        $("#lineNum").val(data);
+		    	  $("#sLineNum").val(data.sLineNum);
+		    	  $("#eLineNum").val(data.eLineNum);
 		      },
 		      error: function(xhr, status, error) {
 		        console.error(error);

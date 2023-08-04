@@ -4,12 +4,7 @@
 <%
 request.setCharacterEncoding("utf-8");
 ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
-String[] seats1 = (String[])session.getAttribute("seats1");
-String seatList = "";
-for (String seat : seats1) {
-	seatList += ", " + seat;
-}
-seatList = seatList.substring(2);
+
 
 int base_price = Integer.parseInt(request.getParameter("basePrice"));
 %>
@@ -17,29 +12,66 @@ int base_price = Integer.parseInt(request.getParameter("basePrice"));
 	<div class="container">
 		<div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated">
 			<div class="col-md-12"><h2 class="border-bottom probootstrap-section-heading">고속버스 예매</h2></div>
-			<div class="col-md-8 m-auto">
-			  <div class="progress-bar-custom">
-			    <div class="progress-step">
-			      <div class="step-count"></div>
-			      <div class="step-description">정보 입력</div>
-			    </div>
-			    <div class="progress-step">
-			      <div class="step-count"></div>
-			      <div class="step-description">배차 조회</div>
-			    </div>
-			    <div class="progress-step">
-			      <div class="step-count"></div>
-			      <div class="step-description">좌석 선택</div>
-			    </div>
-			    <div class="progress-step is-active">
-			      <div class="step-count"></div>
-			      <div class="step-description">확인/결제</div>
-			    </div>
-			    <div class="progress-step">
-			      <div class="step-count"></div>
-			      <div class="step-description">예매 결과</div>
-			    </div>
-			  </div>
+			<div class="col-md-12">
+<% if (ri1.getMode().equals("p")) { // 편도일 경우 %>
+				<div class="col-md-8 m-auto">
+					<div class="progress-bar-custom 1">
+					    <div class="progress-step ">
+					      <div class="step-count"></div>
+					      <div class="step-description">정보 입력</div>
+					    </div>
+					    <div class="progress-step">
+					      <div class="step-count"></div>
+					      <div class="step-description">배차 조회</div>
+					    </div>
+					    <div class="progress-step">
+					      <div class="step-count"></div>
+					      <div class="step-description">좌석 선택</div>
+					    </div>
+					    <div class="progress-step is-active">
+					      <div class="step-count"></div>
+					      <div class="step-description">확인/결제</div>
+					    </div>
+					    <div class="progress-step">
+					      <div class="step-count"></div>
+					      <div class="step-description">예매 결과</div>
+			    		</div>
+					</div>
+				</div>
+<% } else { // 왕복일 경우 %>   
+	            <div class="col-md-12 m-auto">
+					<div class="progress-bar-custom 2">
+						<div class="progress-step">
+							<div class="step-count"></div>
+							<div class="step-description">정보 입력</div>
+						</div>
+		                <div class="progress-step">
+		                  <div class="step-count"></div>
+		                  <div class="step-description">가는 날 배차 조회</div>
+		                </div>
+		                <div class="progress-step">
+		                  <div class="step-count"></div>
+		                  <div class="step-description">가는 날 좌석 선택</div>
+		                </div>
+		                <div class="progress-step">
+		                  <div class="step-count"></div>
+		                  <div class="step-description">오는 날 배차 조회</div>
+		                </div>
+		                <div class="progress-step">
+		                  <div class="step-count"></div>
+		                  <div class="step-description">오는 날 좌석 선택</div>
+		                </div>
+		                <div class="progress-step is-active">
+		                  <div class="step-count"></div>
+		                  <div class="step-description">확인/결제</div>
+		                </div>
+		                <div class="progress-step">
+		                  <div class="step-count"></div>
+		                  <div class="step-description">예매 결과</div>
+		                </div>
+					</div>
+				</div>
+<% } %>
 			</div>
 		</div>
         <div class="row">
@@ -67,14 +99,48 @@ int base_price = Integer.parseInt(request.getParameter("basePrice"));
 			        <td>도착 <%=ri1.getEtime() %></td>
 			        <td><%=ri1.getComname() %></td>
 			      </tr>
-			      <tr>
+			      <tr class="border-b">
 			        <td colspan="2">예매 매수</td>
 			        <td colspan="2" class="text-left">어른 <%=ri1.getRi_acnt() %>명, 청소년 <%=ri1.getRi_scnt() %>명, 아동 <%=ri1.getRi_ccnt() %>명</td>
 			        <td colspan="2">예매 좌석</td>
-			        <td colspan="2" class="text-left"><%=seatList %></td>
+			        <td colspan="2" class="text-left"><%=ri1.getSeat() %></td>
 			      </tr>
 			    </tbody>
 			  </table>
+<% if (ri1.getMode().equals("w")) {
+	ReservationInfo ri2 = (ReservationInfo) session.getAttribute("ri2");
+%>
+				<h5 class="text-left mt-5">오는편</h5>
+				<table class="table">
+				  <colgroup>
+				    <col width="5%">
+				    <col width="15%">
+				    <col width="5%">
+				    <col width="15%">
+				    <col width="15%">
+				    <col width="15%">
+				    <col width="15%">
+				  </colgroup>
+				  <tbody>
+				    <tr>
+				      <td class="align-middle"><span class="badge badge-danger">출발지</span></td>
+				      <td><%=ri2.getSspot() %></td>
+				      <td class="align-middle"><span class="badge badge-primary">도착지</span></td>
+				      <td><%=ri2.getEspot() %></td>
+				      <td><%=ri2.getSdate() %></td>
+				      <td>출발 <%=ri2.getStime() %></td>
+				      <td>도착 <%=ri2.getEtime() %></td>
+				      <td><%=ri2.getComname() %></td>
+				    </tr>
+				    <tr class="border-b">
+				      <td colspan="2">예매 매수</td>
+				      <td colspan="2" class="text-left">어른 <%=ri2.getRi_acnt() %>명, 청소년 <%=ri2.getRi_scnt() %>명, 아동 <%=ri2.getRi_ccnt() %>명</td>
+				      <td colspan="2">예매 좌석</td>
+				      <td colspan="2" class="text-left"><%=ri2.getSeat() %></td>
+				    </tr>
+				  </tbody>
+				</table>
+<% } %>
 			</div>
 			<div class="col-md-12 mb-3">
 				<h5 class="text-left"><span class="text-danger">*</span>서비스 이용약관 동의</h5>
@@ -266,7 +332,7 @@ int base_price = Integer.parseInt(request.getParameter("basePrice"));
 				</div>
 			</div>
         </div>
-        <form name="frmPayInfo" method="post" action="hTicketingStep05P">
+        <form name="frmPayInfo" method="post" action="hTicketingResult">
         <div class="row">
 <!--           <div class="col-md-4 text-center mb-5 mt-5"> -->
 <!--             <h4 class="text-left text-primary">쿠폰 적용</h4> -->

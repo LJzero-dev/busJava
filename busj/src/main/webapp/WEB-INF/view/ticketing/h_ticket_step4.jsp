@@ -3,48 +3,21 @@
 <%@ include file="../_inc/head.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
-
 List<ScheduleInfo> scheduleList = (List<ScheduleInfo>)session.getAttribute("scheduleList");
-ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
+ReservationInfo ri2 = (ReservationInfo) session.getAttribute("ri2");
 %>
 <section class="probootstrap_section">
 	<div class="container">
 		<div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated mb-0">
 			<div class="col-md-12"><h2 class="border-bottom mb-5 probootstrap-section-heading">고속버스 예매</h2></div>
-			<div class="col-md-12">
-<% if (ri1.getMode().equals("p")) { // 편도일 경우 %>
-				<div class="col-md-8 m-auto">
-					<div class="progress-bar-custom 1">
-					    <div class="progress-step ">
-					      <div class="step-count"></div>
-					      <div class="step-description">정보 입력</div>
-					    </div>
-					    <div class="progress-step is-active">
-					      <div class="step-count"></div>
-					      <div class="step-description">배차 조회</div>
-					    </div>
-					    <div class="progress-step">
-					      <div class="step-count"></div>
-					      <div class="step-description">좌석 선택</div>
-					    </div>
-					    <div class="progress-step">
-					      <div class="step-count"></div>
-					      <div class="step-description">확인/결제</div>
-					    </div>
-					    <div class="progress-step">
-					      <div class="step-count"></div>
-					      <div class="step-description">예매 결과</div>
-			    		</div>
-					</div>
-				</div>
-<% } else { // 왕복일 경우 %>   
+			<div class="col-md-12"> 
 	            <div class="col-md-12 m-auto">
 					<div class="progress-bar-custom 2">
 						<div class="progress-step">
 							<div class="step-count"></div>
 							<div class="step-description">정보 입력</div>
 						</div>
-		                <div class="progress-step is-active">
+		                <div class="progress-step">
 		                  <div class="step-count"></div>
 		                  <div class="step-description">가는 날 배차 조회</div>
 		                </div>
@@ -52,7 +25,7 @@ ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
 		                  <div class="step-count"></div>
 		                  <div class="step-description">가는 날 좌석 선택</div>
 		                </div>
-		                <div class="progress-step">
+		                <div class="progress-step is-active">
 		                  <div class="step-count"></div>
 		                  <div class="step-description">오는 날 배차 조회</div>
 		                </div>
@@ -70,12 +43,11 @@ ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
 		                </div>
 					</div>
 				</div>
-<% } %>
 			</div>
 		</div>
         <div class="row">
 			<div class="col-md-12 text-center mb-5">
-				<h5 class="text-left">가는편</h5>
+				<h5 class="text-left">오는편</h5>
 	            <table class="table">
 					<colgroup>
 						<col width="5%">
@@ -88,15 +60,15 @@ ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
 		            <tbody>
 		              <tr class="border-b">
 		                <td class="align-middle"><span class="badge badge-danger">출발지</span></td>
-		                <td class="align-middle"><%=ri1.getSspot() %></td>
+		                <td class="align-middle"><%=ri2.getSspot() %></td>
 		                <td class="align-middle"><span class="badge badge-primary">도착지</span></td>
-		                <td class="align-middle"><%=ri1.getEspot() %></td>
+		                <td class="align-middle"><%=ri2.getEspot() %></td>
 		                <td class="align-middle">탑승일</td>
 		                <td class="text-left">
 		                  <div class="w-50">
 		                  <div class="probootstrap-date-wrap">
 		                        <span class="icon ion-calendar"></span> 
-		                        <input type="text" id="sDate" class="form-control" value="<%=ri1.getSdate()%>" readonly>
+		                        <input type="text" id="sDate" class="form-control" value="<%=ri2.getSdate()%>" readonly>
 		                      </div></td>
 		                  </div>
 		              </tr>
@@ -128,7 +100,7 @@ ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
 		            </thead>
 		            <tbody class="text-center">
 		            <!-- 시간표 영역 -->
-					<form name="frmSchedule" method="post" action="hTicketingStep03">
+					<form name="frmSchedule" method="post" action="hTicketingStep05W">
 					<input type="hidden" id="bsidx" name="bsidx" value="" />
 					<input type="hidden" id="bllevel" name="bllevel" value="" />
 					<input type="hidden" id="price" name="price" value="" />

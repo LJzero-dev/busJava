@@ -3,49 +3,19 @@
 <%@ include file="../_inc/head.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
-ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
-String mode = ri1.getMode();
+ReservationInfo ri2 = (ReservationInfo) session.getAttribute("ri2");
 
 int totalSeat = Integer.parseInt(request.getParameter("total-seat"));
 int leftSeat = Integer.parseInt(request.getParameter("left-seat"));
 
 List<SeatInfo> seatList = (List<SeatInfo>)session.getAttribute("seatList");
 
-String action = "";
-if (mode.equals("p"))	action = "hTicketingPay";
-else					action = "hTicketingStep04";
 %>
 <section class="probootstrap_section">
 	<div class="container">
 	<div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated">
 		<div class="col-md-12"><h2 class="border-bottom probootstrap-section-heading">고속버스 예매</h2></div>
 			<div class="col-md-12">
-<% if (mode.equals("p")) { // 편도일 경우 %>
-				<div class="col-md-8 m-auto">
-					<div class="progress-bar-custom 1">
-					    <div class="progress-step ">
-					      <div class="step-count"></div>
-					      <div class="step-description">정보 입력</div>
-					    </div>
-					    <div class="progress-step">
-					      <div class="step-count"></div>
-					      <div class="step-description">배차 조회</div>
-					    </div>
-					    <div class="progress-step is-active">
-					      <div class="step-count"></div>
-					      <div class="step-description">좌석 선택</div>
-					    </div>
-					    <div class="progress-step">
-					      <div class="step-count"></div>
-					      <div class="step-description">확인/결제</div>
-					    </div>
-					    <div class="progress-step">
-					      <div class="step-count"></div>
-					      <div class="step-description">예매 결과</div>
-			    		</div>
-					</div>
-				</div>
-<% } else { // 왕복일 경우 %>   
 	            <div class="col-md-12 m-auto">
 					<div class="progress-bar-custom 2">
 						<div class="progress-step">
@@ -56,7 +26,7 @@ else					action = "hTicketingStep04";
 		                  <div class="step-count"></div>
 		                  <div class="step-description">가는 날 배차 조회</div>
 		                </div>
-		                <div class="progress-step is-active">
+		                <div class="progress-step">
 		                  <div class="step-count"></div>
 		                  <div class="step-description">가는 날 좌석 선택</div>
 		                </div>
@@ -64,7 +34,7 @@ else					action = "hTicketingStep04";
 		                  <div class="step-count"></div>
 		                  <div class="step-description">오는 날 배차 조회</div>
 		                </div>
-		                <div class="progress-step">
+		                <div class="progress-step is-active">
 		                  <div class="step-count"></div>
 		                  <div class="step-description">오는 날 좌석 선택</div>
 		                </div>
@@ -78,12 +48,11 @@ else					action = "hTicketingStep04";
 		                </div>
 					</div>
 				</div>
-<% } %>
 			</div>
 	</div>
 	<div class="row">
 		<div class="col-md-12 text-center mb-5">
-			<h4 class="display-5 probootstrap-section-heading text-left">가는편</h4>
+			<h4 class="display-5 probootstrap-section-heading text-left">오는편</h4>
 			<table class="table">
 			  <colgroup>
 			    <col width="5%">
@@ -95,26 +64,26 @@ else					action = "hTicketingStep04";
 			    <col width="15%">
 			  </colgroup>
 			  <tbody>
-			    <tr class="border-b">
+			    <tr>
 			      <td class="align-middle"><span class="badge badge-danger">출발지</span></td>
-			      <td><%=ri1.getSspot() %></td>
+			      <td><%=ri2.getSspot() %></td>
 			      <td class="align-middle"><span class="badge badge-primary">도착지</span></td>
-			      <td><%=ri1.getEspot() %></td>
-			      <td><%=ri1.getSdate() %></td>
-			      <td>출발 <%=ri1.getStime() %></td>
-			      <td>도착 <%=ri1.getEtime() %></td>
-			      <td><%=ri1.getComname() %></td>
+			      <td><%=ri2.getEspot() %></td>
+			      <td><%=ri2.getSdate() %></td>
+			      <td>출발 <%=ri2.getStime() %></td>
+			      <td>도착 <%=ri2.getEtime() %></td>
+			      <td><%=ri2.getComname() %></td>
 			    </tr>
 			  </tbody>
 			</table>
 		</div>
 	</div>
-	<form name="frmSeat" action="<%=action %>" method="post">
+	<form name="frmSeat" action="hTicketingPay" method="post">
 	<div class="row justify-content-center">
 		<input type="hidden" name="basePrice" id="baseP" value="" />
 		<div class="col-md-6 text-center">
 			<p>좌석선택 <%=leftSeat %>/<%=totalSeat %></p>
-			<div class="seat-bg <%= ri1.getLevel().equals("우등") ? "seat28" : "seat18" %> ml-auto">
+			<div class="seat-bg <%= ri2.getLevel().equals("우등") ? "seat28" : "seat18" %> ml-auto">
 				<div class="seat-list">
 <% for (SeatInfo si : seatList) { %>
 				<span class="seat-box <% if (si.getReserved_yn().equals("Y")) { %>disabled<% } %> <% if (si.getSi_seat() > 24) %>last_seat <% if (si.getSi_seat() == 28) { %>last<% }%>">
@@ -218,7 +187,6 @@ else					action = "hTicketingStep04";
 
 const selectedValues = [];
 const seats = document.getElementsByName("seatBoxDtl");
-
 function setCnt(op) {
 	if ( $("#totalCnt").text() == 10 && (op == 'plusA' || op == 'plusT' || op == 'plusC')) {
 		alert("최대 예약 가능 인원은 10명입니다.");
@@ -228,9 +196,8 @@ function setCnt(op) {
 	let adult = parseInt($("#adult").val());
 	let teen = parseInt($("#teen").val());
 	let child = parseInt($("#child").val());
-	let totalCnt = parseInt($("#totalCnt").text());
 	
-	// 연산자 마이너스, 해당 필드가 0인경우 return
+	// 연산자가 마이너스이고 해당 필드가 0인경우 미리 return하여 아래 배열에 영향을 주지않도록 함
 	if ((op == 'minusA' && adult === 0) || (op == 'minusT' && teen === 0) || (op == 'minusC' && child === 0)) {
 	    return;
 	}
@@ -269,13 +236,13 @@ function setCnt(op) {
 	
 	
 	$("#adult2").text(adult);	$("#teen2").text(teen);	$("#child2").text(child);
-	$("#priceA").text(formatNumber(adult * <%=ri1.getPrice()%>));
-	$("#priceT").text(formatNumber(teen * <%=ri1.getPrice()%> * 0.8));
-	$("#priceC").text(formatNumber(child * <%=ri1.getPrice()%> * 0.5));
+	$("#priceA").text(formatNumber(adult * <%=ri2.getPrice()%>));
+	$("#priceT").text(formatNumber(teen * <%=ri2.getPrice()%> * 0.8));
+	$("#priceC").text(formatNumber(child * <%=ri2.getPrice()%> * 0.5));
 	  
 	$("#totalCnt").text(adult + teen + child);
-	$("#basePrice").text(formatNumber(adult * <%=ri1.getPrice()%> + teen * <%=ri1.getPrice()%> * 0.8 + child * <%=ri1.getPrice()%> * 0.5));
-	$("#baseP").val((adult * <%=ri1.getPrice()%> + teen * <%=ri1.getPrice()%> * 0.8 + child * <%=ri1.getPrice()%> * 0.5));
+	$("#basePrice").text(formatNumber(adult * <%=ri2.getPrice()%> + teen * <%=ri2.getPrice()%> * 0.8 + child * <%=ri2.getPrice()%> * 0.5));
+	$("#baseP").val((adult * <%=ri2.getPrice()%> + teen * <%=ri2.getPrice()%> * 0.8 + child * <%=ri2.getPrice()%> * 0.5));
 
 	let seatsCnt = 0;
 	for (let i = 0; i < seats.length; i++) {

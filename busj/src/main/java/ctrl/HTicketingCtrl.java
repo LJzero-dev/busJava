@@ -80,10 +80,16 @@ public class HTicketingCtrl {
 
 	@PostMapping("/getLineNum")
 	@ResponseBody
-	public int getLineNum(@RequestParam String spoint, @RequestParam String epoint) {
+	public Map<String, Integer> getLineNum(@RequestParam String spoint, @RequestParam String epoint) {
 		// 출발지, 도착지 이름에 따른 노선번호 반환
-		int lineNum = hTicketingSvc.getLineNum(spoint, epoint);
-		return lineNum;
+		int sLineNum = hTicketingSvc.getLineNum(spoint, epoint);
+		int eLineNum = hTicketingSvc.getLineNum(epoint, spoint);
+		
+		Map<String, Integer> lineNumbers = new HashMap<>();
+	    lineNumbers.put("sLineNum", sLineNum);
+	    lineNumbers.put("eLineNum", eLineNum);
+
+	    return lineNumbers;
 	}
 
 	@PostMapping("/hTicketingStep02")
@@ -91,46 +97,37 @@ public class HTicketingCtrl {
 		request.setCharacterEncoding("utf-8");
 		String mode = request.getParameter("mode");
 		String sDate = request.getParameter("sDate1-1").replace('.', '-');
-		String eDate = "";
-		if (mode.equals("w")) {
-			eDate = request.getParameter("eDate1-2").replace('.', '-');
-		}
+		
 		String sPoint = request.getParameter("sPoint");
 		String ePoint = request.getParameter("ePoint");
-		int lineNum = Integer.parseInt(request.getParameter("lineNum"));
+		int sLineNum = Integer.parseInt(request.getParameter("sLineNum"));
 
 		HttpSession session = request.getSession();
 
-		if (mode.equals("p")) { // 편도일경우 (세션 1개 생성)
-			ReservationInfo ri1 = new ReservationInfo();
-			ri1.setMode(mode);
-			ri1.setSdate(sDate);
-			ri1.setSspot(sPoint);
-			ri1.setEspot(ePoint);
-			ri1.setLinenum(lineNum);
-			session.setAttribute("ri1", ri1);
-		} else { // 왕복일 경우 (세션2개 생성)
-			ReservationInfo ri1 = new ReservationInfo();
-			ri1.setMode(mode);
-			ri1.setSdate(sDate);
-			ri1.setSspot(sPoint);
-			ri1.setEspot(ePoint);
-			ri1.setLinenum(lineNum);
-
-			session.setAttribute("ri1", ri1);
-
+		ReservationInfo ri1 = new ReservationInfo();
+		ri1.setMode(mode);
+		ri1.setSdate(sDate);
+		ri1.setSspot(sPoint);
+		ri1.setEspot(ePoint);
+		ri1.setLinenum(sLineNum);
+		
+		if (mode.equals("w")) { // 왕복일경우 오는날 예약정보를 담을 세션 추가생성
+			String eDate = request.getParameter("eDate1-1").replace('.', '-');
+			int eLineNum = Integer.parseInt(request.getParameter("eLineNum"));
+			
 			ReservationInfo ri2 = new ReservationInfo();
 			ri2.setMode(mode);
 			ri2.setSdate(eDate);
 			ri2.setSspot(ePoint);
-			ri2.setEspot(sPoint); // 반대로 저장
-			ri2.setLinenum(lineNum);
+			ri2.setEspot(sPoint);
+			ri2.setLinenum(eLineNum);
 			session.setAttribute("ri2", ri2);
-		}
+		} 
 
-		List<ScheduleInfo> scheduleList = hTicketingSvc.getSList(sDate, lineNum);
+		List<ScheduleInfo> scheduleList = hTicketingSvc.getSList(sDate, sLineNum);
 		session.setAttribute("scheduleList", scheduleList);
-
+		session.setAttribute("ri1", ri1);
+		
 		return "ticketing/h_ticket_step2";
 	}
 
@@ -150,7 +147,6 @@ public class HTicketingCtrl {
 		String mode = ri1.getMode();
 		String sDate = ri1.getSdate();
 
-		// 편도, 왕복 상관없음
 		ri1.setStime(stime);
 		ri1.setEtime(etime);
 		ri1.setPrice(price);
@@ -160,54 +156,157 @@ public class HTicketingCtrl {
 		session.setAttribute("ri1", ri1);
 
 		List<SeatInfo> seatList = hTicketingSvc.getSeatList(sDate, bsidx);
-		// 일자도 포함하여 좌석정보 가져올 수 있도록 수정필요
 		session.setAttribute("seatList", seatList);
 
 		return "ticketing/h_ticket_step3";
 	}
 
-	@PostMapping("/hTicketingStep04P")
-	public String hTicketingStep04P(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@PostMapping("/hTicketingStep04")
+	public String hTicketingStep04(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
+
+		HttpSession session = request.getSession();
+		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
 		int acnt = Integer.parseInt(request.getParameter("adult"));
 		int tcnt = Integer.parseInt(request.getParameter("teen"));
 		int ccnt = Integer.parseInt(request.getParameter("child"));
-		String[] seats1 = request.getParameterValues("seatBoxDtl");
-
-		HttpSession session = request.getSession();
-
-		ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
+		String[] seatsGo = request.getParameterValues("seatBoxDtl");
+		String seatListGo = "";
+		for (String seatGo : seatsGo) {
+			seatListGo += ", " + seatGo;
+		}
+		
 		ri1.setRi_acnt(acnt);
 		ri1.setRi_scnt(tcnt);
 		ri1.setRi_ccnt(ccnt);
+		ri1.setSeat(seatListGo.substring(2));
 		session.setAttribute("ri1", ri1);
-		session.setAttribute("seats1", seats1);
-
-		return "ticketing/h_ticket_step4p";
+		
+		ReservationInfo ri2 = (ReservationInfo)session.getAttribute("ri2");
+		
+		List<ScheduleInfo> scheduleList = hTicketingSvc.getSList(ri2.getSdate(), ri2.getLinenum());
+		session.setAttribute("scheduleList", scheduleList);
+		session.setAttribute("seatsGo", seatsGo);
+		
+		return "ticketing/h_ticket_step4";
 	}
+	
+	@PostMapping("/hTicketingStep05")
+	public String hTicketingStep05(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		int bsidx = Integer.parseInt(request.getParameter("bsidx"));
+		String stime = request.getParameter("stime");
+		String etime = request.getParameter("etime");
+		int price = Integer.parseInt(request.getParameter("price"));
+		String comname = request.getParameter("comname");
+		String bllevel = request.getParameter("bllevel");
 
-	@PostMapping("/hTicketingStep05P")
-	public String hTicketingStep05P(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		HttpSession session = request.getSession();
+
+		ReservationInfo ri2 = (ReservationInfo) session.getAttribute("ri2");
+
+		ri2.setStime(stime);
+		ri2.setEtime(etime);
+		ri2.setPrice(price);
+		ri2.setBs_idx(bsidx);
+		ri2.setComname(comname);
+		ri2.setLevel(bllevel);
+		session.setAttribute("ri2", ri2);
+
+		List<SeatInfo> seatList = hTicketingSvc.getSeatList(ri2.getSdate(), bsidx);
+		session.setAttribute("seatList", seatList);
+
+		return "ticketing/h_ticket_step5";
+	}
+	
+	@PostMapping("/hTicketingPay")
+	public String hTicketingPay(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		
+		HttpSession session = request.getSession();
+		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
+		
+		if(ri1.getMode().equals("p")) {	// 편도일 경우
+			int acnt = Integer.parseInt(request.getParameter("adult"));
+			int tcnt = Integer.parseInt(request.getParameter("teen"));
+			int ccnt = Integer.parseInt(request.getParameter("child"));
+			String[] seatsGo = request.getParameterValues("seatBoxDtl");
+			String seatListGo = "";
+			for (String seatGo : seatsGo) {
+				seatListGo += ", " + seatGo;
+			}
+			
+			ri1.setRi_acnt(acnt);
+			ri1.setRi_scnt(tcnt);
+			ri1.setRi_ccnt(ccnt);
+			ri1.setSeat(seatListGo.substring(2));
+			session.setAttribute("ri1", ri1);
+			session.setAttribute("seatsGo", seatsGo);
+		} else {	// 왕복일 경우
+			ReservationInfo ri2 = (ReservationInfo)session.getAttribute("ri2");
+			int acnt = Integer.parseInt(request.getParameter("adult"));
+			int tcnt = Integer.parseInt(request.getParameter("teen"));
+			int ccnt = Integer.parseInt(request.getParameter("child"));
+			String[] seatsCome = request.getParameterValues("seatBoxDtl");
+			String seatListCome = "";
+			for (String seatCome : seatsCome) {
+				seatListCome += ", " + seatCome;
+			}
+			
+			ri2.setRi_acnt(acnt);
+			ri2.setRi_scnt(tcnt);
+			ri2.setRi_ccnt(ccnt);
+			ri2.setSeat(seatListCome.substring(2));
+			
+			session.setAttribute("ri2", ri2);
+			session.setAttribute("seatsCome", seatsCome);
+		}
+
+		return "ticketing/h_ticket_pay";
+	}
+	
+	@PostMapping("/hTicketingResult")
+	public String hTicketingResult(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
 		String payment = request.getParameter("paymentOpt");
 		
 		HttpSession session = request.getSession();
 		MemberInfo loginInfo = (MemberInfo) session.getAttribute("loginInfo");
 		ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
-		String[] seats1 = (String[]) session.getAttribute("seats1");
+		ReservationInfo ri2 = null;
+		String[] seatsGo = (String[]) session.getAttribute("seatsGo");
 		
 		ri1.setPayment(payment);
-	
-		String seatWhere = " WHERE BS.bi_idx = SI.bi_idx AND BS.bl_idx = " + ri1.getLinenum() + " AND BS.bs_stime = '" + ri1.getStime() + "'";
-		for (int i = 0 ; i < seats1.length ; i++) {
-				if (i == 0) seatWhere += " and (SI.si_seat = " + seats1[i];
-				else		seatWhere += " or SI.si_seat = " + seats1[i];
+		
+		String seatWhereGo = " WHERE BS.bi_idx = SI.bi_idx AND BS.bl_idx = " + ri1.getLinenum() + " AND BS.bs_stime = '" + ri1.getStime() + "'";
+		for (int i = 0 ; i < seatsGo.length ; i++) {
+				if (i == 0) seatWhereGo += " and (SI.si_seat = " + seatsGo[i];
+				else		seatWhereGo += " or SI.si_seat = " + seatsGo[i];
 		}
-		seatWhere += ")";
+		seatWhereGo += ")";
+		
+		String seatWhereCome = "";
+		if (ri1.getMode().equals("w")) {
+			ri2 = (ReservationInfo) session.getAttribute("ri2");
+			String[] seatsCome = (String[]) session.getAttribute("seatsCome");
+			if (ri2 != null) {
+				seatWhereCome += " WHERE BS.bi_idx = SI.bi_idx AND BS.bl_idx = " + ri2.getLinenum() + " AND BS.bs_stime = '" + ri2.getStime() + "'";
+				for (int i = 0 ; i < seatsCome.length ; i++) {
+						if (i == 0) seatWhereCome += " and (SI.si_seat = " + seatsCome[i];
+						else		seatWhereCome += " or SI.si_seat = " + seatsCome[i];
+				}
+				seatWhereCome += ")";
+			}
+			
+			ri2.setPayment(payment);
+		}
+		
+		hTicketingSvc.reservationIn(loginInfo, ri1, seatWhereGo);
+		if (ri2 != null) {
+			hTicketingSvc.reservationIn(loginInfo, ri2, seatWhereCome);
+		}
 
-		hTicketingSvc.reservationIn(loginInfo, ri1, seatWhere);
-
-		return "ticketing/h_ticket_step5p";
+		return "ticketing/h_ticket_result";
 	}
 
 }

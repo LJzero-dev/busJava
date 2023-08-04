@@ -76,7 +76,8 @@
         <input type="hidden" name="sDate1-1" id="sDate1-1" value="" />
         <input type="hidden" name="sDate2-1" id="sDate2-1" value="" />
         <input type="hidden" name="eDate1-1" id="eDate1-1" value="" />
-        <input type="hidden" name="lineNum" id="lineNum" value="" />
+        <input type="hidden" name="sLineNum" id="sLineNum" value="" />
+        <input type="hidden" name="eLineNum" id="eLineNum" value="" />
         <div class="form-group">
           <ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
