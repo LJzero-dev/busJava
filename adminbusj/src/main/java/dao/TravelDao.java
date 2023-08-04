@@ -1,12 +1,9 @@
 package dao;
 
-import java.sql.ResultSet;
-import java.util.List;
-
-import javax.sql.DataSource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
-
+import java.sql.*;
+import java.util.*;
+import javax.sql.*;
+import org.springframework.jdbc.core.*;
 import vo.*;
 
 public class TravelDao {
@@ -51,6 +48,46 @@ public class TravelDao {
 			return tl;
 		});
 		return travelList;
+	}
+
+	public int travelIn(TravelList tr) {
+		String sql = "insert into t_travel_list(ai_idx, tl_ctgr, tl_area, tl_title, tl_content, tl_img, tl_isview)" + 
+				" values(" + tr.getAi_idx() + ", '" + tr.getTl_ctgr() + "', '" + tr.getTl_area() + "', '" + tr.getTl_title() + "', '" + 
+				tr.getTl_content() + "', '" + tr.getTl_img() + "', '" + tr.getTl_isview() + "')";
+		int result = jdbc.update(sql);
+		int tl_idx = 0;
+		if (result == 1) {
+			sql = "select MAX(tl_idx) from t_travel_list";
+			tl_idx = jdbc.queryForObject(sql, Integer.class);
+		}
+		
+		return tl_idx;
+	}
+
+	public TravelList getTravelView(int tl_idx) {
+		String sql = "select tl_idx, ai_idx, tl_ctgr, tl_area, tl_title, tl_content, tl_img, tl_isview, " +
+				"if(curdate() = date(tl_date), left(time(tl_date), 5), mid(tl_date, 3, 8)) date from t_travel_list where tl_idx = " + tl_idx;
+		TravelList tr = jdbc.queryForObject(sql, new RowMapper<TravelList>() {
+			@Override
+			public TravelList mapRow(ResultSet rs, int rowNum) throws SQLException {
+				TravelList tr = new TravelList();
+				tr.setAi_idx(rs.getInt("ai_idx"));
+				tr.setTl_area(rs.getString("tl_area"));
+				tr.setTl_content(rs.getString("tl_content"));
+				tr.setTl_ctgr(rs.getString("tl_ctgr"));
+				tr.setTl_date(rs.getString("date").replace("-", "."));
+				tr.setTl_idx(rs.getInt("tl_idx"));
+				tr.setTl_img(rs.getString("tl_img"));
+				tr.setTl_title(rs.getString("tl_title"));
+				
+				String isview = "";
+				if (rs.getString("tl_isview").equals("y"))	isview = "Y";
+				else 										isview = "N";
+				tr.setTl_isview(isview);
+				return tr;
+			}
+		});
+		return tr;
 	}
 	
 }

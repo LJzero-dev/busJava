@@ -1,6 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="../_inc/head.jsp" %>
+<style>
+.changePointer {
+      cursor: pointer;
+}
+</style>
+<script>
+$(document).ready(function(){
+	changePointer();
+	clickTd();
+	clickTr();
+})
+ 
+function changePointer(){
+	$('.tr').mouseover(function(){
+	   $(this).addClass('changePointer');
+	}).mouseout(function() {
+	   $(this).removeClass('changePointer');
+	});
+}
+</script>
 <div class="page-wrapper">
 <div class="page-breadcrumb">
 	<div class="row">
@@ -83,13 +103,13 @@
     </div>
 </div>
 <div class="col-lg-12 text-right">
-	<button type="button" class="btn waves-effect waves-light btn-primary btn-lg" onclick="location.href='travelForm'">글등록</button>
+	<button type="button" class="btn waves-effect waves-light btn-primary btn-lg" onclick="location.href='travelForm?kind=in'">글등록</button>
 	<button type="button" class="btn waves-effect waves-light btn-primary btn-lg ml-2" value="">미게시로변경</button>
 </div>
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
-            <table class="table text-center mb-0">
+            <table id="table" class="table text-center mb-0">
                 <colgroup>
                     <col width="5%">
 					<col width="5%">
@@ -113,7 +133,7 @@
             	<c:if test="${travelList.size() > 0 }">
 					<c:forEach items="${travelList }" var="tl" varStatus="status">
 		                <tbody class="border border-primary">
-		                <tr>
+		                <tr class="tr" onclick="location.href='travelView?tl_idx=${tl.getTl_idx() }'">
 		                    <td><input type="checkbox" style="width:18px; height:18px;" /></td>
 		                    <td>${pi.getNum() - status.index}</td>
 		                    <td>${tl.getTl_area()}</td>

@@ -21,4 +21,14 @@ public class TravelSvc {
 		return travelList;
 	}
 
+	public int travelIn(TravelList tr) {
+		int tl_idx = travelDao.travelIn(tr);
+		return tl_idx;
+	}
+
+	public TravelList getTravelView(int tl_idx) {
+		TravelList tr = travelDao.getTravelView(tl_idx);
+		return tr;
+	}
+
 }

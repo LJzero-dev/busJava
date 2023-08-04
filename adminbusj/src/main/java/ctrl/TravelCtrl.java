@@ -15,8 +15,7 @@ import vo.*;
 @Controller
 public class TravelCtrl {
 	private TravelSvc travelSvc;
-	private String area, ctgr, title, content, isview; 
-
+	
 	public void setTravelSvc(TravelSvc travelSvc) {
 		this.travelSvc = travelSvc;
 	}
@@ -74,12 +73,24 @@ public class TravelCtrl {
 	}
 	
 	@GetMapping("/travelForm")
-	public String travelForm() {
+	public String travelForm(Model model, HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		String kind = request.getParameter("kind");
+		
+		if (kind.equals("up")) {
+			int tl_idx = Integer.parseInt(request.getParameter("tl_idx"));
+			
+			TravelList ti = travelSvc.getTravelView(tl_idx);
+			
+			model.addAttribute("ti", ti);
+			
+		}
+		
 		return "travel/travel_form";
 	}
 	
 	@PostMapping("/travelIn")
-	public String travelIn(MultipartFile uploadFile, HttpServletRequest request) throws Exception {
+	public String travelIn(MultipartFile uploadFile, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
 		String uploadPath = "E:/lsj/spring/busjava/adminbusj/src/main/webapp/resources/images/travel";
 		String files = "";
@@ -87,20 +98,50 @@ public class TravelCtrl {
 		MultipartFile file = uploadFile;
 		File saveFile = new File(uploadPath, file.getOriginalFilename());
 		try {
-			file.transferTo(saveFile);
 			files += file.getOriginalFilename();
+			int num = files.indexOf(".");
+			String tmp = files.substring(num + 1);
+			if(!tmp.equals("jpeg") && !tmp.equals("png") && !tmp.equals("gif") && !tmp.equals("jpg")) {
+				response.setContentType("text/html; charset=utf-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('파일의 확장자를 확인해주세요.');");
+				out.println("history.back();");
+				out.println("</script>");
+				out.close();
+				return "";
+			}
+			file.transferTo(saveFile);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		TravelList tr = new TravelList();
+		tr.setTl_area(request.getParameter("area"));
+		tr.setTl_ctgr(request.getParameter("ctgr"));
+		tr.setTl_title(request.getParameter("title").trim());
+		tr.setTl_content(request.getParameter("content").trim());
+		tr.setTl_isview(request.getParameter("isview"));
+		tr.setTl_img(files);
 		
-		return "redirect:/travelView?files=" + files;
+		HttpSession session = request.getSession();
+		AdminInfo loginInfo = (AdminInfo) session.getAttribute("loginInfo");
+		tr.setAi_idx(loginInfo.getAi_idx());
+		
+		int tl_idx = travelSvc.travelIn(tr);
+		
+		return "redirect:/travelView?tl_idx=" + tl_idx;
 	}
 	
 	@GetMapping("/travelView")
 	public String travelView(Model model, HttpServletRequest request) throws Exception {
 		request.setCharacterEncoding("utf-8");
-		String files = request.getParameter("files");
-		model.addAttribute("files", files);
+		int tl_idx = Integer.parseInt(request.getParameter("tl_idx"));
+		
+		TravelList tr = travelSvc.getTravelView(tl_idx);
+		tr.setTl_content(tr.getTl_content().replace("\r\n", "<br />"));
+		
+		model.addAttribute("tr", tr);
 		return "travel/travel_view";
 		
 	}

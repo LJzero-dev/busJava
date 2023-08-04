@@ -15,6 +15,8 @@ public class CtrlConfig {
 	
 	@Autowired
 	private MemberSvc memberSvc;
+	
+	@Autowired
 	private TravelSvc travelSvc;
 	
 	@Bean
