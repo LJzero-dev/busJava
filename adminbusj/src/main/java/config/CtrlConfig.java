@@ -8,6 +8,9 @@ import svc.*;
 @Configuration
 public class CtrlConfig {
 	@Autowired
+	private IndexSvc indexSvc;
+	
+	@Autowired
 	private TerminalSvc terminalSvc;
 	
 	@Autowired
@@ -21,7 +24,9 @@ public class CtrlConfig {
 	
 	@Bean
 	public IndexCtrl indexCtrl() {
-		return new IndexCtrl();
+		IndexCtrl indexCtrl = new IndexCtrl();
+		indexCtrl.setIndexSvc(indexSvc);
+		return indexCtrl;
 	}
 	
 	@Bean

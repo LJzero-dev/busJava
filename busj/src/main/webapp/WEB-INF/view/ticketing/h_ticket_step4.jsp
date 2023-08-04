@@ -100,7 +100,7 @@ ReservationInfo ri2 = (ReservationInfo) session.getAttribute("ri2");
 		            </thead>
 		            <tbody class="text-center">
 		            <!-- 시간표 영역 -->
-					<form name="frmSchedule" method="post" action="hTicketingStep05W">
+					<form name="frmSchedule" method="post" action="hTicketingStep05">
 					<input type="hidden" id="bsidx" name="bsidx" value="" />
 					<input type="hidden" id="bllevel" name="bllevel" value="" />
 					<input type="hidden" id="price" name="price" value="" />
