@@ -28,8 +28,7 @@ function changePointer(){
 			<h3 class="page-title text-truncate text-dark font-weight-medium mb-1">추천여행지 관리</h3>
 		</div>
 	</div>
-</div>
-<div class="row">
+	<div class="row">
     <div class="col-lg-12">
         <div class="card">
             <table class="table table-sm custom">
@@ -102,11 +101,11 @@ function changePointer(){
         </div> 
     </div>
 </div>
-<div class="col-lg-12 text-right">
-	<button type="button" class="btn waves-effect waves-light btn-primary btn-lg" onclick="location.href='travelForm?kind=in'">글등록</button>
-	<button type="button" class="btn waves-effect waves-light btn-primary btn-lg ml-2" value="">미게시로변경</button>
-</div>
 <div class="row">
+<div class="col-lg-12 text-right mb-2">
+	<button type="button" class="btn waves-effect waves-light btn-primary btn-lg" onclick="location.href='travelForm?kind=in'">글등록</button>
+	<button type="button" class="btn waves-effect waves-light btn-secondary btn-lg ml-2" value="">미게시로변경</button>
+</div>
     <div class="col-lg-12">
         <div class="card">
             <table id="table" class="table text-center mb-0">
@@ -178,6 +177,8 @@ function changePointer(){
     </div>
 </div>
 </div>
+</div>
+
 
 <div class="modal fade" id="AddLine" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
