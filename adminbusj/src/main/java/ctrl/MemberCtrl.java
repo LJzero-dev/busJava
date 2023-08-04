@@ -33,22 +33,36 @@ public class MemberCtrl {
 		// 검색조건 전체, 아이디, 이메일
 		String schtype = request.getParameter("schtype");
 		String keyword = request.getParameter("keyword");
+		String[] check = request.getParameterValues("chk");
 		String where = "";
+		if (check != null) {
+			for (int i = 0; i < check.length; i++) {
+				if (i == 0 ) {
+					where += " where (mi_status = '" + check[i] + "' ";
+				} else {
+					where += " or mi_status = '" + check[i] + "' ";
+				}	
+			}
+			where += ")";
+		}
+		
+System.out.println(where);
+		
 		String args = "", schargs = "";
 		if(schtype == null || keyword == null) {
-			schtype = ""; keyword = "";
+			schtype = ""; keyword = ""; 
 		} else if (!schtype.equals("") && !keyword.trim().equals("")) {
 			URLEncoder.encode(keyword, "UTF-8");
 			keyword = keyword.trim();
 			if (schtype.equals("all")) { //검색조건이 '아이디 + 이메일'일 경우
-				where += "where (mi_id like '%" + keyword + "%' or mi_email like '%" + keyword + "%') ";
+				where += " and (mi_id like '%" + keyword + "%' or mi_email like '%" + keyword + "%') ";
 			} else {
-				where += "where mi_" + schtype + " like '%" + keyword + "%' ";
+				where += " and mi_" + schtype + " like '%" + keyword + "%' ";
 			}
 			schargs = "&schtype=" + schtype + "&keyword=" + keyword;
 		}
 		args = "&cpage=" + cpage + schargs;
-		
+System.out.println(where);
 		rcnt = memberSvc.getmemberListCount(where); //천제 게시글개수
 		// 검색된 게시글의 총 개수로 게시글 일련번호 출력과 전체 페이지수 계산을 위한 값
 		List<MemberInfo> memberList = memberSvc.getmemberList(where, cpage, psize); // jdbc 템플릿이 제공해주는게 List이기 때문에 List사용 
@@ -73,6 +87,7 @@ public class MemberCtrl {
 		
 		request.setAttribute("memberList", memberList);
 		request.setAttribute("pi", pi);
+		request.setAttribute("check", check);
 		
 		return "member/member_list";
 	}

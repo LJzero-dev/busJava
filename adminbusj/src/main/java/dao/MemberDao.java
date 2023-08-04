@@ -20,6 +20,8 @@ public class MemberDao {
 
 	public List<MemberInfo> getmemberList(String where, int cpage, int psize) {
 		String sql = "select * from t_member_Info " + where + " limit " + ((cpage - 1) * psize) + ", " + psize;
+		
+System.out.println(sql);
 		List<MemberInfo> memberList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
 			MemberInfo mi = new MemberInfo();
 			mi.setMi_id(rs.getString("mi_id"));
