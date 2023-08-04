@@ -69,10 +69,10 @@
 	</form>
 	</div>
 	<div class="row">
-		<div class="col-md-12 text-center mb-5"> 
-			<div id="timetable">
-			</div>
-		</div>	
+    	<div class="col-md-12 text-center mb-5" style="display: none;" id="timetable-container">
+        	<div id="timetable">
+        	</div>
+    	</div>
 	</div>	 
 </div>
 <div class="modal fade" id="ViewModal" tabindex="-1" role="dialog">
@@ -81,6 +81,27 @@
         </div>
     </div>
 </div>
+<!-- 페이지네이션 영역 -->
+<!-- 
+<nav aria-label="Page navigation example" class="mt-4">
+	<ul class="pagination justify-content-center">
+		<li class="page-item">
+			<a class="page-link" href="#" aria-label="Previous">
+				<span aria-hidden="true">&laquo;</span>
+			</a>
+		</li>
+		<li class="page-item"><a class="page-link" href="#">1</a></li>
+		<li class="page-item"><a class="page-link" href="#">2</a></li>
+		<li class="page-item"><a class="page-link" href="#">3</a></li>
+		<li class="page-item">
+			<a class="page-link" href="#" aria-label="Next">
+				<span aria-hidden="true">&raquo;</span>
+			</a>
+		</li>
+	</ul>
+</nav>
+ -->
+<!-- 페이지네이션 영역 끝 -->
 </section>
 <!-- END section -->
 
@@ -135,40 +156,61 @@ $(document).ready(function() {
       });
 
 	$("#schBtn").click(function() {
-		if ($("#sPoint").val() == "" || $("#ePoint").val() == "") {
-			alert("출발지와 도착지를 선택해주세요.");
-			return false;
-		}
-		
-		const sPoint = $("#sPoint").val();
-		const ePoint = $("#ePoint").val();
-		// 체크 선택여부를 통해 고속인지 시외인지 구분
-		const busType = $("input[name=busType]:checked").val();
-		const risday = $("#risday").val();
-		
-		$.ajax({
-			type: "POST", 
-			url: "./getSchedule",
-			data: { sPoint: sPoint, ePoint: ePoint, busType : busType, risday : risday },
-            dataType: "json",
-            success: function(response) {
-            	 // 서버로부터 받은 데이터를 이용하여 테이블 생성
-                const timetableData = response.timetable;
+	    if ($("#sPoint").val() == "" || $("#ePoint").val() == "") {
+	        alert("출발지와 도착지를 선택해주세요.");
+	        return false;
+	    }
 
-                let tableHTML = "<table><thead><tr><th>출발시간</th><th>도착시간</th><th>버스 타입</th></tr></thead><tbody>";
-                timetableData.forEach(function(data) {
-                    tableHTML += `<tr><td>${data.departureTime}</td><td>${data.arrivalTime}</td><td>${data.busType}</td></tr>`;
-                });
-                tableHTML += "</tbody></table>";
+	    const sPoint = $("#sPoint").val();
+	    const ePoint = $("#ePoint").val();
+	    const busType = $("input[name=busType]:checked").val();
+	    const risday = $("#risday").val();
 
-                // 생성한 테이블을 timetable 요소에 추가하여 보여줌
-                $("#timetable").html(tableHTML);
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX Error:", error);
-                // 오류 처리 로직을 추가할 수도 있음
-            }
-        });
-	}); 
+	    $.ajax({
+	        type: "POST", 
+	        url: "./getSchedule",
+	        data: { sPoint: sPoint, ePoint: ePoint, busType: busType, risday: risday },
+	        dataType: "json",
+	        success: function(data) {
+
+	            if (data.length > 0) {
+	                let tableHTML = "<table class='table table-hover'>" + 
+	               					"<colgroup><col width='10%'><col width='10%'><col width='15%'><col width='15%'>" +
+									"<col width='15%'><col width='15%'><col width='10%'><col width='10%'></colgroup>" + 
+		            				"<thead class='bg-primary'><tr>" + 
+		            				"<th scope='col' class='text-center'>출발시간</th><th scope='col' class='text-center'>고속사</th>" + 
+		            				"<th scope='col' class='text-center'>등급</th><th scope='col' class='text-center'>성인요금</th>" + 
+		            				"<th scope='col' class='text-center'>청소년요금</th><th scope='col' class='text-center'>아동요금</th>" + 
+		            				"<th scope='col' class='text-center'>전체좌석</th><th scope='col' class='text-center'>잔여좌석</th></tr></thead><tbody>";
+	                data.forEach(function(table) {
+	                    tableHTML += "<tr>";
+	                    tableHTML += "<td>" + table.bs_stime + "</td>";
+	                    tableHTML += "<td>" + table.bc_name + "</td>";
+	                    tableHTML += "<td>" + table.bi_level + "</td>";
+	                    tableHTML += "<td>" + table.bl_adult + "</td>";
+	                    tableHTML += "<td>" + (table.bl_adult * 0.8) + "</td>";
+	                    tableHTML += "<td>" + (table.bl_adult * 0.5) + "</td>";
+	                    tableHTML += "<td>" + table.total_seat + "</td>";
+	                    tableHTML += "<td>" + table.left_seat + "</td>";
+	                    tableHTML += "</tr>";
+	                });
+	                tableHTML += "</tbody></table>";
+
+	                // 테이블을 보여줌
+	                $("#timetable").html(tableHTML);
+	                $("#timetable-container").show();
+	            } else {
+	                // 데이터가 없는 경우
+	                alert("조회된 시간표가 없습니다.");
+	                $("#timetable").empty();
+	                $("#timetable-container").hide();
+	            }
+	        },
+	        error: function(xhr, status, error) {
+	            console.error("AJAX Error:", error);
+	            // 오류 처리 로직을 추가할 수도 있음
+	        }
+	    });
+	});
 });
 </script>
