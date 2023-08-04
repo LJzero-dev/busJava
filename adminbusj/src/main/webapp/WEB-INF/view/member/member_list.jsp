@@ -8,6 +8,7 @@ List<MemberInfo> memberList = (List<MemberInfo>) request.getAttribute("memberLis
 PageInfo pi = (PageInfo)request.getAttribute("pi");
 String[] check = request.getParameterValues("check");
 %>	
+<script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.4.js"></script>
 <script>
 function chkAll() {
 	  var allCheckbox = document.getElementById("all");
@@ -68,26 +69,6 @@ function chkval(frm) {
 		return false;
 	}
 	return true;
-}
-
-function memdetail() {
-	$.ajax({
-		type : "POST", url : "./memberDetail", data : {"uid" : uid},
-		success : function(chkRs){
-			var msg = "";
-			if (chkRs == 0) {
-				msg = "<div class='valid-feedback text-left'>사용가능한 아이디 입니다.</div>";
-				$("#idChk").val("y");
-				$("#mi_id").removeClass("is-invalid").addClass("is-valid");
-			} else {
-				msg = "<div class='valid-feedback text-left' style='color: red;'>이미 사용중인 아이디 입니다.</div>";
-				$("#idChk").val("n");
-				$("#mi_id").removeClass("is-valid").addClass("is-invalid");
-			}
-			$("#idMsg").html(msg); // .html : ()안의 태그를 바꿔라
-		}
-	});
-	$("#idChk").val("y");
 }
 
 </script>
@@ -186,9 +167,9 @@ function memdetail() {
 <% if (memberList.size() > 0) {
 		for (MemberInfo mi : memberList) { 
 			for (int i = 1; i <= memberList.size(); i++) { %>              
-              <tr onclick="memdetail();">
+              <tr onclick="qwer();" >
                   <td><%=i %></td>
-                  <td><%=mi.getMi_id() %></td>
+                  <td id="mi_id" value="<%=mi.getMi_id() %>"><%=mi.getMi_id() %></td>
                   <td><%=mi.getMi_email() %></td>
                   <td><%=mi.getMi_date().substring(0,16).replace("-", ".") %></td>
                   <td><%=mi.getMi_status() %></td>
@@ -233,7 +214,7 @@ for (int i = pi.getSpage(); i <= endPage; i++) {
 <% }  %>         
             </ul>
           </nav>
-            </div>
+          </div>
 <% } else {    %>	
         <tr height="50"><td colspan="5" align="center">
 		검색결과가 없습니다.
@@ -243,7 +224,13 @@ for (int i = pi.getSpage(); i <= endPage; i++) {
     </div>
 </div>
 </div>
-
+<!-- ajax -->
+<div class="row">
+   	<div class="col-md-12 text-center mb-5" style="display: none;" id="memberDetail-container">
+       	<div id="memberDetail">
+    </div>
+</div>
+<!-- ajax -->
 <div class="modal fade" id="AddLine" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -251,5 +238,62 @@ for (int i = pi.getSpage(); i <= endPage; i++) {
     </div>
 </div>
 <!-- ------------------------------------------------------------------------------------------------ -->
-
+<script>
+function qwer () {
+		const uid = $("#mi_id").val();
+		$.ajax({
+			type : "POST", 
+			url : "./memberDetail", 
+			data : {"uid" : uid},
+			dataType: "json",
+			success : function(data){
+				if (data.length > 0) {
+					let tableHTML = "<table class='table table-hover'>" + 
+					"<colgroup><col width='10%'><col width='10%'><col width='15%'><col width='15%'>" +
+					"<col width='15%'><col width='15%'><col width='10%'><col width='10%'></colgroup>" + 
+					"<thead class='bg-primary'><tr>" + 
+					"<th scope='col' class='text-center'>아이디</th><td>아이디입력</td>" +
+					"<th scope='col' class='text-center'>비밀번호</th><td>비밀번호입력</td>" +
+					"<th scope='col' class='text-center'>이메일</th><td>이메일입력</td>" +
+					"<th scope='col' class='text-center'>상태</th><td>상태입력</td>" +
+					"<th scope='col' class='text-center'>이름/성별</th><td>이름/성별입력</td>" +
+					"<th scope='col' class='text-center'>휴대폰번호</th><td>휴대폰번호입력</td>" +
+					"<th scope='col' class='text-center'>보유페이머니</th><td>보유페이머니입력</td>" +
+					"<th scope='col' class='text-center'>보유스템프</th><td>보유스템프입력</td>" +
+					"<th scope='col' class='text-center'>보유쿠폰</th><td>보유쿠폰입력</td>" +
+					"<th scope='col' class='text-center'>가입일시</th><td>가입일시입력</td>" +
+					"</tr></thead><tbody>";
+					
+					data.forEach(function(table) {
+	                    tableHTML += "<tr>";
+	                    tableHTML += "<td>" + table.mi_id + "</td>";
+	                    tableHTML += "<td>" + table.mi_pw + "</td>";
+	                    tableHTML += "<td>" + table.mi_email + "</td>";
+	                    tableHTML += "<td>" + table.mi_status + "</td>";
+	                    tableHTML += "<td>" + table.mi_name + "n/" + table.mi_gender + "</td>";
+	                    tableHTML += "<td>" + table.mi_phone + "</td>";
+	                    tableHTML += "<td>" + table.mi_pmoney + "</td>";
+	                    tableHTML += "<td>" + table.mi_stamp + "</td>";
+	                    tableHTML += "<td>" + table.mi_coupon + "</td>";
+	                    tableHTML += "<td>" + table.mi_date + "</td>";
+	                    tableHTML += "</tr>";
+	                });
+	                tableHTML += "</tbody></table>";
+				
+				$("#memberDetail").html(tableHTML);
+	            $("#memberDetail-container").show();
+	        } else {
+	            // 데이터가 없는 경우
+	            alert("조회된 시간표가 없습니다.");
+	            $("#memberDetail").empty();
+	            $("#memberDetail-container").hide();
+	        }
+		 },
+	     error: function(xhr, status, error) {
+	         console.error("AJAX Error:", error);
+         // 오류 처리 로직을 추가할 수도 있음
+	        }
+	    });
+	};
+</script>
 <%@ include file="../_inc/foot.jsp" %>

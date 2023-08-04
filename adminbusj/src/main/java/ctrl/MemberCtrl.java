@@ -91,4 +91,17 @@ System.out.println(where);
 		
 		return "member/member_list";
 	}
+	
+	@PostMapping("/memberDetail")
+	@ResponseBody
+	public List<MemberInfo> getmemberDetail(HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		
+		String mi_id = request.getParameter("mi_id");
+					
+		List<MemberInfo> memDetailList = memberSvc.getmemberDetail(mi_id);
+		
+		
+		return memDetailList;
+	}
 }

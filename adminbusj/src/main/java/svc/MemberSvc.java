@@ -21,5 +21,10 @@ public class MemberSvc {
 		int rcnt = memberDao.getFreeListCount(where);
 		return rcnt;
 	}
+
+	public List<MemberInfo> getmemberDetail(String mi_id) {
+		List<MemberInfo> memDetailList = memberDao.getmemberDetail(mi_id);
+		return memDetailList;
+	}
 	
 }

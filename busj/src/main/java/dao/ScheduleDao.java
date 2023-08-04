@@ -39,7 +39,8 @@ public class ScheduleDao {
 				+ "WHEN '프리미엄' THEN 18 "
 				+ "END AS total_seat "
 				+ "FROM t_bus_schedule a, t_bus_line b, t_bus_info c, t_bus_company d "
-				+ "WHERE a.bl_idx = b.bl_idx and a.bi_idx = c.bi_idx and c.bc_idx = d.bc_idx and a.bl_idx = " + blidx + " ) tt";
+				+ "WHERE a.bl_idx = b.bl_idx and a.bi_idx = c.bi_idx and c.bc_idx = d.bc_idx and a.bl_idx = " + blidx + " ) tt " 
+				+ "order by a.bs_stime";
 		
 		List<ReservationStep2> scheduleList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
 			ReservationStep2 sl = new ReservationStep2();

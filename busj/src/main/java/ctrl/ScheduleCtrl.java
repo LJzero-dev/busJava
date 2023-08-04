@@ -36,7 +36,10 @@ public class ScheduleCtrl {
 		
 		int blidx = scheduleSvc.getLineidx(sPoint, ePoint, busType);
 		
-		List<ReservationStep2>scheduleList = scheduleSvc.getScheduleList(blidx, risday);
+		System.out.println(blidx);	System.out.println(risday);
+		
+		List<ReservationStep2> scheduleList = scheduleSvc.getScheduleList(blidx, risday);
+		
 		
 		return scheduleList;
 	}
