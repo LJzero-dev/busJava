@@ -54,12 +54,12 @@ public class HTicketingSvc {
 	}
 
 	@Transactional
-	public void reservationIn(MemberInfo loginInfo, ReservationInfo ri1, String seatWhere) {
+	public void reservationIn(MemberInfo loginInfo, ReservationInfo ri, String seatWhere) {
 	// 예매 메서드
-		int totalP = ri1.getPrice() * ri1.getRi_acnt() + ri1.getPrice() * ri1.getRi_scnt() + ri1.getPrice() * ri1.getRi_ccnt();
+		int totalP = ri.getPrice() * ri.getRi_acnt() + ri.getPrice() * ri.getRi_scnt() + ri.getPrice() * ri.getRi_ccnt();
 		
 		// 1. 예매 정보 테이블 insert
-		String result = hTicketingDao.reservationIn(loginInfo, ri1);
+		String result = hTicketingDao.reservationIn(loginInfo, ri);
 		// 인서트 성공시 성공한 ri_idx(예매번호) 리턴
 		
 		// 2. seatWhere 절에 맞는 좌석번호 리턴
@@ -69,15 +69,15 @@ public class HTicketingSvc {
 		hTicketingDao.reservationSeatIn(result, seatArr);
 		
 		// 4. 결제방식이 페이머니인 경우에만 회원정보 테이블의 해당 회원 페이머니 잔액 업데이트 메서드 실행
-		if (ri1.getPayment().equals("페이머니")) {
-			hTicketingDao.reservationUserUp(loginInfo, ri1, totalP);
+		if (ri.getPayment().equals("페이머니")) {
+			hTicketingDao.reservationUserUp(loginInfo, ri, totalP);
 		}
 		
 		// 5. 회원 결제내역 테이블 insert
-		hTicketingDao.reservationPayIn(result, loginInfo, ri1, totalP);
+		hTicketingDao.reservationPayIn(result, loginInfo, ri, totalP);
 		
 		// 6. 예매 매출 집계 테이블 insert 
-		hTicketingDao.reservationCntIn(result, ri1, totalP);
+		hTicketingDao.reservationCntIn(result, ri, totalP);
 	}
 
 
