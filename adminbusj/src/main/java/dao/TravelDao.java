@@ -50,17 +50,28 @@ public class TravelDao {
 		return travelList;
 	}
 
-	public int travelIn(TravelList tr) {
-		String sql = "insert into t_travel_list(ai_idx, tl_ctgr, tl_area, tl_title, tl_content, tl_img, tl_isview)" + 
+	public int travelIn(TravelList tr, String kind) {
+		String sql = "";
+		if (kind.equals("in")) {
+			sql = "insert into t_travel_list(ai_idx, tl_ctgr, tl_area, tl_title, tl_content, tl_img, tl_isview)" + 
 				" values(" + tr.getAi_idx() + ", '" + tr.getTl_ctgr() + "', '" + tr.getTl_area() + "', '" + tr.getTl_title() + "', '" + 
 				tr.getTl_content() + "', '" + tr.getTl_img() + "', '" + tr.getTl_isview() + "')";
+		} else {
+			sql = "update t_travel_list set ai_idx = '" + tr.getAi_idx() + "', tl_ctgr = '" + tr.getTl_ctgr() + "', tl_area = '" +
+					tr.getTl_area() + "', tl_title = '" + tr.getTl_title() +"', tl_content = '" + tr.getTl_content() + "', tl_img = '"
+					+ tr.getTl_img() + "', tl_isview = '" + tr.getTl_isview() + "' where tl_idx = " + tr.getTl_idx();
+		}
+			
 		int result = jdbc.update(sql);
 		int tl_idx = 0;
-		if (result == 1) {
-			sql = "select MAX(tl_idx) from t_travel_list";
-			tl_idx = jdbc.queryForObject(sql, Integer.class);
+		if (kind.equals("in")) {
+			if (result == 1) {
+				sql = "select MAX(tl_idx) from t_travel_list";
+				tl_idx = jdbc.queryForObject(sql, Integer.class);
+			}
+		} else {
+			tl_idx = tr.getTl_idx();
 		}
-		
 		return tl_idx;
 	}
 
@@ -88,6 +99,12 @@ public class TravelDao {
 			}
 		});
 		return tr;
+	}
+
+	public int travelDel(String where) {
+		String sql = "update t_travel_list set tl_isview = 'n' " + where;
+		int result = jdbc.update(sql);
+		return result;
 	}
 	
 }

@@ -5,6 +5,22 @@
 request.setCharacterEncoding("utf-8");
 String kind = request.getParameter("kind");
 %>
+<script>
+function showFileName() {
+    const fileInput = document.getElementById('file');
+    const fileNameElement = document.getElementById('fileName');
+
+    const fileName = fileInput.value.split('\\').pop(); // 파일 이름만 추출
+    if (fileName) {
+    	fileNameElement.innerText = fileName;
+    } else {
+    	fileNameElement.innerText = fileNameElement.getAttribute('data-tl-img');
+    }
+}
+</script>
+<c:set var="kind" value="${param.kind }" />
+<c:set var="btn" value="등록" />
+<c:set var="file1" value="${ti.getTl_img() }" />
 <section class="probootstrap_section">
 <div class="page-wrapper">
 <div class="page-breadcrumb">
@@ -18,8 +34,9 @@ String kind = request.getParameter("kind");
     <div class="col-lg-12">
         <div class="card">
         <form name="frmIn" action="travelIn" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="kind" value="<%=kind%>" />
+        <input type="hidden" name="kind" value="${kind }" />
         <input type="hidden" name="tl_idx" value="${ti.getTl_idx() }"	/>
+        <input type="hidden" id="fileSrc" name="fileSrc" value="${file1 }" />
             <table class="table table-sm custom">
                 <colgroup>
                     <col width="10%">
@@ -52,7 +69,7 @@ String kind = request.getParameter("kind");
                         </div>
                         </td>
                         <th scope="row" class="text-center bg-gray align-middle">장소명</th>
-                        <td><input type="text" class="form-control" name="title" value="${ti.getTl_title() }" required /></td> 
+                        <td><input type="text" class="form-control" name="title" value="${ti.getTl_title() }" maxlength="40" required /></td> 
                     </tr>
                     <tr>
                         <th scope="row" class="text-center bg-gray">내용</th>
@@ -64,10 +81,15 @@ String kind = request.getParameter("kind");
                     <tr>
                         <th scope="row" class="text-center bg-gray align-middle">이미지</th>
                         <td class="text-left">
-                            <div class="d-flex">
-                                <input type="file" name="uploadFile" required />
+                            <div class="filebox">
+                           		<label for="file">파일첨부</label>
+                                <input type="file" id="file" name="uploadFile" onchange="showFileName();" />
+                                <c:if test="${ti.getTl_img() == null }" >
+                                <span id="fileName" style="width:250px" value="${ti.getTl_img()}" >선택된 파일이 없습니다.</span>
+                                </c:if>
                                 <c:if test="${ti.getTl_img() != null }" >
-                                	<img src="${ti.getTl_img() }" width="100" height="100" />
+                                	<span id="fileName" style="width:250px">${ti.getTl_img()}</span>
+	                                <img src="resources/images/travel/${ti.getTl_img() }" width="100" height="100" />
                                 </c:if>
                             </div>
                         </td> 
@@ -99,7 +121,9 @@ String kind = request.getParameter("kind");
             </table>
             <div class="d-flex justify-content-center">
 	            <button type="button" class="btn waves-effect waves-light btn-secondary mb-2 mr-3" onclick="history.back();">취소</button>
-	            <button type="submit" class="btn waves-effect waves-light btn-secondary mb-2">등록</button>
+	            <button type="submit" class="btn waves-effect waves-light btn-secondary mb-2">
+	            <c:if test="${kind == 'in'}" >등록</c:if>
+	            <c:if test="${kind == 'up'}" >수정</c:if></button>
             </div>
         </form>
         </div> 

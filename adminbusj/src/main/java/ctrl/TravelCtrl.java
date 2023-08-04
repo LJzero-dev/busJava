@@ -29,25 +29,44 @@ public class TravelCtrl {
 			cpage = Integer.parseInt(request.getParameter("cpage"));
 		String schtype = request.getParameter("schtype");
 		String keyword = request.getParameter("keyword");
-		String schctgr = request.getParameter("schctgr");
+		String schctgr = request.getParameter("hiddenCtgr");
 		String isview = request.getParameter("isview");
 		String where = " where 1 = 1 ";
 		String args = "", schargs = "";
+		
+		
 		if (schctgr != null && !schctgr.equals("")) {
 			URLEncoder.encode(schctgr, "UTF-8");
-			where = " and tl_ctgr like '" + schctgr + "'";
+			String[] arr = schctgr.split(":");
+			if (!arr[0].equals("all"))
+				where += " and (";
+			for (int i = 0; i < arr.length; i++) {
+				if (arr[i].equals("all")) {
+					break;
+				} else {
+					where += (i == 0 ? "" : " or ") + "tl_ctgr = '" + arr[i] + "' ";
+				}
+				
+			}
+			if (!arr[0].equals("all"))
+				where += ") ";
 			schargs = "&schctgr=" + schctgr;
 		}
 		if (isview != null && !isview.equals("")) {
-			where = " and tl_isview = '" + isview + "'";
+			where += " and tl_isview = '" + isview + "'";
 			schargs = "&isview=" + isview;
 		}
+		
 		if (schtype == null || keyword == null) {
 			schtype = ""; keyword = "";
 		} else if (!schtype.equals("") && !keyword.trim().equals("")) {
 			URLEncoder.encode(keyword, "UTF-8");
-			keyword = keyword.trim();	
-			where += " and tl_" + schtype + " like '%" + keyword + "%'";
+			keyword = keyword.trim();
+			if (schtype.equals("all")) {
+				where += " and tl_area" + " like '%" + keyword + "%' or tl_title" + " like '%" + keyword + "%'";
+			} else {
+				where += " and tl_" + schtype + " like '%" + keyword + "%'";
+			}
 			schargs = "&schtype=" + schtype + "&keyword=" + keyword;
 		}
 		args = "&cpage=" + cpage + schargs;
@@ -92,30 +111,45 @@ public class TravelCtrl {
 	@PostMapping("/travelIn")
 	public String travelIn(MultipartFile uploadFile, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
 		String uploadPath = "E:/lsj/spring/busjava/adminbusj/src/main/webapp/resources/images/travel";
 		String files = "";
+		String kind = request.getParameter("kind");
+		String fileSrc = request.getParameter("fileSrc");
 		
 		MultipartFile file = uploadFile;
 		File saveFile = new File(uploadPath, file.getOriginalFilename());
 		try {
 			files += file.getOriginalFilename();
-			int num = files.indexOf(".");
-			String tmp = files.substring(num + 1);
-			if(!tmp.equals("jpeg") && !tmp.equals("png") && !tmp.equals("gif") && !tmp.equals("jpg")) {
-				response.setContentType("text/html; charset=utf-8");
-				PrintWriter out = response.getWriter();
-				out.println("<script>");
-				out.println("alert('파일의 확장자를 확인해주세요.');");
-				out.println("history.back();");
-				out.println("</script>");
-				out.close();
-				return "";
+			
+			if (!files.equals("")) {
+				int num = files.indexOf(".");
+				String tmp = files.substring(num + 1);
+				if(!tmp.equals("jpeg") && !tmp.equals("png") && !tmp.equals("gif") && !tmp.equals("jpg")) {
+					out.println("<script>");
+					out.println("alert('파일의 확장자를 확인해주세요.');");
+					out.println("history.back();");
+					out.println("</script>");
+					out.close();
+					return "";
+				}
+				file.transferTo(saveFile);
+			} else {
+				if (files.equals("") && fileSrc.equals("")) {
+					out.println("<script>");
+					out.println("alert('파일을 첨부해 주세요.');");
+					out.println("history.back();");
+					out.println("</script>");
+					out.close();
+				}
+				files += fileSrc;
 			}
-			file.transferTo(saveFile);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
+		
 		TravelList tr = new TravelList();
 		tr.setTl_area(request.getParameter("area"));
 		tr.setTl_ctgr(request.getParameter("ctgr"));
@@ -127,8 +161,11 @@ public class TravelCtrl {
 		HttpSession session = request.getSession();
 		AdminInfo loginInfo = (AdminInfo) session.getAttribute("loginInfo");
 		tr.setAi_idx(loginInfo.getAi_idx());
+		if (kind.equals("up")) {
+			tr.setTl_idx(Integer.parseInt(request.getParameter("tl_idx")));
+		}
 		
-		int tl_idx = travelSvc.travelIn(tr);
+		int tl_idx = travelSvc.travelIn(tr, kind);
 		
 		return "redirect:/travelView?tl_idx=" + tl_idx;
 	}
@@ -144,5 +181,28 @@ public class TravelCtrl {
 		model.addAttribute("tr", tr);
 		return "travel/travel_view";
 		
+	}
+	
+	@PostMapping("/travelDel")
+	@ResponseBody
+	public String travelDel(HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		String tlidx = request.getParameter("tlidx");
+		
+		String where = " where 1 = 1 ";
+		if (tlidx.indexOf(',') >= 0) {
+			String[] arr = tlidx.split(",");
+			for (int i = 0; i < arr.length; i ++) {
+				if (i == 0) where += " and (tl_idx = " + arr[i];
+				else 		where += " or tl_idx = " + arr[i];
+			}
+			where += ") ";
+		} else {
+			where += " and tl_idx = " + tlidx;
+		}
+		
+		int result = travelSvc.travelDel(where);
+		
+		return result + "";
 	}
 }

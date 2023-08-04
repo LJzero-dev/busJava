@@ -57,7 +57,7 @@
                 </tbody>
             </table>
             <div class="d-flex justify-content-center">
-	            <button type="button" class="btn waves-effect waves-light btn-secondary mb-2 mr-3" onclick="history.back();">취소</button>
+	            <button type="button" class="btn waves-effect waves-light btn-secondary mb-2 mr-3" onclick="location.href='travelList'">목록</button>
 	            <button type="button" class="btn waves-effect waves-light btn-secondary mb-2" onclick="location.href='travelForm?kind=up&tl_idx=${tr.getTl_idx()}'">수정</button>
             </div>
         </div> 

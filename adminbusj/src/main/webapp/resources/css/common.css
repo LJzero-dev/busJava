@@ -18,3 +18,38 @@ table th.bg-gray, table td.bg-gray {
 .padding-size-sm td { padding:10px; }
 
 .padding-0 { padding:0; }
+
+.filebox {display: flex;}
+.filebox .upload-name {
+    display: none;
+    height: 40px;
+    padding: 0 10px;
+    vertical-align: middle;
+    border: 1px solid #dddddd;
+    width: 78%;
+    color: #999999;
+}
+.filebox label {
+    display: inline-block;
+    padding: 10px 20px;
+    vertical-align: middle;
+    background-color: #e6e6e6;
+    cursor: pointer;
+    height: 40px;
+    width: 150px;
+    margin-left: 10px;
+    font-weight: 600;
+}
+.filebox input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+
+.file-wrap { border-top: 1px solid #e6e6e6; padding: 20px 0;}
+.file-wrap > * { margin-right: 20px; }
+.file-wrap > a:hover { text-decoration: underline; }
+.file-wrap > span { font-weight: 600; }

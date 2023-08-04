@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="../_inc/head.jsp" %>
 <style>
 .changePointer {
@@ -20,6 +21,115 @@ function changePointer(){
 	   $(this).removeClass('changePointer');
 	});
 }
+
+function makeCtgr() {
+// 검색폼의 조건들을 쿼리스트링 sch의 값으로 만듦
+	var frm = document.frmSch;	var sch = "";
+	
+	// 브랜드 조건
+	var arr = frm.schctgr;	// brand라는 이름의 컨트롤들을 배열로 받아옴
+	var isFirst = true;		// brand 체크박스들 중 첫번째로 선택한 체크박스인지 여부를 저장
+	for (var i = 0; i < arr.length; i++) {
+		if (arr[i].checked) {
+			if(isFirst) {	// 첫번째로 선택한 체크박스 이면
+				isFirst = false;
+				sch += arr[i].value;
+			} else {
+				sch += ":" + arr[i].value;
+			}
+		}
+	}
+	
+	document.frmSch.hiddenCtgr.value = sch;
+	document.frmSch.submit();
+}
+
+function chkAll(all) {
+// 전체 선택 체크박스 클릭시 모든 체크박스에 대한 체크 여부를 처리하는 함수
+	var arr = document.frm.chk;
+
+	for (var i = 1; i < arr.length; i++) {
+		arr[i].checked = all.checked;
+	}
+}
+
+function chkOne(one) {
+// 특정 체크박스 클릭시 체크 여부에 따른 '전체 선택' 체크박스의 체크 여부를 처리하는 함수
+	var frm = document.frm;
+	var all = frm.chechkall;	// '전체 선택' 체크박스 객체
+	if (one.checked) {	// 특정 체크박스를 체크했을 경우
+		var arr = frm.chk;
+		var isChk = true;
+		for (var i = 1; i < arr.length; i++) {	// hidden으로 chk값을 넣엇을 경우 i = 1로 바꿔줘야함
+			if (arr[i].checked == false) {
+				isChk = false;		break;
+			}
+		}
+		all.checked = isChk;
+	} else {	// 특정 체크박스를 체크 해체했을 경우
+		all.checked = false;
+	}
+}
+
+function ctgrChkAll(all) {
+// 전체 선택 체크박스 클릭시 모든 체크박스에 대한 체크 여부를 처리하는 함수
+	var arr = document.frmSch.schctgr;
+
+	for (var i = 1; i < arr.length; i++) {
+		arr[i].checked = all.checked;
+	}
+}
+
+function ctgrChkOne(one) {
+// 특정 체크박스 클릭시 체크 여부에 따른 '전체 선택' 체크박스의 체크 여부를 처리하는 함수
+	var frmSch = document.frmSch;
+	var all = document.getElementById("ctgr1");	// '전체 선택' 체크박스 객체
+	if (one.checked) {	// 특정 체크박스를 체크했을 경우
+		var arr = frmSch.schctgr;
+		var isChk = true;
+		for (var i = 1; i < arr.length; i++) {	// hidden으로 chk값을 넣엇을 경우 i = 1로 바꿔줘야함
+			if (arr[i].checked == false) {
+				isChk = false;		break;
+			}
+		}
+		all.checked = isChk;
+	} else {	// 특정 체크박스를 체크 해체했을 경우
+		all.checked = false;
+	}
+}
+
+function isviewDel(tlidx) {
+// 장바구니내 특정 상품을 삭제하는 함수
+	if (confirm("정말 삭제하시겠습니까?")) {
+		$.ajax({
+			type : "POST", url : "./travelDel", data : { "tlidx" : tlidx }, 
+			success : function(chkRs) {
+				if (chkRs == 0) {
+					alert("게시여부 미게시로 변경 실패했습니다.\n다시 시도하세요.");
+				}
+				location.reload();
+			}
+		});
+	}
+}
+
+function getSelectedChk() {
+// 체크박스들 중 선택된 체크박스들의 값(value)들을 쉼표로 구분하여 문자열로 리턴하는 함수
+	var chk = document.frm.chk;
+	var idxs = "";	// chk컨트롤 배열에서 선택된 체크박스의 값들을 누적 저장할 변수
+	for (var i = 1; i < chk.length; i++) {	// hidden으로 chk 하나 만들엇을경우 1부터
+		if (chk[i].checked) idxs += "," + chk[i].value;
+	}
+	return idxs.substring(1);
+}
+
+function chkDel() {
+// 사용자가 선택한 상품(들)을 삭제하는 함수
+	var tlidx = getSelectedChk();
+	// 선택한 체크박스의 oc_idx 값들이 쉼표를 기준으로 '1,2,3,4' 형태의 문자열로 저장됨
+	if (tlidx == "")	alert("삭제할 상품을 선택하세요.");
+	else				isviewDel(tlidx);
+}
 </script>
 <div class="page-wrapper">
 <div class="page-breadcrumb">
@@ -31,6 +141,8 @@ function changePointer(){
 	<div class="row">
     <div class="col-lg-12">
         <div class="card">
+        <form name="frmSch">
+        <input type="hidden" id="hiddenCtgr" name="hiddenCtgr" value="" />
             <table class="table table-sm custom">
                 <colgroup>
                     <col width="20%">
@@ -41,12 +153,12 @@ function changePointer(){
                         <th scope="row" class="text-center bg-gray align-middle">검색어</th>
                         <td class="text-left">
                             <div class="d-flex">
-                                <select class="form-control w-auto" id="">
-                                    <option>전체</option>
-                                    <option>지역</option>
-                                    <option>장소명</option>
+                                <select class="form-control w-auto" name="schtype">
+                                    <option value="all" <c:if test="${pi.getSchtype() == 'all' }">selected='selected'</c:if>>전체</option>
+                                    <option value="area" <c:if test="${pi.getSchtype() == 'area' }">selected='selected'</c:if>>지역</option>
+                                    <option value="title" <c:if test="${pi.getSchtype() == 'title' }">selected='selected'</c:if>>장소명</option>
                                 </select>
-                                <input type="text" class="form-control">
+                                <input type="text" name="keyword" value="${pi.getKeyword() }" class="form-control">
                             </div>
                         </td> 
                     </tr>
@@ -54,28 +166,46 @@ function changePointer(){
                         <th scope="row" class="text-center bg-gray">분류</th>
                         <td class="text-left">
                         <div class="d-flex">
+                        <c:set var="ct" value="${pi.getSchctgr() }" />
+						<c:set var="arrct" value="${fn:split(ct, ':')}" />
                             <div class="form-check form-check-inline">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                    <label class="custom-control-label" for="customCheck1">전체</label>
+                                    <input type="checkbox" name="schctgr" value="all" class="custom-control-input" id="ctgr1"
+                                    onclick="ctgrChkAll(this);" 
+                                     <c:forEach var="v" items="${arrct}">
+                                    <c:if test="${v == 'all' }"> checked="checked"</c:if>
+                                    </c:forEach> />
+                                    <label class="custom-control-label" for="ctgr1">전체</label>
                                 </div>
                             </div>
                             <div class="form-check form-check-inline">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                    <label class="custom-control-label" for="customCheck1">맛집</label>
+                                    <input type="checkbox" name="schctgr" value="맛집" class="custom-control-input" id="ctgr2" 
+                                    onclick="ctgrChkOne(this);"
+                                    <c:forEach var="v" items="${arrct}">
+                                    <c:if test="${v == '맛집' }"> checked="checked"</c:if>
+                                    </c:forEach> />
+                                    <label class="custom-control-label" for="ctgr2">맛집</label>
                                 </div>
                             </div>
                             <div class="form-check form-check-inline">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                    <label class="custom-control-label" for="customCheck1">명소</label>
+                                    <input type="checkbox" name="schctgr" value="명소" class="custom-control-input" id="ctgr3" 
+                                    onclick="ctgrChkOne(this);"
+                                    <c:forEach var="v" items="${arrct}">
+                                    <c:if test="${v == '명소' }"> checked="checked"</c:if>
+                                    </c:forEach> />
+                                    <label class="custom-control-label" for="ctgr3">명소</label>
                                 </div>
                             </div>
                             <div class="form-check form-check-inline">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                    <label class="custom-control-label" for="customCheck1">액티비티</label>
+                                    <input type="checkbox" name="schctgr" value="액티비티" class="custom-control-input" id="ctgr4" 
+                                    onclick="ctgrChkOne(this);" 
+                                    <c:forEach var="v" items="${arrct}">
+                                    <c:if test="${v == '액티비티' }"> checked="checked"</c:if>
+                                    </c:forEach> />
+                                    <label class="custom-control-label" for="ctgr4">액티비티</label>
                                 </div>
                             </div>
                             </div>
@@ -85,10 +215,10 @@ function changePointer(){
                         <th scope="row" class="text-center bg-gray align-middle">게시여부</th>
                         <td class="text-left">
                             <div class="d-flex">
-                                <select class="form-control w-auto" id="">
-                                    <option>전체</option>
-                                    <option>게시</option>
-                                    <option>미게시</option>
+                                <select class="form-control w-auto" name="isview" id="">
+                                    <option value="">전체</option>
+                                    <option value="y" <c:if test="${pi.getIsview() == 'y' }">selected='selected'</c:if> >게시</option>
+                                    <option value="n" <c:if test="${pi.getIsview() == 'n' }">selected='selected'</c:if>>미게시</option>
                                 </select>
                             </div>
                         </td> 
@@ -96,18 +226,21 @@ function changePointer(){
                 </tbody>
             </table>
             <div class="d-flex justify-content-center">
-            <button type="button" class="btn waves-effect waves-light btn-secondary mb-2">검색</button>
+            <button type="button" class="btn waves-effect waves-light btn-secondary mb-2" onclick="makeCtgr();">검색</button>
             </div>
+            </form>
         </div> 
     </div>
 </div>
 <div class="row">
 <div class="col-lg-12 text-right mb-2">
 	<button type="button" class="btn waves-effect waves-light btn-primary btn-lg" onclick="location.href='travelForm?kind=in'">글등록</button>
-	<button type="button" class="btn waves-effect waves-light btn-secondary btn-lg ml-2" value="">미게시로변경</button>
+	<button type="button" class="btn waves-effect waves-light btn-secondary btn-lg ml-2" onclick="chkDel();" value="">미게시로변경</button>
 </div>
     <div class="col-lg-12">
         <div class="card">
+        <form name="frm">
+        <input type="hidden" name="chk" value="" />
             <table id="table" class="table text-center mb-0">
                 <colgroup>
                     <col width="5%">
@@ -120,7 +253,7 @@ function changePointer(){
                 </colgroup>
                 <thead class="bg-primary text-white">
                 <tr>
-                    <th><input type="checkbox" style="width:18px; height:18px;" /></th>
+                    <th><input type="checkbox" name="chechkall" style="width:18px; height:18px;" onclick="chkAll(this);" /></th>
                     <th>No</th>
                     <th>지역</th>
                     <th>분류</th>
@@ -132,12 +265,12 @@ function changePointer(){
             	<c:if test="${travelList.size() > 0 }">
 					<c:forEach items="${travelList }" var="tl" varStatus="status">
 		                <tbody class="border border-primary">
-		                <tr class="tr" onclick="location.href='travelView?tl_idx=${tl.getTl_idx() }'">
-		                    <td><input type="checkbox" style="width:18px; height:18px;" /></td>
+		                <tr class="tr">
+		                    <td><input type="checkbox" name="chk" value="${tl.getTl_idx() }" style="width:18px; height:18px;" onclick="chkOne(this);" /></td>
 		                    <td>${pi.getNum() - status.index}</td>
 		                    <td>${tl.getTl_area()}</td>
 		                    <td><span class="badge badge-pill badge-primary">${tl.getTl_ctgr() }</span></td>
-		                    <td class="text-left">${tl.getTl_title()}</td>
+		                    <td class="text-left"><a href="travelView?tl_idx=${tl.getTl_idx() }">${tl.getTl_title()}</a></td>
 							<td>${tl.getTl_date() }</td>
 							<td>${tl.getTl_isview() }</td>
 		                </tr>
@@ -173,6 +306,7 @@ function changePointer(){
 				</ul>
 			</nav>
             </div>
+        </form>
         </div> 
     </div>
 </div>
