@@ -159,7 +159,7 @@ public class TravelCtrl {
 		tr.setTl_img(files);
 		
 		HttpSession session = request.getSession();
-		AdminInfo loginInfo = (AdminInfo) session.getAttribute("loginInfo");
+		AdminInfo loginInfo = (AdminInfo)session.getAttribute("loginInfo");
 		tr.setAi_idx(loginInfo.getAi_idx());
 		if (kind.equals("up")) {
 			tr.setTl_idx(Integer.parseInt(request.getParameter("tl_idx")));

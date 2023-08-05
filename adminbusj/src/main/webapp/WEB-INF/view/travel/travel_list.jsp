@@ -10,8 +10,6 @@
 <script>
 $(document).ready(function(){
 	changePointer();
-	clickTd();
-	clickTr();
 })
  
 function changePointer(){
@@ -285,24 +283,38 @@ function chkDel() {
 		           	</tbody>
 				</c:if>
             </table>
+            
+            
             <div class="d-flex justify-content-center mt-2">
             <nav aria-label="Page navigation example m-auto">
 				<ul class="pagination m-auto">
+				<c:if test="${travelList.size() > 0 }">
 				    <li class="page-item">
-				        <a class="page-link" href="javascript:void(0)" aria-label="Previous">
+				    <c:choose>
+						<c:when test="${ pi.getCpage() == 1 }">
+						<a class="page-link" href="travelList?cpage=1${pi.getSchargs()}" aria-label="Previous"></c:when>
+						<c:when test="${ pi.getCpage() > 1 }">
+						<a class="page-link" href="travelList?cpage=${pi.getCpage() - 1}${pi.getSchargs()}" aria-label="Previous"></c:when>
+					</c:choose>
 				            <span aria-hidden="true">«</span>
 				            <span class="sr-only">Previous</span>
 				        </a>
 				    </li>
-				    <li class="page-item"><a class="page-link" href="javascript:void(0)">1</a></li>
-				    <li class="page-item"><a class="page-link" href="javascript:void(0)">2</a></li>
-				    <li class="page-item"><a class="page-link" href="javascript:void(0)">3</a></li>
+				    <c:forEach var="i" begin="${pi.getSpage() }" end="${pi.getSpage() + pi.getBsize() - 1 <= pi.getPcnt() ? pi.getSpage() + pi.getBsize() - 1 : pi.getPcnt()}">
+							<li class="page-item"><a class="page-link" href="travelList?cpage=${i }${pi.getSchargs() }">${i }</a></li>
+					</c:forEach>
 				    <li class="page-item">
-				        <a class="page-link" href="javascript:void(0)" aria-label="Next">
+				    <c:choose>
+						<c:when test="${pi.getCpage() == pi.getPcnt()}">
+						<a class="page-link" href="travelList?cpage=${pi.getCpage()}${pi.getSchargs() }" aria-label="Next"></c:when>
+						<c:when test="${pi.getCpage() <  pi.getPcnt()}">
+						<a class="page-link" href="travelList?cpage=${pi.getCpage() + 1 }${pi.getSchargs() }" aria-label="Next"></c:when>
+					</c:choose>
 				            <span aria-hidden="true">»</span>
 				            <span class="sr-only">Next</span>
 				        </a>
 				    </li>
+				</c:if>
 				</ul>
 			</nav>
             </div>
