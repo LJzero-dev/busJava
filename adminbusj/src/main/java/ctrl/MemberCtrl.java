@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.*;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import svc.*;
 import vo.*;
@@ -23,7 +24,7 @@ public class MemberCtrl {
 	}
 	
 	@GetMapping("/memberList")
-	public String memberList(HttpServletRequest request) throws Exception {
+	public String memberList(Model model, HttpServletRequest request) throws Exception {
 		request.setCharacterEncoding("utf-8");
 		int cpage = 1, pcnt = 0, spage = 0, rcnt = 0, psize = 10, bsize = 10, num = 0;
 		//현제페이지 번호, 페이지 수, 시작페이지 , 게시글수, 페이지크기(내가 정하는 값), 블록크기(내가 정하는 값), 번호등을 저장할 변수
@@ -34,11 +35,10 @@ public class MemberCtrl {
 		String schtype = request.getParameter("schtype");
 		String keyword = request.getParameter("keyword");
 		String schctgr = request.getParameter("hiddenCtgr");
-		/* String[] check = request.getParameterValues("chk"); */
 		String where = " where 1 = 1 ";
 		String args = "", schargs = "";
 		
-		System.out.println(schctgr);
+		System.out.println(schctgr); 
 		
 		if (schctgr != null && !schctgr.equals("")) {
 			URLEncoder.encode(schctgr, "UTF-8");
@@ -57,14 +57,6 @@ public class MemberCtrl {
 				where += ") ";
 			schargs = "&schctgr=" + schctgr;
 		}
-		
-		/*
-		 * if (check != null) { for (int i = 0; i < check.length; i++) { if (i == 0 ) {
-		 * where += " where (mi_status = '" + check[i] + "' "; } else { where +=
-		 * " or mi_status = '" + check[i] + "' "; } } where += ")"; }
-		 */
-		
-		/* System.out.println(where); */
 		
 		if(schtype == null || keyword == null) {
 			schtype = ""; keyword = ""; 
@@ -100,11 +92,12 @@ public class MemberCtrl {
 		pi.setKeyword(keyword);
 		pi.setSchargs(schargs);
 		pi.setSchtype(schtype);
-		pi.setSchctgr(schctgr);
+		/*pi.setSchctgr(schctgr);*/
 		// 페이징에 필요한 정보들과 검색조건을 PageInfo형 인스턴스에 저장
 		
 		request.setAttribute("memberList", memberList);
 		request.setAttribute("pi", pi);
+		model.addAttribute("schctgr", schctgr);
 		/* request.setAttribute("check", check); */
 		
 		return "member/member_list";

@@ -6,11 +6,10 @@
 request.setCharacterEncoding("utf-8");
 List<MemberInfo> memberList = (List<MemberInfo>) request.getAttribute("memberList");
 PageInfo pi = (PageInfo)request.getAttribute("pi");
-/* String[] check = request.getParameterValues("check"); */
 
-/* String cb = pi.getSchctgr();
-String[] arrcb = cb.split(":"); */
-
+String cb = (String)request.getAttribute("schctgr");
+if (cb == null) cb = "all:정상:휴면:탈퇴";  
+String[] arrcb = cb.split(":");
 %>	
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.4.js"></script>
 <script>
@@ -53,55 +52,65 @@ document.addEventListener("click", function(e) {
     }
 });
 
-function chkval(frm) {
-	var chk = frm.chk; //schtype라는 이름이 2개이상이면 배열로 들어감 
-	var isChecked = false;
-	for (var i = 0 ; i < chk.length ; i++ ){
-		if (chk[i].checked){
-			isChecked = true;
-			break;
-		}
-	}
-	if (!isChecked) {
-		alert("검색조건을 선택해주세요.");
-		return false;
-	}
-	var keyword = frm.keyword.value;
-	if (keyword == "") {
-		alert("검색어를 입력하세요.");
-		frm.keyword.focus(); 
-		return false;
-	}
-	return true;
-}
+window.onload = function() {
+    document.getElementById('schForm').addEventListener('submit', function(event) {
 
-function makeCtgr() {
-    // 검색폼의 조건들을 쿼리스트링 sch의 값으로 만듦
-    var frm = document.frmSch;
-    var sch = "";
-    
-    // 브랜드 조건
-    var arr = frm.chk;
-    var isFirst = true;
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i].checked) {
-            if(isFirst) {
-                isFirst = false;
-                sch += arr[i].value;
-            } else {
-                sch += ":" + arr[i].value;
+        function chkval() {
+            var frm = document.schForm;
+            var chk = frm.chk; //schtype라는 이름이 2개이상이면 배열로 들어감 
+            var isChecked = false;
+            for (var i = 0 ; i < chk.length ; i++ ){
+                if (chk[i].checked){
+                    isChecked = true;
+                    break;
+                }
             }
+            if (!isChecked) {
+                alert("검색조건을 선택해주세요.");
+                return false;
+            }
+            var keyword = frm.keyword.value;
+            if (keyword == "") {
+                alert("검색어를 입력하세요.");
+                frm.keyword.focus(); 
+                return false;
+            }
+            return true;
         }
-    }
 
-    console.log(sch);  // sch 값을 출력
+        function makeCtgr() {
+            // 검색폼의 조건들을 쿼리스트링 sch의 값으로 만듦
+            var frm = document.schForm;
+            var sch = "";
+            // 브랜드 조건
+            var arr = frm.chk;
+            var isFirst = true;
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i].checked) {
+                    if(isFirst) {
+                        isFirst = false;
+                        sch += arr[i].value;
+                    } else {
+                        sch += ":" + arr[i].value;
+                    }
+                }
+            }
 
-    document.frmSch.hiddenCtgr.value = sch;
+              // sch 값을 출력
 
-    console.log(document.frmSch.hiddenCtgr.value);  // hiddenCtgr 필드의 값을 출력
+            document.schForm.hiddenCtgr.value = sch;  
+              // hiddenCtgr 필드의 값을 출력
+        }
 
-    document.frmSch.submit();
-}
+        if (!chkval()) {
+            event.preventDefault();
+            return;
+        }
+
+        makeCtgr();
+    });
+};
+
 
 </script>
 <div class="page-wrapper">
@@ -115,7 +124,7 @@ function makeCtgr() {
 <div class="row">
 <div class="col-lg-12">
     <div class="card">
-      <form name="frmSch" onsubmit="return chkval(this);">
+      <form id="schForm" name="schForm" onsubmit="">
       <input type="hidden" id="hiddenCtgr" name="hiddenCtgr" value="" />
         <table class="table table-sm custom">
             <colgroup>
@@ -142,28 +151,28 @@ function makeCtgr() {
                         <div class="form-check form-check-inline">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" value="all" id="all" name="chk" onclick="chkAll(this);"
-                                	<%-- <%for (int k = 0; k < arrcb.length; k++) { if (arrcb[k].equals("all")) { %> checked="checked" <% } } %> --%> >
+                       			<% for (int k = 0; k < arrcb.length; k++) { if (arrcb[k].equals("all")) { %> checked="checked" <%} } %> >
                                 <label class="custom-control-label" for="all">전체</label>
                             </div>
                         </div>
                         <div class="form-check form-check-inline">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" value="정상" id="customCheck1" name="chk"
-                                <%-- <%for (int k = 0; k < arrcb.length; k++) { if (arrcb[k].equals("정상")) { %> checked="checked" <% } } %> --%>>
+                                <%for (int k = 0; k < arrcb.length; k++) { if (arrcb[k].equals("정상")) { %> checked="checked" <% } } %> >
                                 <label class="custom-control-label" for="customCheck1">정상</label>
                             </div>
                         </div>
                         <div class="form-check form-check-inline">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" value="휴면" id="customCheck2" name="chk"
-                               <%--  <%for (int k = 0; k < arrcb.length; k++) { if (arrcb[k].equals("휴면")) { %> checked="checked" <% } } %> --%>>
+                                <%for (int k = 0; k < arrcb.length; k++) { if (arrcb[k].equals("휴면")) { %> checked="checked" <% } } %>>
                                 <label class="custom-control-label" for="customCheck2">휴면</label>
                             </div>
                         </div>
                         <div class="form-check form-check-inline">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" value="탈퇴" id="customCheck3" name="chk"
-                                <%-- <%for (int k = 0; k < arrcb.length; k++) { if (arrcb[k].equals("탈퇴")) { %> checked="checked" <% } } %> --%>>
+                                <%for (int k = 0; k < arrcb.length; k++) { if (arrcb[k].equals("탈퇴")) { %> checked="checked" <% } } %>>
                                 <label class="custom-control-label" for="customCheck3">탈퇴</label>
                             </div>
                         </div>
@@ -336,7 +345,7 @@ function qwer (elem) {
 	                    tableHTML += "</tr>";
 	                });
 	                tableHTML += "</tbody></table>";
-	                tableHTML += "<button type='submit' class='btn waves-effect waves-light btn-primary btn-lg m-auto' >수정</button>";  
+	                tableHTML += "<button type='submit' class='btn waves-effect waves-light btn-primary btn-lg m-auto' >수정</button>&nbsp;&nbsp;&nbsp;";  
 	                tableHTML += "<button type='button' class='btn waves-effect waves-light btn-primary btn-lg m-auto' onclick='location.href=\"memberList\"'>확인</button>";
 				
 				$("#memberDetail").html(tableHTML);
