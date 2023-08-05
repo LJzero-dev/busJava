@@ -13,7 +13,7 @@ public class IndexDao {
 		this.jdbc = new JdbcTemplate(dataSource);
 	}
 	public List<String> getSales() {
-		String sql = "SELECT 1, concat(count(ri_idx), \":\",  sum(cr_pmoney + cr_pay)) sales FROM t_count_rinfo WHERE LEFT(cr_date, 10) = adddate(curdate(), -1) " + 
+		String sql = "SELECT 1, concat(count(ri_idx), \":\",  IFNULL(SUM(cr_pmoney + cr_pay), 0)) sales FROM t_count_rinfo WHERE LEFT(cr_date, 10) = adddate(curdate(), -1) " + 
 				"UNION " + 
 				"SELECT 2, concat(count(ri_idx), \":\",  sum(cr_pmoney + cr_pay)) sales FROM t_count_rinfo WHERE LEFT(cr_date, 10) >= adddate(curdate(), -7) " + 
 				"UNION " + 
