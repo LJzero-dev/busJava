@@ -4,14 +4,33 @@
 <%
 request.setCharacterEncoding("utf-8");
 ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
+ReservationInfo ri2 = (ReservationInfo) session.getAttribute("ri2");
+String selectedSeats = request.getParameter("selectedSeats");
+String adultCnt1 = "어른", teenCnt1 = "", childCnt1 = "", adultCnt2 = "", teenCnt2 = "", childCnt2 = "";
+if(ri1.getRi_acnt() > 0 && (ri1.getRi_scnt() > 0 || ri1.getRi_ccnt() > 0)) {
+	adultCnt1 = "어른 " + ri1.getRi_acnt() + "명, ";
+} else if (ri1.getRi_acnt() > 0) {
+	adultCnt1 = "어른 " + ri1.getRi_acnt() + "명";
+} else if (ri1.getRi_acnt() <= 0) adultCnt1 = "";
+
+if(ri1.getRi_scnt() > 0 && ri1.getRi_ccnt() > 0) {
+	teenCnt1 = "청소년 " + ri1.getRi_scnt() + "명, ";
+} else if (ri1.getRi_scnt() > 0) {
+	teenCnt1 = "청소년 " + ri1.getRi_scnt() + "명";
+}
+if(ri1.getRi_ccnt() > 0 ) {
+	childCnt1 = "아동 " + ri1.getRi_ccnt() + "명";
+}
 %>
 <section class="probootstrap_section">
 <div class="container">
 	<div class="row text-center mb-5 probootstrap-animate fadeInUp probootstrap-animated">
 		<div class="col-md-12"><h2 class="border-bottom probootstrap-section-heading">시외버스 예매</h2></div>
-		<div class="col-md-8 m-auto">
-			<div class="progress-bar-custom">
-				<div class="progress-step">
+		<div class="col-md-12">
+<% if (ri1.getMode().equals("p")) { // 편도일 경우 %>
+			<div class="col-md-8 m-auto">
+			<div class="progress-bar-custom 1">
+				<div class="progress-step ">
 					<div class="step-count"></div>
 					<div class="step-description">정보 입력</div>
 				</div>
@@ -31,8 +50,43 @@ ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
 					<div class="step-count"></div>
 					<div class="step-description">예매 결과</div>
 				</div>
+			</div>
+			</div>
+<% } else { // mode.equals("w")왕복일 경우 %>   
+			<div class="col-md-12 m-auto">
+			<div class="progress-bar-custom 2">
+				<div class="progress-step">
+					<div class="step-count"></div>
+					<div class="step-description">정보 입력</div>
+				</div>
+				<div class="progress-step">
+					<div class="step-count"></div>
+					<div class="step-description">가는 날 배차 조회</div>
+				</div>
+				<div class="progress-step">
+					<div class="step-count"></div>
+					<div class="step-description">가는 날 좌석 선택</div>
+				</div>
+				<div class="progress-step">
+					<div class="step-count"></div>
+					<div class="step-description">오는 날 배차 조회</div>
+				</div>
+				<div class="progress-step">
+					<div class="step-count"></div>
+					<div class="step-description">오는 날 좌석 선택</div>
+				</div>
+				<div class="progress-step is-active">
+					<div class="step-count"></div>
+					<div class="step-description">확인/결제</div>
+				</div>
+				<div class="progress-step">
+					<div class="step-count"></div>
+					<div class="step-description">예매 결과</div>
 				</div>
 			</div>
+			</div>
+<% } %>
+		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-12 text-center mb-5">
@@ -51,22 +105,56 @@ ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
 				<tbody>
 				<tr>
 					<td><span class="badge badge-danger">출발지</span></td>
-					<td>서울</td>
+					<td><%=ri1.getSspot() %></td>
 					<td><span class="badge badge-primary">도착지</span></td>
-					<td>부산</td>
-					<td>2023.07.06 목</td>
-					<td>출발 06:45</td>
-					<td>도착 10:45</td>
-					<td>금호고속</td>
+					<td><%=ri1.getEspot() %></td>
+					<td><%=ri1.getSdate() %></td>
+					<td>출발 <%=ri1.getStime() %></td>
+					<td>도착 <%=ri1.getEtime() %></td>
+					<td><%=ri1.getComname() %></td>
 				</tr>
 				<tr>
 					<td colspan="2">예매 매수</td>
-					<td colspan="2" class="text-left">어른1, 청소년1, 아동1</td>
+					<td colspan="2" class="text-left">
+					<%=adultCnt1 %><%=teenCnt1 %><%=childCnt1 %></td>
 					<td colspan="2">예매 좌석</td>
-					<td colspan="2" class="text-left">15, 16, 17</td>
+					<td colspan="2" class="text-left"><%=selectedSeats %></td>
 				</tr>
 				</tbody>
 			</table>
+<%if (ri1.getMode().equals("w")) {%>
+		<h5 class="text-left">가는편</h5>
+			<table class="table">
+				<colgroup>
+					<col width="5%">
+					<col width="15%">
+					<col width="5%">
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
+				</colgroup>
+				<tbody>
+				<tr>
+					<td><span class="badge badge-danger">출발지</span></td>
+					<td><%=ri2.getSspot() %></td>
+					<td><span class="badge badge-primary">도착지</span></td>
+					<td><%=ri2.getEspot() %></td>
+					<td><%=ri2.getSdate() %></td>
+					<td>출발 <%=ri2.getStime() %></td>
+					<td>도착 <%=ri2.getEtime() %></td>
+					<td><%=ri2.getComname() %></td>
+				</tr>
+				<tr>
+					<td colspan="2">예매 매수</td>
+					<td colspan="2" class="text-left">
+					<%=adultCnt2 %><%=teenCnt2 %><%=childCnt2 %></td>
+					<td colspan="2">예매 좌석</td>
+					<td colspan="2" class="text-left"><%=selectedSeats %></td>
+				</tr>
+				</tbody>
+			</table>
+<%} %>			
 		</div>
 		<div class="col-md-12 mb-3">
 		<h5 class="text-left"><span class="text-danger">*</span>서비스 이용약관 동의</h5>

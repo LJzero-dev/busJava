@@ -1,17 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*" %>
+<%@ page import = "java.util.*" %>
 <%@ include file="../_inc/head.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
-String mode = request.getParameter("mode");
-String ri_sday1 = request.getParameter("ri_sday1");
-String ri_sday2 = request.getParameter("ri_sday2");
-String ri_sday3 = request.getParameter("ri_sday3");
-String btsname = request.getParameter("sPoint");
-String btename = request.getParameter("ePoint");
-
 List<ReservationStep2> scheduleList = (List<ReservationStep2>)request.getAttribute("scheduleList");
-ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
+ReservationInfo ri2 = (ReservationInfo) session.getAttribute("ri2");
 
 int bsidx = 0;
 String etime = "";
@@ -28,39 +21,13 @@ tr:hover {
 		<div class="col-md-12">
 		<h2 class="border-bottom mb-5 probootstrap-section-heading">시외버스 예매</h2></div>
 		<div class="col-md-12">
-<% if (mode.equals("p")) { // 편도일 경우 %>
-			<div class="col-md-8 m-auto">
-			<div class="progress-bar-custom 1">
-				<div class="progress-step ">
-					<div class="step-count"></div>
-					<div class="step-description">정보 입력</div>
-				</div>
-				<div class="progress-step is-active">
-					<div class="step-count"></div>
-					<div class="step-description">배차 조회</div>
-				</div>
-				<div class="progress-step">
-					<div class="step-count"></div>
-					<div class="step-description">좌석 선택</div>
-				</div>
-				<div class="progress-step">
-					<div class="step-count"></div>
-					<div class="step-description">확인/결제</div>
-				</div>
-				<div class="progress-step">
-					<div class="step-count"></div>
-					<div class="step-description">예매 결과</div>
-				</div>
-			</div>
-			</div>
-<% } else { // mode.equals("w")왕복일 경우 %>   
 			<div class="col-md-12 m-auto">
 			<div class="progress-bar-custom 2">
 				<div class="progress-step">
 					<div class="step-count"></div>
 					<div class="step-description">정보 입력</div>
 				</div>
-				<div class="progress-step is-active">
+				<div class="progress-step">
 					<div class="step-count"></div>
 					<div class="step-description">가는 날 배차 조회</div>
 				</div>
@@ -68,7 +35,7 @@ tr:hover {
 					<div class="step-count"></div>
 					<div class="step-description">가는 날 좌석 선택</div>
 				</div>
-				<div class="progress-step">
+				<div class="progress-step is-active">
 					<div class="step-count"></div>
 					<div class="step-description">오는 날 배차 조회</div>
 				</div>
@@ -86,12 +53,11 @@ tr:hover {
 				</div>
 			</div>
 			</div>
-<% } %>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-12 text-center mb-5">
-		<h5 class="text-left">가는편</h5>
+		<h5 class="text-left">오는편</h5>
 		<table class="table">
 			<colgroup>
 				<col width="5%">
@@ -103,15 +69,15 @@ tr:hover {
 			<tbody>
 			<tr class="border-b">
 				<td class="align-middle"><span class="badge badge-danger">출발지</span></td>
-				<td class="align-middle"><%=btsname %></td>
+				<td class="align-middle"><%=ri2.getSspot() %></td>
 				<td class="align-middle"><span class="badge badge-primary">도착지</span></td>
-				<td class="align-middle"><%=btename %></td>
+				<td class="align-middle"><%=ri2.getEspot() %></td>
 				<td class="text-left">
 					<div class="w-50">
 					<div class="probootstrap-date-wrap">
 						<span class="icon ion-calendar"></span> 
-							<input type="text" id="sday1" class="form-control" value="<%=ri_sday1 %>" readonly >
-							<input type="hidden" id="ri_sday1" name="ri_sday1" value="" />
+							<input type="text" id="sday3" class="form-control" value="<%=ri2.getSdate() %>" readonly >
+							<input type="hidden" id="ri_sday3" name="ri_sday3" value="" />
 					</div>
 					</div>
 				</td>	
@@ -161,7 +127,8 @@ tr:hover {
 				<td colspan="6">해당 노선의 시간표가 없습니다.</td>
 			</tr>
 <% } %>				
-			</tbody>	
+			</tbody>
+<!-- 		</form>	 -->	
 		</table>
 		
 <!-- 페이지네이션 영역 -->
@@ -209,7 +176,7 @@ function getToday(){
 
 $(document).ready(function() {
 	
-	$("#sday1").datepicker({
+	$("#sday3").datepicker({
 		format: "yyyy.mm.dd",
 		autoclose: true,
 		startDate: "0d",
@@ -219,7 +186,7 @@ $(document).ready(function() {
 		weekStart: 1,
 		})
 	    .on('changeDate', function(e) {	
-	      $("#ri_sday1").val($(this).val());	// 왕복 가는 날, 오는 날 값 설정
+	      $("#ri_sday3").val($(this).val());	// 왕복 가는 날, 오는 날 값 설정
 	    });
 
 });
@@ -228,7 +195,7 @@ function rowClicked(bsidx, etime, stime, bcname, bilevel, bladult, totalseat, le
 // 클릭한 행의 데이터를 가져와서 폼을 새롭게 생성하여 제출하기
 	var form = document.createElement("form");
 	form.method = "post";
-	form.action = "sTicketingStep03";
+	form.action = "sTicketingStep05";
 	
 	if (leftseat == 0) {
 		alert("예매 가능한 좌석이 없습니다.");
@@ -286,8 +253,8 @@ function rowClicked(bsidx, etime, stime, bcname, bilevel, bladult, totalseat, le
 	
 	var ri_sday1Input = document.createElement("input");
 	ri_sday1Input.type = "hidden";
-	ri_sday1Input.name = "ri_sday1";
-	ri_sday1Input.value = document.getElementById("ri_sday1").value;
+	ri_sday1Input.name = "ri_sday3";
+	ri_sday1Input.value = document.getElementById("ri_sday3").value;
 	form.appendChild(ri_sday1Input);
 	
 	// form 서버로 제출

@@ -6,11 +6,7 @@
 <%
 request.setCharacterEncoding("utf-8");
 ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
-String mode = ri1.getMode();
-
-String action = "";
-if (mode.equals("p"))	action = "sTicketingPay";	// 편도일 경우 결제하기로 이동
-else					action = "sTicketingStep04";	// 왕복일 경우 시간표선택하기로 이동
+ReservationInfo ri2 = (ReservationInfo)session.getAttribute("ri2");
 
 int bsidx = Integer.parseInt(request.getParameter("bsidx"));	// 시간표인덱스 번호
 int totalseat = Integer.parseInt(request.getParameter("totalseat"));	// 전체좌석
@@ -25,32 +21,6 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 		<div class="col-md-12">
 		<h2 class="border-bottom mb-5 probootstrap-section-heading">시외버스 예매</h2></div>
 		<div class="col-md-12">
-<% if (mode.equals("p")) { // 편도일 경우 %>
-			<div class="col-md-8 m-auto">
-			<div class="progress-bar-custom 1">
-				<div class="progress-step ">
-					<div class="step-count"></div>
-					<div class="step-description">정보 입력</div>
-				</div>
-				<div class="progress-step">
-					<div class="step-count"></div>
-					<div class="step-description">배차 조회</div>
-				</div>
-				<div class="progress-step is-active">
-					<div class="step-count"></div>
-					<div class="step-description">좌석 선택</div>
-				</div>
-				<div class="progress-step">
-					<div class="step-count"></div>
-					<div class="step-description">확인/결제</div>
-				</div>
-				<div class="progress-step">
-					<div class="step-count"></div>
-					<div class="step-description">예매 결과</div>
-				</div>
-			</div>
-			</div>
-<% } else { // mode.equals("w")왕복일 경우 %>   
 			<div class="col-md-12 m-auto">
 			<div class="progress-bar-custom 2">
 				<div class="progress-step">
@@ -61,7 +31,7 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 					<div class="step-count"></div>
 					<div class="step-description">가는 날 배차 조회</div>
 				</div>
-				<div class="progress-step is-active">
+				<div class="progress-step">
 					<div class="step-count"></div>
 					<div class="step-description">가는 날 좌석 선택</div>
 				</div>
@@ -69,7 +39,7 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 					<div class="step-count"></div>
 					<div class="step-description">오는 날 배차 조회</div>
 				</div>
-				<div class="progress-step">
+				<div class="progress-step is-active">
 					<div class="step-count"></div>
 					<div class="step-description">오는 날 좌석 선택</div>
 				</div>
@@ -83,12 +53,11 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 				</div>
 			</div>
 			</div>
-<% } %>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-12 text-center mb-5">
-		<h4 class="display-5 probootstrap-section-heading text-left"><% if (mode.equals("p")) { // 편도일 경우 %>가는편<%} %><%else { // 왕복일 경우 %>가는 날 가는편<%} %></h4>
+		<h4 class="display-5 probootstrap-section-heading text-left">오는편</h4>
 		<table class="table">
 			<colgroup>
 				<col width="5%">
@@ -102,19 +71,19 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 			<tbody>
 			<tr>
 				<td><span class="badge badge-danger">출발지</span></td>
-				<td><%=ri1.getSspot() %></td>
+				<td><%=ri2.getSspot() %></td>
 				<td><span class="badge badge-primary">도착지</span></td>
-				<td><%=ri1.getEspot() %></td>
-				<td><%=ri1.getSdate() %></td>
-				<td>출발 <%=ri1.getStime() %></td>
-				<td>도착 <%=ri1.getEtime() %></td>
-				<td><%=ri1.getComname() %></td>
+				<td><%=ri2.getEspot() %></td>
+				<td><%=ri2.getSdate() %></td>
+				<td>출발 <%=ri2.getStime() %></td>
+				<td>도착 <%=ri2.getEtime() %></td>
+				<td><%=ri2.getComname() %></td>
 			</tr>
 			</tbody>
 		</table>
 		</div>
 	</div>
-	<form name="frmSeat" action="<%=action %>" method="post">
+	<form name="frmSeat" action="sTicketingPay" method="post">
 		<input type="hidden" name="selectedSeats" id="selectedSeats" value="">
 		<input type="hidden" name="selectedSeatsIndexes" id="selectedSeatsIndexes" value="">
 		<input type="hidden" name="totalPrice" id="totalP" value="">
@@ -154,7 +123,7 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 						<path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>	<!-- 좌표값 -->
 						</svg>
 					</button>
-					<input class="form-control text-center" type="text" name="riacnt" id="riacnt" value="0" size="5" readonly>	<!-- 성인티켓량 -->
+					<input class="form-control text-center" type="text" name="riacnt" id="riacnt" value="<%=ri1.getRi_acnt() %>" size="5" readonly>	<!-- 성인티켓량 -->
 					<button type="button" id="plusA" class="btn btn-primary p-1" onclick="setCnt(this.id);">	<!-- [+] 버튼 -->
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
 						<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -170,7 +139,7 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 						<path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>
 						</svg>
 					</button>
-					<input class="form-control text-center" type="text" name="riscnt" id="riscnt" value="0" size="5" readonly>
+					<input class="form-control text-center" type="text" name="riscnt" id="riscnt" value="<%=ri1.getRi_scnt() %>" size="5" readonly>
 					<button type="button" id="plusT" class="btn btn-primary p-1" onclick="setCnt(this.id);">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
 						<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -186,7 +155,7 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 						<path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>	
 						</svg>
 					</button>
-					<input class="form-control text-center" type="text" name="riccnt" id="riccnt" value="0" size="5" readonly>
+					<input class="form-control text-center" type="text" name="riccnt" id="riccnt" value="<%=ri1.getRi_ccnt() %>" size="5" readonly>
 					<button type="button" id="plusC" class="btn btn-primary p-1" onclick="setCnt(this.id);">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
 						<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -281,13 +250,13 @@ function setCnt(op) {	// 매수 선택필드의 [-] / [+] 버튼 클릭 시
 	
 	
 	$("#riacnt2").text(riacnt);	$("#riscnt2").text(riscnt);	$("#riccnt2").text(riccnt);
-	$("#priceA").text(formatNumber(riacnt * <%=ri1.getPrice()%>));
-	$("#priceT").text(formatNumber(riscnt * <%=ri1.getPrice()%> * 0.8));
-	$("#priceC").text(formatNumber(riccnt * <%=ri1.getPrice()%> * 0.5));
+	$("#priceA").text(formatNumber(riacnt * <%=ri2.getPrice()%>));
+	$("#priceT").text(formatNumber(riscnt * <%=ri2.getPrice()%> * 0.8));
+	$("#priceC").text(formatNumber(riccnt * <%=ri2.getPrice()%> * 0.5));
 	  
 	$("#totalCnt").text(riacnt + riscnt + riccnt);
-	$("#totalPrice").text(formatNumber(riacnt * <%=ri1.getPrice()%> + riscnt * <%=ri1.getPrice()%> * 0.8 + riccnt * <%=ri1.getPrice()%> * 0.5));
-	$("#totalP").val((riacnt * <%=ri1.getPrice()%> + riscnt * <%=ri1.getPrice()%> * 0.8 + riccnt * <%=ri1.getPrice()%> * 0.5));
+	$("#totalPrice").text(formatNumber(riacnt * <%=ri2.getPrice()%> + riscnt * <%=ri2.getPrice()%> * 0.8 + riccnt * <%=ri2.getPrice()%> * 0.5));
+	$("#totalP").val((riacnt * <%=ri2.getPrice()%> + riscnt * <%=ri2.getPrice()%> * 0.8 + riccnt * <%=ri2.getPrice()%> * 0.5));
 
 	let seatsCnt = 0;
 	for (let i = 0; i < seats.length; i++) {

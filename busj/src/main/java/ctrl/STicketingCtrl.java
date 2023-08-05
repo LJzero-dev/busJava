@@ -60,8 +60,8 @@ public class STicketingCtrl {
 		
 		if (mode.equals("w")) {	// 왕복 예매일 경우 오는 날 세션(ri2)도 생성		/ 탑승일을 ri_sday2로 출발지와 도착지는 서로 크로스하여 입력
 			ReservationInfo ri2 =  new ReservationInfo();
-			ri2.setMode(mode);			ri2.setSdate(ri_sday3);
-			ri1.setSspot(btename);		ri1.setEspot(btsname);
+			ri1.setMode(mode);			ri2.setMode(mode);			ri2.setSdate(ri_sday3);
+			ri2.setSspot(btename);		ri2.setEspot(btsname);
 			session.setAttribute("ri2", ri2);
 		}
 		
@@ -112,14 +112,15 @@ public class STicketingCtrl {
 		return "ticketing/s_ticket_step3";
 	}
 	
-	@PostMapping("/sTicketingStep04P")
+	@PostMapping("/sTicketingPay")
 	public String sTicketingStep04P(HttpServletRequest request, HttpServletResponse response) throws Exception {
-	// 회원이 보유한 쿠폰이 있는지
+	// 연령별 좌석 매수, 예매좌석 번호, 총 예매 금액(연령별 예매금액)
 		request.setCharacterEncoding("utf-8");
 		
 		HttpSession session = request.getSession();	
-		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
-		
+		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");	
+		ReservationInfo ri2 = (ReservationInfo)session.getAttribute("ri2");
+
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
 		
@@ -129,24 +130,30 @@ public class STicketingCtrl {
 		    out.println("location.href='sTicketingStep01';");
 		    out.println("</script>");
 		    out.close();
-		} else {
+		} else if (ri1.getMode().equals("p")) {	// 편도일 경우
 			ri1.setRi_acnt(Integer.parseInt(request.getParameter("riacnt")));
+			ri1.setRi_scnt(Integer.parseInt(request.getParameter("riscnt")));
+			ri1.setRi_ccnt(Integer.parseInt(request.getParameter("riccnt")));
+
+		} else if (ri1.getMode().equals("w") && ri2 != null) {
+			ri2.setRi_acnt(Integer.parseInt(request.getParameter("riacnt")));
+			ri2.setRi_scnt(Integer.parseInt(request.getParameter("riscnt")));
+			ri2.setRi_ccnt(Integer.parseInt(request.getParameter("riccnt")));
 		}
 		
-		// 연령별 좌석 매수, 예매좌석 번호, 총 예매 금액(연령별 예매금액)
 		
-		/*
-		 * System.out.println(request.getParameter("riacnt"));
-		 * System.out.println(request.getParameter("riscnt"));
-		 * System.out.println(request.getParameter("riccnt"));
-		 * System.out.println(request.getParameter("selectedSeats"));
-		 * System.out.println(request.getParameter("totalPrice"));
-		 */
 		
-		return "ticketing/s_ticket_step4p";
+		System.out.println(request.getParameter("riacnt"));
+		System.out.println(request.getParameter("riscnt"));
+		System.out.println(request.getParameter("riccnt"));
+		System.out.println(request.getParameter("selectedSeats"));
+		System.out.println(request.getParameter("totalPrice"));
+		
+		
+		return "ticketing/s_ticket_pay";
 	}
 	
-	@PostMapping("/sTicketingStep04W")
+	@PostMapping("/sTicketingStep04")
 	public String sTicketingStep04W(HttpServletRequest request, HttpServletResponse response) throws Exception {
 	// 
 		HttpSession session = request.getSession();	
@@ -162,9 +169,63 @@ public class STicketingCtrl {
 		    out.println("location.href='sTicketingStep01';");
 		    out.println("</script>");
 		    out.close();
+		} else {
+			ri1.setRi_acnt(Integer.parseInt(request.getParameter("riacnt")));
+			ri1.setRi_scnt(Integer.parseInt(request.getParameter("riscnt")));
+			ri1.setRi_ccnt(Integer.parseInt(request.getParameter("riccnt")));
+		}
+		String btsname = ri2.getSspot();
+		String btename = ri2.getEspot();
+		String ri_sday3 = ri2.getSdate();
+		int blidx = sTicketingSvc.getsLineNum(btsname, btename);
+		
+		
+		List<ReservationStep2>scheduleList = sTicketingSvc.getScheduleList(blidx, ri_sday3);
+		request.setAttribute("scheduleList", scheduleList);
+		
+		return "ticketing/s_ticket_step4";
+	}
+	
+	@PostMapping("/sTicketingStep05")
+	public String sTicketingStep05(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	// bs_idx로 버스 운영시간표 (출발시간, 도착시간) / bi_idx로 조인해서 버스 좌석 정보 (좌석 번호) 가져오기
+	// 예매된 좌석은 선택이 되지 않게 (checkbox 비활성화)
+		request.setCharacterEncoding("utf-8");
+		int bsidx = Integer.parseInt(request.getParameter("bsidx"));
+		
+		String bcname = request.getParameter("bcname");		String bilevel = request.getParameter("bilevel");
+		String stime = request.getParameter("stime");		String etime = request.getParameter("etime");
+		int bladult = Integer.parseInt(request.getParameter("bladult"));
+		int totalseat = Integer.parseInt(request.getParameter("totalseat"));
+		int leftseat = Integer.parseInt(request.getParameter("leftseat"));
+		
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		
+		HttpSession session = request.getSession();	
+		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
+		ReservationInfo ri2 = (ReservationInfo)session.getAttribute("ri2");
+		
+		if (ri1 == null || ri2 == null) {	// ri1 객체가 null인 경우에 대한 처리
+		    out.println("<script>");
+		    out.println("alert('시간이 경과되었습니다.\\예매를 다시 시도해주세요.')");
+		    out.println("location.href='sTicketingStep01';");
+		    out.println("</script>");
+		    out.close();
 		}
 		
-		return "ticketing/s_ticket_step4w";
+		ri2.setBs_idx(bsidx);		ri2.setComname(bcname);		ri2.setLevel(bilevel);	ri2.setPrice(bladult);
+		ri2.setStime(stime);		ri2.setEtime(etime);		
+
+		if (request.getParameter("ri_sday3") != null && !request.getParameter("ri_sday3").equals("")) 
+			ri2.setSdate(request.getParameter("ri_sday3"));	
+		
+		String ri_sday3 = ri2.getSdate();					// 바뀐 값이 있으면 세션에 다시 담기
+		
+		List<SeatInfo> seatList = sTicketingSvc.getSeatList(bsidx, ri_sday3);
+		request.setAttribute("seatList", seatList);
+		
+		return "ticketing/s_ticket_step5";
 	}
 
 }
