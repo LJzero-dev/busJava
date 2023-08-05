@@ -52,7 +52,7 @@ public class HTicketingDao {
 				"FROM t_bus_line bl " + 
 				"JOIN t_bus_terminal start_terminal ON bl.bt_sidx = start_terminal.bt_idx " + 
 				"JOIN t_bus_terminal end_terminal ON bl.bt_eidx = end_terminal.bt_idx " + 
-				"WHERE start_terminal.bt_name = '" + spoint + "' AND end_terminal.bt_name = '" + epoint + "' ";
+				"WHERE start_terminal.bt_name = '" + spoint + "' AND end_terminal.bt_name = '" + epoint + "' LIMIT 0, 1";
 		int result = jdbc.queryForObject(sql, Integer.class);
 		return result;
 	}

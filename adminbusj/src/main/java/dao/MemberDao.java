@@ -19,9 +19,9 @@ public class MemberDao {
 	}
 
 	public List<MemberInfo> getmemberList(String where, int cpage, int psize) {
-		String sql = "select * from t_member_Info " + where + " limit " + ((cpage - 1) * psize) + ", " + psize;
+		String sql = "select DISTINCT  * from t_member_Info " + where + " limit " + ((cpage - 1) * psize) + ", " + psize;
 		
-System.out.println(sql);
+		/* System.out.println(sql); */
 		List<MemberInfo> memberList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
 			MemberInfo mi = new MemberInfo();
 			mi.setMi_id(rs.getString("mi_id"));
@@ -49,9 +49,9 @@ System.out.println(sql);
 	}
 
 	public List<MemberInfo> getmemberDetail(String mi_id) {
-		String sql = "select * from t_member_Info where mi_id =" + mi_id;
+		String sql = "select * from t_member_Info where mi_id = '" + mi_id + "' ";
 		
-		System.out.println(sql);
+		/* System.out.println(sql); */
 				List<MemberInfo> memDetailList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
 					MemberInfo mi = new MemberInfo();
 					mi.setMi_id(rs.getString("mi_id"));
@@ -70,6 +70,16 @@ System.out.println(sql);
 					return mi;
 				});
 		return memDetailList;
+	}
+
+	public int memberUpdate(String mi_id, String mi_status, int mi_pmoney) {
+		String sql = "update t_member_Info "
+				+ " set mi_pmoney = " + mi_pmoney + ", mi_status = '" + mi_status + "' "
+				+ " where mi_id = '" + mi_id + "' ";
+		/* System.out.println(sql); */
+		int result = jdbc.update(sql);
+		/* System.out.println(result); */
+		return result;
 	}
 
 }

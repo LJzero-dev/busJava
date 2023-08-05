@@ -6,7 +6,11 @@
 request.setCharacterEncoding("utf-8");
 List<MemberInfo> memberList = (List<MemberInfo>) request.getAttribute("memberList");
 PageInfo pi = (PageInfo)request.getAttribute("pi");
-String[] check = request.getParameterValues("check");
+/* String[] check = request.getParameterValues("check"); */
+
+/* String cb = pi.getSchctgr();
+String[] arrcb = cb.split(":"); */
+
 %>	
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.4.js"></script>
 <script>
@@ -71,6 +75,34 @@ function chkval(frm) {
 	return true;
 }
 
+function makeCtgr() {
+    // 검색폼의 조건들을 쿼리스트링 sch의 값으로 만듦
+    var frm = document.frmSch;
+    var sch = "";
+    
+    // 브랜드 조건
+    var arr = frm.chk;
+    var isFirst = true;
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i].checked) {
+            if(isFirst) {
+                isFirst = false;
+                sch += arr[i].value;
+            } else {
+                sch += ":" + arr[i].value;
+            }
+        }
+    }
+
+    console.log(sch);  // sch 값을 출력
+
+    document.frmSch.hiddenCtgr.value = sch;
+
+    console.log(document.frmSch.hiddenCtgr.value);  // hiddenCtgr 필드의 값을 출력
+
+    document.frmSch.submit();
+}
+
 </script>
 <div class="page-wrapper">
 <div class="page-breadcrumb">
@@ -84,6 +116,7 @@ function chkval(frm) {
 <div class="col-lg-12">
     <div class="card">
       <form name="frmSch" onsubmit="return chkval(this);">
+      <input type="hidden" id="hiddenCtgr" name="hiddenCtgr" value="" />
         <table class="table table-sm custom">
             <colgroup>
                 <col width="20%">
@@ -108,25 +141,29 @@ function chkval(frm) {
                     <div class="d-flex">
                         <div class="form-check form-check-inline">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" value="" id="all" name="all" onclick="chkAll();">
+                                <input type="checkbox" class="custom-control-input" value="all" id="all" name="chk" onclick="chkAll(this);"
+                                	<%-- <%for (int k = 0; k < arrcb.length; k++) { if (arrcb[k].equals("all")) { %> checked="checked" <% } } %> --%> >
                                 <label class="custom-control-label" for="all">전체</label>
                             </div>
                         </div>
                         <div class="form-check form-check-inline">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" value="정상" id="customCheck1" name="chk">
+                                <input type="checkbox" class="custom-control-input" value="정상" id="customCheck1" name="chk"
+                                <%-- <%for (int k = 0; k < arrcb.length; k++) { if (arrcb[k].equals("정상")) { %> checked="checked" <% } } %> --%>>
                                 <label class="custom-control-label" for="customCheck1">정상</label>
                             </div>
                         </div>
                         <div class="form-check form-check-inline">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" value="휴면" id="customCheck2" name="chk">
+                                <input type="checkbox" class="custom-control-input" value="휴면" id="customCheck2" name="chk"
+                               <%--  <%for (int k = 0; k < arrcb.length; k++) { if (arrcb[k].equals("휴면")) { %> checked="checked" <% } } %> --%>>
                                 <label class="custom-control-label" for="customCheck2">휴면</label>
                             </div>
                         </div>
                         <div class="form-check form-check-inline">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" value="탈퇴" id="customCheck3" name="chk">
+                                <input type="checkbox" class="custom-control-input" value="탈퇴" id="customCheck3" name="chk"
+                                <%-- <%for (int k = 0; k < arrcb.length; k++) { if (arrcb[k].equals("탈퇴")) { %> checked="checked" <% } } %> --%>>
                                 <label class="custom-control-label" for="customCheck3">탈퇴</label>
                             </div>
                         </div>
@@ -165,17 +202,19 @@ function chkval(frm) {
               </thead>
               <tbody class="text-center">
 <% if (memberList.size() > 0) {
+		int j = 1;
 		for (MemberInfo mi : memberList) { 
-			for (int i = 1; i <= memberList.size(); i++) { %>              
-              <tr onclick="qwer();" >
-                  <td><%=i %></td>
-                  <td id="mi_id" value="<%=mi.getMi_id() %>"><%=mi.getMi_id() %></td>
+	 %>              
+              <tr onclick="qwer(this);" >
+                  <td><%=j %></td>
+                  <td class="mi_id"><%=mi.getMi_id() %></td>
                   <td><%=mi.getMi_email() %></td>
                   <td><%=mi.getMi_date().substring(0,16).replace("-", ".") %></td>
                   <td><%=mi.getMi_status() %></td>
               </tr>
-<%			}
-		} %>
+<%	j++;	
+}
+				%>
               </tbody>
           	</table>
             <div class="d-flex justify-content-center mt-2">
@@ -225,11 +264,13 @@ for (int i = pi.getSpage(); i <= endPage; i++) {
 </div>
 </div>
 <!-- ajax -->
+<form name="frmMemUp" action="memberUp" method="post">
 <div class="row">
    	<div class="col-md-12 text-center mb-5" style="display: none;" id="memberDetail-container">
        	<div id="memberDetail">
     </div>
 </div>
+</form>
 <!-- ajax -->
 <div class="modal fade" id="AddLine" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -239,8 +280,9 @@ for (int i = pi.getSpage(); i <= endPage; i++) {
 </div>
 <!-- ------------------------------------------------------------------------------------------------ -->
 <script>
-function qwer () {
-		const uid = $("#mi_id").val();
+function qwer (elem) {
+    const uid = elem.querySelector(".mi_id").innerText;
+/* 		alert(uid); */
 		$.ajax({
 			type : "POST", 
 			url : "./memberDetail", 
@@ -248,11 +290,12 @@ function qwer () {
 			dataType: "json",
 			success : function(data){
 				if (data.length > 0) {
-					let tableHTML = "<table class='table table-hover'>" + 
+					let tableHTML = "<table class='table table-hover' algin='center' >" + 
 					"<colgroup><col width='10%'><col width='10%'><col width='15%'><col width='15%'>" +
-					"<col width='15%'><col width='15%'><col width='10%'><col width='10%'></colgroup>" + 
-					"<thead class='bg-primary'><tr>" + 
-					"<th scope='col' class='text-center'>아이디</th><td>아이디입력</td>" +
+					"</colgroup>" + 
+					/* <col width='15%'><col width='15%'><col width='10%'><col width='10%'> 
+					"<thead class='bg-primary'>" + 
+				    "<tr><th scope='col' class='text-center'>아이디</th><td>아이디입력</td>" +
 					"<th scope='col' class='text-center'>비밀번호</th><td>비밀번호입력</td>" +
 					"<th scope='col' class='text-center'>이메일</th><td>이메일입력</td>" +
 					"<th scope='col' class='text-center'>상태</th><td>상태입력</td>" +
@@ -261,38 +304,55 @@ function qwer () {
 					"<th scope='col' class='text-center'>보유페이머니</th><td>보유페이머니입력</td>" +
 					"<th scope='col' class='text-center'>보유스템프</th><td>보유스템프입력</td>" +
 					"<th scope='col' class='text-center'>보유쿠폰</th><td>보유쿠폰입력</td>" +
-					"<th scope='col' class='text-center'>가입일시</th><td>가입일시입력</td>" +
-					"</tr></thead><tbody>";
+					"<th scope='col' class='text-center'>가입일시</th><td>가입일시입력</td>" + 
+					"</tr> 
+					"</thead>*/
+					"<tbody>";
 					
 					data.forEach(function(table) {
-	                    tableHTML += "<tr>";
+	                    tableHTML += "<tr><th scope='col' class='text-center'>아이디</th>";
 	                    tableHTML += "<td>" + table.mi_id + "</td>";
-	                    tableHTML += "<td>" + table.mi_pw + "</td>";
+	                    tableHTML += "<input type='hidden' name='mi_id' value='" + table.mi_id + "' />" ;
+	                    tableHTML += "<th scope='col' class='text-center'>비밀번호</th>";
+	                    tableHTML += "<td>" + table.mi_pw + "</td><tr>";
+	                    tableHTML += "<tr><th scope='col' class='text-center'>이메일</th>";
 	                    tableHTML += "<td>" + table.mi_email + "</td>";
-	                    tableHTML += "<td>" + table.mi_status + "</td>";
+	                   /*  tableHTML += "<th scope='col' class='text-center'>상태</th>";
+	                    tableHTML += "<td>" + table.mi_status + "</td>"; */
+	                    tableHTML += "<th scope='col' class='text-center'>상태</th>";
+	                    tableHTML += "<td><select name='mi_status' ><option " + (table.mi_status === '정상' ? "selected='selected'" : "") + ">정상</option><option " + (table.mi_status === '휴면' ? "selected='selected'" : "") + ">휴면</option><option " + (table.mi_status === '탈퇴' ? "selected='selected'" : "") + ">탈퇴</option></select></td>";
+	                    tableHTML += "<tr><th scope='col' class='text-center'>이름/성별</th>";
 	                    tableHTML += "<td>" + table.mi_name + "n/" + table.mi_gender + "</td>";
+	                    tableHTML += "<th scope='col' class='text-center'>번호</th>";
 	                    tableHTML += "<td>" + table.mi_phone + "</td>";
-	                    tableHTML += "<td>" + table.mi_pmoney + "</td>";
+	                    tableHTML += "<tr><th scope='col' class='text-center'>보유페이머니</th>";
+	                    tableHTML += "<td><input type='text' style='width:100px; border:0.1; text-align:center' name='mi_pmoney' value='" + table.mi_pmoney +"' /></td>";
+	                   /*  tableHTML += "<th scope='col' class='text-center'>스템프</th>";
 	                    tableHTML += "<td>" + table.mi_stamp + "</td>";
-	                    tableHTML += "<td>" + table.mi_coupon + "</td>";
+	                    tableHTML += "<tr><th scope='col' class='text-center'>쿠폰</th>";
+	                    tableHTML += "<td>" + table.mi_coupon + "</td>"; */
+	                    tableHTML += "<th scope='col' class='text-center'>가입일시</th>";
 	                    tableHTML += "<td>" + table.mi_date + "</td>";
 	                    tableHTML += "</tr>";
 	                });
 	                tableHTML += "</tbody></table>";
+	                tableHTML += "<button type='submit' class='btn waves-effect waves-light btn-primary btn-lg m-auto' >수정</button>";  
+	                tableHTML += "<button type='button' class='btn waves-effect waves-light btn-primary btn-lg m-auto' onclick='location.href=\"memberList\"'>확인</button>";
 				
 				$("#memberDetail").html(tableHTML);
 	            $("#memberDetail-container").show();
 	        } else {
 	            // 데이터가 없는 경우
-	            alert("조회된 시간표가 없습니다.");
+	            alert("회원이 없습니다.");
 	            $("#memberDetail").empty();
 	            $("#memberDetail-container").hide();
 	        }
 		 },
-	     error: function(xhr, status, error) {
-	         console.error("AJAX Error:", error);
-         // 오류 처리 로직을 추가할 수도 있음
-	        }
+		 error: function(jqXHR, textStatus, errorThrown) {
+			    console.error("AJAX Error: " + textStatus);
+			    console.error("HTTP Error: " + errorThrown);
+			    console.error("Server Response: " + jqXHR.responseText);
+			}
 	    });
 	};
 </script>
