@@ -33,22 +33,39 @@ public class MemberCtrl {
 		// 검색조건 전체, 아이디, 이메일
 		String schtype = request.getParameter("schtype");
 		String keyword = request.getParameter("keyword");
-		String[] check = request.getParameterValues("chk");
-		String where = "";
-		if (check != null) {
-			for (int i = 0; i < check.length; i++) {
-				if (i == 0 ) {
-					where += " where (mi_status = '" + check[i] + "' ";
+		String schctgr = request.getParameter("hiddenCtgr");
+		/* String[] check = request.getParameterValues("chk"); */
+		String where = " where 1 = 1 ";
+		String args = "", schargs = "";
+		
+		System.out.println(schctgr);
+		
+		if (schctgr != null && !schctgr.equals("")) {
+			URLEncoder.encode(schctgr, "UTF-8");
+			String[] arr = schctgr.split(":");
+			if (!arr[0].equals("all"))
+				where += " and (";
+			for (int i = 0; i < arr.length; i++) {
+				if (arr[i].equals("all")) {
+					break;
 				} else {
-					where += " or mi_status = '" + check[i] + "' ";
-				}	
+					where += (i == 0 ? "" : " or ") + "mi_status = '" + arr[i] + "' ";
+				}
+				
 			}
-			where += ")";
+			if (!arr[0].equals("all"))
+				where += ") ";
+			schargs = "&schctgr=" + schctgr;
 		}
 		
-System.out.println(where);
+		/*
+		 * if (check != null) { for (int i = 0; i < check.length; i++) { if (i == 0 ) {
+		 * where += " where (mi_status = '" + check[i] + "' "; } else { where +=
+		 * " or mi_status = '" + check[i] + "' "; } } where += ")"; }
+		 */
 		
-		String args = "", schargs = "";
+		/* System.out.println(where); */
+		
 		if(schtype == null || keyword == null) {
 			schtype = ""; keyword = ""; 
 		} else if (!schtype.equals("") && !keyword.trim().equals("")) {
@@ -62,7 +79,7 @@ System.out.println(where);
 			schargs = "&schtype=" + schtype + "&keyword=" + keyword;
 		}
 		args = "&cpage=" + cpage + schargs;
-System.out.println(where);
+		/* System.out.println(where); */
 		rcnt = memberSvc.getmemberListCount(where); //천제 게시글개수
 		// 검색된 게시글의 총 개수로 게시글 일련번호 출력과 전체 페이지수 계산을 위한 값
 		List<MemberInfo> memberList = memberSvc.getmemberList(where, cpage, psize); // jdbc 템플릿이 제공해주는게 List이기 때문에 List사용 
@@ -83,25 +100,46 @@ System.out.println(where);
 		pi.setKeyword(keyword);
 		pi.setSchargs(schargs);
 		pi.setSchtype(schtype);
+		pi.setSchctgr(schctgr);
 		// 페이징에 필요한 정보들과 검색조건을 PageInfo형 인스턴스에 저장
 		
 		request.setAttribute("memberList", memberList);
 		request.setAttribute("pi", pi);
-		request.setAttribute("check", check);
+		/* request.setAttribute("check", check); */
 		
 		return "member/member_list";
 	}
 	
 	@PostMapping("/memberDetail")
-	@ResponseBody
-	public List<MemberInfo> getmemberDetail(HttpServletRequest request) throws Exception {
+		@ResponseBody
+		public List<MemberInfo> getmemberDetail(HttpServletRequest request) throws Exception {
+			request.setCharacterEncoding("utf-8");
+			
+			String mi_id = request.getParameter("uid");
+						
+			List<MemberInfo> memDetailList = memberSvc.getmemberDetail(mi_id);
+			
+			
+			return memDetailList;
+		}
+	
+	@PostMapping("/memberUp") 
+	public String memberUpdate(HttpServletRequest request,  HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
-		
 		String mi_id = request.getParameter("mi_id");
-					
-		List<MemberInfo> memDetailList = memberSvc.getmemberDetail(mi_id);
+		String mi_status = request.getParameter("mi_status");
+		int mi_pmoney = Integer.parseInt(request.getParameter("mi_pmoney"));
 		
+		int result = memberSvc.memberUpdate(mi_id, mi_status, mi_pmoney);
 		
-		return memDetailList;
-	}
+		  if (result != 1) { 
+			  response.setContentType("text/html; charset=utf-8");
+			  PrintWriter out = response.getWriter(); out.println("<script>");
+			  out.println("alert('정보수정에 실패했습니다.');"); out.println("history.back();");
+			  out.println("</script>"); out.close(); 
+		  }
+		 
+		
+		return "redirect:/memberList";
+	}	
 }

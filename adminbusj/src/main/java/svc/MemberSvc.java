@@ -26,5 +26,10 @@ public class MemberSvc {
 		List<MemberInfo> memDetailList = memberDao.getmemberDetail(mi_id);
 		return memDetailList;
 	}
+
+	public int memberUpdate(String mi_id, String mi_status, int mi_pmoney) {
+		int result = memberDao.memberUpdate(mi_id, mi_status, mi_pmoney);
+		return result;
+	}
 	
 }

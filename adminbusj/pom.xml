@@ -61,6 +61,11 @@
          <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java 에서 버전 확인 -->
       </dependency>
       <!-- db연결을 위한 추가 부분 종료 -->
+      <dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-databind</artifactId>
+	    <version>2.13.0</version> <!-- 현재 최신 버전인 2.13.0을 사용했지만, 프로젝트에 맞는 버전을 사용하십시오. -->
+	  </dependency>	
   </dependencies>
   <build>
     <finalName>adminbusj</finalName>
