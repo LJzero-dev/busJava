@@ -4,8 +4,6 @@
 <%@ include file="../_inc/head.jsp" %>
 <script>
 function schtype(type) {
-	var frm = document.frm;	var sch = "";
-	
 	document.frm.type.value = type;
 	document.frm.submit();
 }
@@ -27,12 +25,14 @@ function openModal() {
           <h2 class="heading mb-2 display-4 font-light probootstrap-animate">떠날 예정이신가요?</h2>
         </div>
       </div>
+    <form name="frm">
+    <input type="hidden" id="hiddenArea" name="hiddenArea" value="${param.hiddenArea }" />
       <div class="row p-5">
         <div class="col-md-6">
           <div class="col-md">
             <div class="input-group input-group-lg">
-              <input type="text" class="form-control" placeholder="도착치" role="button" data-target="#ViewModal" data-toggle="modal" 
-              onclick="openModal();" aria-describedby="emailHelp">
+              <input type="text" class="form-control" placeholder="도착치" id="arrive" name="area" role="button" data-target="#ViewModal" data-toggle="modal" 
+              onclick="openModal();" value="${param.area }" aria-describedby="emailHelp">
             </div>
           </div>
         </div>
@@ -42,14 +42,11 @@ function openModal() {
           </div>
         </div>
       </div>
-
     </div>
     </div>
-
   </section>
   <!-- END section -->
   <section class="probootstrap_section pb-0">
-  <form name="frm">
   <input type="hidden" name="type" value="" />
     <div class="container">
       <div class="row">

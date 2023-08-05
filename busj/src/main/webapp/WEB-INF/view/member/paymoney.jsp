@@ -29,14 +29,14 @@ List<paymoneyInfo> mphList = (List<paymoneyInfo>)request.getAttribute("mphList")
 	           	<tr>
 <% if ( mi.getMi_pmoney() <= 0) { %>
 	           	<td class="text-left">보유중인 페이머니가 없습니다.</td>
-	           	<td colspan="2" class="text-right"><button type="button" class="btn btn-primary" onclick="location.href=''" />충전하기</td>
+	           	<td colspan="2" class="text-right"><button type="button" class="btn btn-primary" onclick="location.href='pmoneyInfo'" />충전하기</td>
 	           	</tr>
 <% } else { %>	           	
 	            <tr>
                   <td class="text-left">
                     <p class="h2 mb-0"><%=mi.getMi_pmoney() %> 원</p>
                   </td>
-                  <td colspan="2" class="text-right"><button type="button" class="btn btn-primary" onclick="location.href=''" />충전하기</td>
+                  <td colspan="2" class="text-right"><button type="button" class="btn btn-primary" onclick="location.href='pmoneyInfo'" />충전하기</td>
                 </tr>
 <% } %>	
               </tbody>

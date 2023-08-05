@@ -76,9 +76,7 @@ public class MemberDao {
 		String sql = "update t_member_Info "
 				+ " set mi_pmoney = " + mi_pmoney + ", mi_status = '" + mi_status + "' "
 				+ " where mi_id = '" + mi_id + "' ";
-		/* System.out.println(sql); */
 		int result = jdbc.update(sql);
-		/* System.out.println(result); */
 		return result;
 	}
 

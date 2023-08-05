@@ -51,11 +51,11 @@ PageInfo pi = (PageInfo)request.getAttribute("pageInfo");
             <tr> <!-- 이동할 주소입력(ri_idx값 들고 가야함) -->
                   <td><a href="bookDetail<%=pi.getArgs() %>&riidx=<%=bl.getRi_idx() %>"><%=bl.getRi_idx() %></a></td>
                   <td><%=bl.getBl_type() %></td>
-                  <td><%=bl.getBt_sidx() %></td>
-                  <td><%=bl.getBt_eidx() %></td>
+                  <td><%=bl.getBt1_sidx() %></td>
+                  <td><%=bl.getBt2_eidx() %></td>
                   <td><%=bl.getRi_sday() %></td>
                   <td><%=bl.getBs_stime() %></td>
-                  <td>성인 <%=bl.getRi_acnt() %>명&nbsp;청소년 <%=bl.getRi_scnt() %>명&nbsp;아동 <%=bl.getRi_ccnt() %>명&nbsp;</td>
+                  <td>성인 <%=bl.getRi_acnt() %>명,&nbsp;청소년 <%=bl.getRi_scnt() %>명,&nbsp;아동 <%=bl.getRi_ccnt() %>명&nbsp;</td>
 				<td>
 <% 
 StringBuilder seats = new StringBuilder();

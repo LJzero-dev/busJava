@@ -40,6 +40,7 @@ if (bi.getTotal_cr_pay() > 1000) {
     </div>
     <div class="row">
     <div class="col-md-12">
+    <h5 class="text-left">예매정보</h5>
 	<table class="table" class="thead-light">
 	<colgroup>
 		<col width="25%">
