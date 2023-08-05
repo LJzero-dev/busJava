@@ -29,13 +29,21 @@ public class TravelCtrl {
 		request.setCharacterEncoding("utf-8");
 		String type = request.getParameter("type");
 		String where = " where tl_isview = 'y' ";
+		String area = request.getParameter("hiddenArea");
+		String terminal = request.getParameter("area");
 		
 		if (type != null && !type.equals("")) {
 			where += " and tl_ctgr = '" + type + "' ";
 		}
 		
+		if (area != null && !area.equals("")) {
+			where += " and tl_area = '" + area + "' ";
+		}
+		
 		List<TravelInfo> travelList = travelSvc.getTravelList(where);
 		model.addAttribute("travelList", travelList);
+		model.addAttribute("terminal", terminal);
+		model.addAttribute("area", area);
 		
 		return "/travel/travel_list";
 	}

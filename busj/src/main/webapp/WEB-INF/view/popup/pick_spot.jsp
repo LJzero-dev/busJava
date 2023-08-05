@@ -49,6 +49,7 @@ List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("term
 <hr />
     <form name="frmPoint">
 		<input type="hidden" name="lineNum" value="" />
+		<input type="hidden" name="area" id="area" value="" />
       <div class="form-row">
         <div class="col-md-6 mb-3">
           <label for="ePointPop">도착지</label>
@@ -73,7 +74,7 @@ List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("term
 		for (int i = 0 ; i < terminalList.size() ; i++) {	// 전체목록
 			TerminalInfo ti = terminalList.get(i);	
 %>
-				<li><a href="" onclick="setEPointValue('값1')"><%=ti.getBt_name() %></a></li>
+				<li><span onclick="setEPointValue('<%=ti.getBt_area() %>:<%=ti.getBt_name() %>')"><%=ti.getBt_name() %></span></li>
 <%
 		}
 %>
@@ -83,7 +84,7 @@ List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("term
 	for (int i = 0 ; i < terminalList.size() ; i++) { // 서울경기
 		TerminalInfo ti = terminalList.get(i);
 		if (ti.getBt_area().startsWith("서울") || ti.getBt_area().startsWith("경기")) { %>
-			<li><a href="" onclick="setEPointValue('값1')"><%=ti.getBt_name() %></a></li>
+			<li><span onclick="setEPointValue('<%=ti.getBt_area() %>:<%=ti.getBt_name() %>')"><%=ti.getBt_name() %></span></li>
 <%
 		}
 	}
@@ -94,7 +95,7 @@ List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("term
 	for (int i = 0 ; i < terminalList.size() ; i++) { // 강원
 		TerminalInfo ti = terminalList.get(i);
 		if (ti.getBt_area().startsWith("강원")) { %>
-			<li><a href="" onclick="setEPointValue('값1')"><%=ti.getBt_name() %></a></li>
+			<li><span onclick="setEPointValue('<%=ti.getBt_area() %>:<%=ti.getBt_name() %>')"><%=ti.getBt_name() %></span></li>
 <%
 		}
 	}
@@ -105,7 +106,7 @@ List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("term
 	for (int i = 0 ; i < terminalList.size() ; i++) { // 경상
 		TerminalInfo ti = terminalList.get(i);
 		if (ti.getBt_area().startsWith("경상")) { %>
-			<li><a href="" onclick="setEPointValue('값1')"><%=ti.getBt_name() %></a></li>
+			<li><span onclick="setEPointValue('<%=ti.getBt_area() %>:<%=ti.getBt_name() %>')"><%=ti.getBt_name() %></span></li>
 <%
 		}
 	}
@@ -148,24 +149,22 @@ List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("term
 
 <%@ include file="../_inc/foot.jsp" %>
 <script>
-  // a태그를 클릭했을 때 실행되는 함수
-  function setEPointValue(value) {
-    document.getElementById('ePointPop').value = value;
-  }
+// a태그를 클릭했을 때 실행되는 함수
+function setEPointValue(value) {
+	var arr = value.split(":");
+	
+	document.getElementById('ePointPop').value = arr[1];
+	document.getElementById('area').value = arr[0];
+}
   
 //확인 버튼을 눌렀을 때 실행되는 함수
-  function onConfirmButtonClick() {
-    // 이 부분에 확인 버튼을 눌렀을 때 실행되어야 할 동작을 추가하세요.
-
-    // 여기에 모달 창을 닫는 JavaScript 코드를 추가합니다.
-    $('#ViewModal').modal('hide');
-  }
-
-  // 확인 버튼의 클릭 이벤트 처리
-  $(document).ready(function () {
-    $('#btnSubmit').on('click', function (e) {
-      e.stopPropagation(); // a태그의 클릭 이벤트 전파 방지
-      onConfirmButtonClick();
-    });
-  });
+function onConfirmButtonClick() {
+	var selectedValue = document.getElementById('ePointPop').value;
+	var area = document.getElementById('area').value;
+	// 선택된 값을 텍스트 박스에 넣어줍니다.
+	document.getElementById('arrive').value = selectedValue;
+	document.getElementById('hiddenArea').value = area;
+	// 여기에 모달 창을 닫는 JavaScript 코드를 추가합니다.
+	$('#ViewModal').modal('hide');
+}
 </script>
