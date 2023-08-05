@@ -124,12 +124,10 @@ public class MemberDao {
 	}
 
 	public List<BookInfo> getBookList(String mi_id, int cpage, int psize) {
-		String sql = "select ri.ri_idx, ri.ri_sday, ri.ri_acnt, ri.ri_scnt, ri.ri_ccnt, ri.ri_status, bs.bs_stime, bl.bl_type, bl.bt_sidx, bl.bt_eidx "
-				+ " from t_reservation_info ri, t_bus_schedule bs, t_seat_info si , t_bus_line bl "
-				+ " where ri.bs_idx = bs.bs_idx "
-				+ " and bs.bl_idx = bl.bl_idx "
-				+ " and bs.bi_idx = si.bi_idx "
-				+ " and ri.mi_id = '" + mi_id + "' and ri.ri_date >= DATE_SUB(NOW(), INTERVAL 3 MONTH) GROUP BY ri.ri_idx order by ri.ri_idx desc"
+		String sql = " select ri.ri_idx, ri.ri_sday, ri.ri_acnt, ri.ri_scnt, ri.ri_ccnt, ri.ri_status, bs.bs_stime, bl.bl_type, bt1.bt_name as bt1_sidx, bt2.bt_name as bt2_eidx "
+				+ " from t_reservation_info ri, t_bus_schedule bs, t_seat_info si , t_bus_line bl, t_bus_terminal bt1, t_bus_terminal bt2 "
+				+ " where ri.bs_idx = bs.bs_idx and bs.bl_idx = bl.bl_idx and bs.bi_idx = si.bi_idx and bl.bt_sidx = bt1.bt_idx and bl.bt_eidx = bt2.bt_idx and ri.mi_id = '" + mi_id + "' and ri.ri_date >= DATE_SUB(NOW(), INTERVAL 3 MONTH) "
+				+ " GROUP BY ri.ri_idx order by ri.ri_idx desc "
 				+ " limit "+ ((cpage - 1) * psize) + ", " + psize;
 		/* System.out.println(sql); */
 		List<BookInfo> bookList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
@@ -137,8 +135,8 @@ public class MemberDao {
 					rs.getInt("ri_acnt"),
 					rs.getInt("ri_scnt"),
 					rs.getInt("ri_ccnt"),
-					rs.getInt("bt_sidx"),
-					rs.getInt("bt_eidx"),
+					rs.getString("bt1_sidx"),
+					rs.getString("bt2_eidx"),
 					rs.getString("ri_status"),
 					rs.getString("ri_sday"),
 					rs.getString("bs_stime"),

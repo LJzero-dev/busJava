@@ -49,14 +49,14 @@ public class BookInfo {
 	}
 
 
-	public BookInfo(int ri_acnt, int ri_scnt, int ri_ccnt, int bt_sidx, int bt_eidx, String ri_status, String ri_sday,
+	public BookInfo(int ri_acnt, int ri_scnt, int ri_ccnt, String bt1_sidx, String bt2_eidx, String ri_status, String ri_sday,
 			String bs_stime, String bl_type, String ri_idx, List<BusSeatList> busSeatList) {
 		super();
 		this.ri_acnt = ri_acnt;
 		this.ri_scnt = ri_scnt;
 		this.ri_ccnt = ri_ccnt;
-		this.bt_sidx = bt_sidx;
-		this.bt_eidx = bt_eidx;
+		this.bt1_sidx = bt1_sidx;
+		this.bt2_eidx = bt2_eidx;
 		this.ri_status = ri_status;
 		this.ri_sday = ri_sday;
 		this.bs_stime = bs_stime;
