@@ -19,6 +19,9 @@ public class CtrlConfig {
 	@Autowired
 	private ScheduleSvc scheduleSvc;
 	
+	@Autowired
+	private TravelSvc travelSvc;
+	
 	@Bean
 	public IndexCtrl indexCtrl() {
 		return new IndexCtrl();
@@ -55,6 +58,14 @@ public class CtrlConfig {
 		ScheduleCtrl scheduleCtrl = new ScheduleCtrl();
 		scheduleCtrl.setScheduleSvc(scheduleSvc);
 		return scheduleCtrl;
+	}
+	
+	@Bean
+	public TravelCtrl travelCtrl() {
+		TravelCtrl travelCtrl = new TravelCtrl();
+		travelCtrl.setTravelSvc(travelSvc);
+		travelCtrl.sethTicketingSvc(hTicketingSvc);
+		return travelCtrl;
 	}
 
 }
