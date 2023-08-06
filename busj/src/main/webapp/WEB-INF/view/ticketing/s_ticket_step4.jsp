@@ -72,14 +72,15 @@ tr:hover {
 				<td class="align-middle"><%=ri2.getSspot() %></td>
 				<td class="align-middle"><span class="badge badge-primary">도착지</span></td>
 				<td class="align-middle"><%=ri2.getEspot() %></td>
-				<td class="text-left">
-					<div class="w-50">
+				<td class="align-middle">탑승일</td>
+				<td class="text-left"><%=ri2.getSdate() %>
+					<%-- <div class="w-50">
 					<div class="probootstrap-date-wrap">
 						<span class="icon ion-calendar"></span> 
 							<input type="text" id="sday3" class="form-control" value="<%=ri2.getSdate() %>" readonly >
 							<input type="hidden" id="ri_sday3" name="ri_sday3" value="" />
 					</div>
-					</div>
+					</div> --%>
 				</td>	
 			</tr>
 			</tbody>
@@ -254,11 +255,11 @@ function rowClicked(bsidx, etime, stime, bcname, bilevel, bladult, totalseat, le
 	availableSeatsInput.value = leftseat;
 	form.appendChild(availableSeatsInput);
 	
-	var ri_sday1Input = document.createElement("input");
+	/* var ri_sday1Input = document.createElement("input");
 	ri_sday1Input.type = "hidden";
 	ri_sday1Input.name = "ri_sday3";
 	ri_sday1Input.value = document.getElementById("ri_sday3").value;
-	form.appendChild(ri_sday1Input);
+	form.appendChild(ri_sday1Input); */
 	
 	// form 서버로 제출
 	document.body.appendChild(form);
