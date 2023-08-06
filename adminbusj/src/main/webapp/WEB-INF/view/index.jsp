@@ -2,14 +2,20 @@
 <%@ include file="_inc/head.jsp" %>
 <%@ page import = "java.text.*" %>
 <% 
-// if (!isLogin) {		// 로그인이 되어 있지 않다면
-// 	out.println("<script>");
-// 	out.println("alert('로그인 후 이용해 주세요.'); location.href='/adminbusj/login' ");
-// 	out.println("</script>");
-// 	out.close();
-// }
+if (!isLogin) {		// 로그인이 되어 있지 않다면
+	out.println("<script>");
+	out.println("alert('로그인 후 이용해 주세요.'); location.href='/adminbusj/login' ");
+	out.println("</script>");
+	out.close();
+}
 request.setCharacterEncoding("utf-8");
 List<String> salesList = (List<String>)session.getAttribute("salesList");
+Object hTopLine = (Object)session.getAttribute("hTopLinelist");
+Object sTopLine = (Object)session.getAttribute("sTopLinelist");
+List<String> hSalesQuarterLast = (List<String>)session.getAttribute("hSalesQuarterLast");
+List<String> hSalesQuarterNow = (List<String>)session.getAttribute("hSalesQuarterNow");
+List<String> sSalesQuarterLast = (List<String>)session.getAttribute("sSalesQuarterLast");
+List<String> sSalesQuarterNow = (List<String>)session.getAttribute("sSalesQuarterNow");
 String[] tmp1 = salesList.get(0).split(":");
 String[] tmp2 = salesList.get(1).split(":");
 String[] tmp3 = salesList.get(2).split(":");
@@ -17,6 +23,14 @@ String[] tmp4 = salesList.get(3).split(":");
 
 DecimalFormat decimalFormat = new DecimalFormat("#,###");
 %>
+<script>
+const hTopLineJson = '<%= hTopLine %>';
+const sTopLineJson = '<%= sTopLine %>';
+const hSalesQuarterLast = <%=hSalesQuarterLast%>;
+const hSalesQuarterNow = <%=hSalesQuarterNow%>;
+const sSalesQuarterLast = <%=sSalesQuarterLast%>;
+const sSalesQuarterNow = <%=sSalesQuarterNow%>;
+</script>
 <div class="page-wrapper">
             <div class="page-breadcrumb">
                 <div class="row">
@@ -92,9 +106,9 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###");
                     <div class="col-lg-6">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">이달의 고속버스 인기 노선</h4>
+                                <h4 class="card-title">이달의 고속버스 인기 노선<span class="h6 ml-2">[단위 : 건]</span></h4>
                                 <div>
-                                    <canvas id="pie-chart1" height="150"></canvas>
+                                    <canvas id="hTopPie" height="150"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -102,9 +116,9 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###");
                     <div class="col-lg-6">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">이달의 시외버스 인기 노선</h4>
+                                <h4 class="card-title">이달의 시외버스 인기 노선<span class="h6 ml-2">[단위 : 건]</span></h4>
                                 <div>
-                                    <canvas id="pie-chart2" height="150"></canvas>
+                                    <canvas id="sTopPie" height="150"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -112,9 +126,9 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###");
                     <div class="col-lg-6">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">고속버스 분기별 매출 현황</h4>
+                                <h4 class="card-title">고속버스 분기별 매출 현황<span class="h6 ml-2">[단위 : 원]</span></h4>
                                 <div>
-                                    <canvas id="bar-chart1" height="150"></canvas>
+                                    <canvas id="hTopSales" height="150"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -122,9 +136,9 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###");
                     <div class="col-lg-6">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">시외버스 분기별 매출 현황</h4>
+                                <h4 class="card-title">시외버스 분기별 매출 현황<span class="h6 ml-2">[단위 : 원]</span></h4>
                                 <div>
-                                    <canvas id="bar-chart2" height="150"></canvas>
+                                    <canvas id="sTopSales" height="150"></canvas>
                                 </div>
                             </div>
                         </div>
