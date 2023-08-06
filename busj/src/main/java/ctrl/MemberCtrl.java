@@ -347,7 +347,19 @@ public class MemberCtrl {
 	public String bookingList(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
 		HttpSession session = request.getSession();
+		
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		
 		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
+		
+		if (loginInfo == null) {
+			out.println("<script>");
+			out.println("alert('로그인 후 이용해 주세요. 예매는 회원만 이용 가능합니다.');");
+			out.println("location.href='memberLogin';");
+			out.println("</script>");
+		}
+		
 		String mi_id = loginInfo.getMi_id();
 		
 		int cpage = 1, pcnt = 0, spage = 0, rcnt = 0, psize = 10, bsize = 10;

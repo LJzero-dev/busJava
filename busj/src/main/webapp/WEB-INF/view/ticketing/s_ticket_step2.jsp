@@ -15,6 +15,13 @@ ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
 
 int bsidx = 0;
 String etime = "";
+
+if (loginInfo == null) {
+	out.println("<script>");
+	out.println("alert('로그인 후 이용해 주세요. 예매는 회원만 이용 가능합니다.');");
+	out.println("location.href='memberLogin';");
+	out.println("</script>");
+}
 %>
 <style>
 tr:hover {

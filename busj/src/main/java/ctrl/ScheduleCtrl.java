@@ -54,13 +54,39 @@ public class ScheduleCtrl {
 	}
 	
 	@PostMapping("/getDepartureTerminal")
+	@ResponseBody
 	public List<TerminalInfo> getDepartureTerminal(HttpServletRequest request) throws Exception {
 		request.setCharacterEncoding("utf-8");
 		
 		String selectedArea = request.getParameter("selectedArea");
-		System.out.println(selectedArea);
+//		System.out.println(selectedArea);
 		List<TerminalInfo> departureTerminal = scheduleSvc.getDepartureTerminal(selectedArea);
-		
+
 		return departureTerminal;
+	}
+	
+	@PostMapping("/getArrivalTerminal")
+	@ResponseBody
+	public List<LineInfo> getArrivalTerminal(HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		
+		String selectedTerminal = request.getParameter("selectedTerminal");
+//		System.out.println(selectedTerminal);
+		List<LineInfo> lineList = scheduleSvc.getArrivalTerminal(selectedTerminal);
+		
+		return lineList;
+	}
+	
+	@PostMapping("/getArrivalTime")
+	@ResponseBody
+	public List<ArriveInfo> getArrivalTime(HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		String arrivalTerminal = request.getParameter("arrivalTerminal");	// 노선 인덱스 (bl_idx)
+		String busCompany = request.getParameter("busCompany");				// 버스회사 인덱스 (bc_idx)
+		String time = request.getParameter("time");							// 현재시간 (hh:mm)
+		
+		List<ArriveInfo> timeList = scheduleSvc.getArrivalTerminal(arrivalTerminal, busCompany, time);
+		
+		return timeList;
 	}
 }

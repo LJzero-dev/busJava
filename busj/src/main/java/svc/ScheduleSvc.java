@@ -32,6 +32,18 @@ public class ScheduleSvc {
 	public List<TerminalInfo> getDepartureTerminal(String selectedArea) {
 	// 선택한 출발지역에 있는 터미널 이름
 		List<TerminalInfo> departureTerminal = scheduleDao.getDepartureTerminal(selectedArea);
-		return null;
+		return departureTerminal;
+	}
+
+	public List<LineInfo> getArrivalTerminal(String selectedTerminal) {
+	// 선택한 출발 터미널에 해당하는 버스 노선을 select (도착 터미널 이름 + 라인 인덱스 사용)
+		List<LineInfo> lineList = scheduleDao.getArrivalTerminal(selectedTerminal);
+		return lineList;
+	}
+
+	public List<ArriveInfo> getArrivalTerminal(String arrivalTerminal, String busCompany, String time) {
+	// 
+		List<ArriveInfo> timeList = scheduleDao.getArrivalTerminal(arrivalTerminal, busCompany, time);
+		return timeList;
 	}
 }
