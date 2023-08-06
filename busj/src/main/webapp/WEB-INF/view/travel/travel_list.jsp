@@ -60,7 +60,7 @@ function openModal() {
           	<c:if test="${travelList.size() > 0 }">
 				<c:forEach items="${travelList }" var="tl" varStatus="status">
 		            <div class="card">
-		              <img src="C:/lsj/spring/busjava/adminbusj/src/main/webapp/resources/images/travel/${tl.getTl_img() }" class="card-img-top" alt="...">
+					 <img src="${pageContext.request.contextPath}/resources/images/travel/${tl.getTl_img() }" class="card-img-top" alt="..."> 
 		              <div class="card-body">
 		                <span class="badge badge-primary mb-2">${tl.getTl_ctgr() }</span>
 		                <h5 class="card-title">[${tl.getTl_area() }]${tl.getTl_title() }</h5>
