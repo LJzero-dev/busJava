@@ -262,6 +262,8 @@ input[type="text"]#adult, input[type="text"]#teen, input[type="text"]#child {bac
 input[type="text"]#riacnt, input[type="text"]#riscnt, input[type="text"]#riccnt {background: #fff;}
 
 tr.data:hover { cursor: pointer; }
+tr.sold-out td { background-color: rgba(0, 0, 0, 0.075); color: #888; }
+tr.sold-out:hover td { background:none; }
 
 .probootstrap_section.index { padding-top: 70px; padding-bottom: 0;}
 

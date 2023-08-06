@@ -140,9 +140,21 @@ ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
 					
 <% if (scheduleList.size() > 0) {	// 해당 노선의 시간표가 있는 경우
 for (ScheduleInfo sl : scheduleList) { 
-	int adultPrice = sl.getBl_adult();
-%>
-					<tr class="data" data-bsidx="<%=sl.getBs_idx()%>" data-etime="<%=sl.getBs_etime()%>">
+	int adultPrice = 0;
+	if (sl.getBi_level().equals("우등"))	adultPrice = sl.getBl_adult();
+	else	adultPrice = (int)(sl.getBl_adult() * 1.5);
+	if (sl.getLeft_seat() == 0) {	// 해당 노선이 매진인 경우 %>
+		<tr class="sold-out">
+			<td><%=sl.getBs_stime() %></td>
+		    <td><%=sl.getComname() %>고속</td>
+		    <td><%=sl.getBi_level() %></td>
+		    <td><%= String.format("%,d", adultPrice) %></td>
+		    <td><%=sl.getTotal_seat() %></td>
+		    <td>매진</td>
+		</tr>
+		
+<%	} else { // 해당 노선이 매진이 아닌경우 %>
+		<tr class="data" data-bsidx="<%=sl.getBs_idx()%>" data-etime="<%=sl.getBs_etime()%>">
 						<td><%=sl.getBs_stime() %></td>
 					    <td><%=sl.getComname() %>고속</td>
 					    <td><%=sl.getBi_level() %></td>
@@ -150,7 +162,7 @@ for (ScheduleInfo sl : scheduleList) {
 					    <td><%=sl.getTotal_seat() %></td>
 					    <td><%=sl.getLeft_seat() %></td>
 					</tr>
-					
+	<% }  %>			
 <% 
 	} 
 } else { // 해당 노선의 시간표가 없는 경우 %>
