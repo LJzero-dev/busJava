@@ -4,9 +4,8 @@
 <%
 request.setCharacterEncoding("utf-8");
 ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
-
-
-int base_price = Integer.parseInt(request.getParameter("basePrice"));
+int base_price1 = ri1.getBasePrice();
+int base_price2 = 0;
 %>
 <section class="probootstrap_section">
 	<div class="container">
@@ -109,6 +108,7 @@ int base_price = Integer.parseInt(request.getParameter("basePrice"));
 			  </table>
 <% if (ri1.getMode().equals("w")) {
 	ReservationInfo ri2 = (ReservationInfo) session.getAttribute("ri2");
+	base_price2 = ri2.getBasePrice();
 %>
 				<h5 class="text-left mt-5">오는편</h5>
 				<table class="table">
@@ -382,7 +382,7 @@ int base_price = Integer.parseInt(request.getParameter("basePrice"));
      </div>
      <div id="pmoney_view" style="display: none;">
        <div style="height:76px">
-<% if (loginInfo.getMi_pmoney() > base_price) { // 회원의 보유 페이머니가 결제금액보다 큰 경우 %>
+<% if (loginInfo.getMi_pmoney() > (base_price1 + base_price2)) { // 회원의 보유 페이머니가 결제금액보다 큰 경우 %>
 		<p class="h5 text-left">잔액 <span id="myPmoney"></span></p>
 <% } else { // 회원의 보유 페이머니가 결제금액보다 작은 경우 %>
 		<p class="h5 text-left text-danger">잔액 <span id="myPmoney"></span></p>
@@ -432,7 +432,7 @@ function openModal() {
 const pmoneybox = document.getElementById('pmoney_view');
 const paymentChks = document.getElementsByName('paymentOpt');
 const myPmoney = <%=loginInfo.getMi_pmoney() %>;
-const basePrice = <%=base_price %>;
+const basePrice = <%=base_price1%> + <%=base_price2%>;
 
 
 for (let i = 0; i < paymentChks.length; i++) {

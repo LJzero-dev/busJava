@@ -56,7 +56,7 @@ public class HTicketingSvc {
 	@Transactional
 	public void reservationIn(MemberInfo loginInfo, ReservationInfo ri, String seatWhere) {
 	// 예매 메서드
-		int totalP = ri.getPrice() * ri.getRi_acnt() + ri.getPrice() * ri.getRi_scnt() + ri.getPrice() * ri.getRi_ccnt();
+		int totalP = ri.getBasePrice();
 		
 		// 1. 예매 정보 테이블 insert
 		String result = hTicketingDao.reservationIn(loginInfo, ri);

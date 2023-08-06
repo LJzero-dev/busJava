@@ -170,6 +170,7 @@ public class HTicketingCtrl {
 		int acnt = Integer.parseInt(request.getParameter("adult"));
 		int tcnt = Integer.parseInt(request.getParameter("teen"));
 		int ccnt = Integer.parseInt(request.getParameter("child"));
+		int basePrice = Integer.parseInt(request.getParameter("basePrice"));
 		String[] seatsGo = request.getParameterValues("seatBoxDtl");
 		String seatListGo = "";
 		for (String seatGo : seatsGo) {
@@ -179,6 +180,7 @@ public class HTicketingCtrl {
 		ri1.setRi_acnt(acnt);
 		ri1.setRi_scnt(tcnt);
 		ri1.setRi_ccnt(ccnt);
+		ri1.setBasePrice(basePrice);
 		ri1.setSeat(seatListGo.substring(2));
 		session.setAttribute("ri1", ri1);
 		
@@ -247,6 +249,7 @@ public class HTicketingCtrl {
 			int acnt = Integer.parseInt(request.getParameter("adult"));
 			int tcnt = Integer.parseInt(request.getParameter("teen"));
 			int ccnt = Integer.parseInt(request.getParameter("child"));
+			int basePrice = Integer.parseInt(request.getParameter("basePrice"));
 			String[] seatsCome = request.getParameterValues("seatBoxDtl");
 			String seatListCome = "";
 			for (String seatCome : seatsCome) {
@@ -256,6 +259,7 @@ public class HTicketingCtrl {
 			ri2.setRi_acnt(acnt);
 			ri2.setRi_scnt(tcnt);
 			ri2.setRi_ccnt(ccnt);
+			ri2.setBasePrice(basePrice);
 			ri2.setSeat(seatListCome.substring(2));
 			
 			session.setAttribute("ri2", ri2);
