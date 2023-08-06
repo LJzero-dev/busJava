@@ -120,8 +120,7 @@ window.onload = function() {
 			<h3 class="page-title text-truncate text-dark font-weight-medium mb-1">회원 관리</h3>
 		</div>
 	</div>
-</div>
-<div class="row">
+	<div class="row">
 <div class="col-lg-12">
     <div class="card">
       <form id="schForm" name="schForm" onsubmit="">
@@ -188,11 +187,10 @@ window.onload = function() {
     </div> 
     </div>
 </div>
-
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
-            <table id="table" class="table text-center mb-0">
+            <table id="table" class="table text-center mb-0 padding-size-sm">
               <colgroup>
                   <col width="5%">    
                   <col width="10%">
@@ -209,7 +207,7 @@ window.onload = function() {
                   <th scope="col" class="text-center">상태</th>
               </tr>
               </thead>
-              <tbody class="text-center">
+              <tbody class="text-center border border-primary">
 <% if (memberList.size() > 0) {
 		int j = 1;
 		for (MemberInfo mi : memberList) { 
@@ -271,22 +269,20 @@ for (int i = pi.getSpage(); i <= endPage; i++) {
         </div> 
     </div>
 </div>
-</div>
 <!-- ajax -->
 <form name="frmMemUp" action="memberUp" method="post">
 <div class="row">
    	<div class="col-md-12 text-center mb-5" style="display: none;" id="memberDetail-container">
+   		<div class="card">
        	<div id="memberDetail">
+       	</div>
     </div>
 </div>
 </form>
 <!-- ajax -->
-<div class="modal fade" id="AddLine" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-        </div>
-    </div>
 </div>
+</div>
+
 <!-- ------------------------------------------------------------------------------------------------ -->
 <script>
 function qwer (elem) {
@@ -299,7 +295,7 @@ function qwer (elem) {
 			dataType: "json",
 			success : function(data){
 				if (data.length > 0) {
-					let tableHTML = "<table class='table table-hover' algin='center' >" + 
+					let tableHTML = "<table class='table' algin='center' >" + 
 					"<colgroup><col width='10%'><col width='10%'><col width='15%'><col width='15%'>" +
 					"</colgroup>" + 
 					/* <col width='15%'><col width='15%'><col width='10%'><col width='10%'> 
@@ -324,18 +320,18 @@ function qwer (elem) {
 	                    tableHTML += "<input type='hidden' name='mi_id' value='" + table.mi_id + "' />" ;
 	                    tableHTML += "<th scope='col' class='text-center'>비밀번호</th>";
 	                    tableHTML += "<td>" + table.mi_pw + "</td><tr>";
-	                    tableHTML += "<tr><th scope='col' class='text-center'>이메일</th>";
-	                    tableHTML += "<td>" + table.mi_email + "</td>";
+	                    tableHTML += "<tr><th scope='col' class='text-center align-middle'>이메일</th>";
+	                    tableHTML += "<td class='align-middle'>" + table.mi_email + "</td>";
 	                   /*  tableHTML += "<th scope='col' class='text-center'>상태</th>";
 	                    tableHTML += "<td>" + table.mi_status + "</td>"; */
-	                    tableHTML += "<th scope='col' class='text-center'>상태</th>";
-	                    tableHTML += "<td><select name='mi_status' ><option " + (table.mi_status === '정상' ? "selected='selected'" : "") + ">정상</option><option " + (table.mi_status === '휴면' ? "selected='selected'" : "") + ">휴면</option><option " + (table.mi_status === '탈퇴' ? "selected='selected'" : "") + ">탈퇴</option></select></td>";
+	                    tableHTML += "<th scope='col' class='text-center align-middle'>상태</th>";
+	                    tableHTML += "<td><select class='form-control w-auto' name='mi_status' style='margin:0 auto'><option " + (table.mi_status === '정상' ? "selected='selected'" : "") + ">정상</option><option " + (table.mi_status === '휴면' ? "selected='selected'" : "") + ">휴면</option><option " + (table.mi_status === '탈퇴' ? "selected='selected'" : "") + ">탈퇴</option></select></td>";
 	                    tableHTML += "<tr><th scope='col' class='text-center'>이름/성별</th>";
-	                    tableHTML += "<td>" + table.mi_name + "n/" + table.mi_gender + "</td>";
+	                    tableHTML += "<td>" + table.mi_name + "/" + table.mi_gender + "</td>";
 	                    tableHTML += "<th scope='col' class='text-center'>번호</th>";
 	                    tableHTML += "<td>" + table.mi_phone + "</td>";
-	                    tableHTML += "<tr><th scope='col' class='text-center'>보유페이머니</th>";
-	                    tableHTML += "<td><input type='text' style='width:100px; border:0.1; text-align:center' name='mi_pmoney' value='" + table.mi_pmoney +"' /></td>";
+	                    tableHTML += "<tr><th scope='col' class='text-center align-middle'>보유페이머니</th>";
+	                    tableHTML += "<td><input class='form-control'  type='text' style='width:100px; border:0.1; text-align:center; margin: 0 auto' name='mi_pmoney' value='" + table.mi_pmoney +"' /></td>";
 	                   /*  tableHTML += "<th scope='col' class='text-center'>스템프</th>";
 	                    tableHTML += "<td>" + table.mi_stamp + "</td>";
 	                    tableHTML += "<tr><th scope='col' class='text-center'>쿠폰</th>";
@@ -344,9 +340,9 @@ function qwer (elem) {
 	                    tableHTML += "<td>" + table.mi_date + "</td>";
 	                    tableHTML += "</tr>";
 	                });
-	                tableHTML += "</tbody></table>";
+	                tableHTML += "</tbody></table><div class='btn-wrap mb-3'>";
 	                tableHTML += "<button type='submit' class='btn waves-effect waves-light btn-primary btn-lg m-auto' >수정</button>&nbsp;&nbsp;&nbsp;";  
-	                tableHTML += "<button type='button' class='btn waves-effect waves-light btn-primary btn-lg m-auto' onclick='location.href=\"memberList\"'>확인</button>";
+	                tableHTML += "<button type='button' class='btn waves-effect waves-light btn-primary btn-lg m-auto' onclick='location.href=\"memberList\"'>확인</button></div>";
 				
 				$("#memberDetail").html(tableHTML);
 	            $("#memberDetail-container").show();

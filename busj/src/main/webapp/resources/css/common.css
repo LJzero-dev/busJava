@@ -262,3 +262,29 @@ input[type="text"]#adult, input[type="text"]#teen, input[type="text"]#child {bac
 input[type="text"]#riacnt, input[type="text"]#riscnt, input[type="text"]#riccnt {background: #fff;}
 
 tr.data:hover { cursor: pointer; }
+
+.probootstrap_section.index { padding-top: 70px; padding-bottom: 0;}
+
+.probootstrap_section.index .carousel-inner { height: calc(100vh - 70px);}
+.carousel-control-prev, .carousel-control-next { background: none; border: none;}
+
+#indexBox {width: 1140px;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;}
+
+#indexBox h3 { color: #fff; font-size: 60px; line-height: 75px;}
+    
+#indexBox a.btn {    display: block;
+    font-size: 20px;
+    color: #fff;
+    background: #00CA4C;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    padding: 4rem 2rem;
+    font-weight: 700;
+    }
+    
+.carousel-item img {position: absolute;
+    top: -150px;}
