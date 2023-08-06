@@ -34,19 +34,19 @@ List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("term
 </div>
 <div class="modal-body">
 <form name="frmSch">
-<div class="input-group mb-3">
-	<input type="text" name="schTField" class="form-control focus-none"  placeholder="터미널 이름을 검색하세요.">
-	<div class="input-group-append"><button class="btn btn-outline-success" type="button" id="schBtn">검색</button></div>
-</div>
-</form>
-<hr />
-    <div>
-	    <button type="button" class="btn-success btn-sm">동서울</button>
-	    <button type="button" class="btn-success btn-sm">동서울</button>
-	    <button type="button" class="btn-success btn-sm">동서울</button>
-	    <button type="button" class="btn-success btn-sm">동서울</button>
-    </div>
-<hr />
+<!-- <div class="input-group mb-3"> -->
+<!-- 	<input type="text" name="schTField" class="form-control focus-none"  placeholder="터미널 이름을 검색하세요."> -->
+<!-- 	<div class="input-group-append"><button class="btn btn-outline-success" type="button" id="schBtn">검색</button></div> -->
+<!-- </div> -->
+<!-- </form> -->
+<!-- <hr /> -->
+<!--     <div> -->
+<!-- 	    <button type="button" class="btn-success btn-sm">동서울</button> -->
+<!-- 	    <button type="button" class="btn-success btn-sm">동서울</button> -->
+<!-- 	    <button type="button" class="btn-success btn-sm">동서울</button> -->
+<!-- 	    <button type="button" class="btn-success btn-sm">동서울</button> -->
+<!--     </div> -->
+<!-- <hr /> -->
     <form name="frmPoint">
 		<input type="hidden" name="lineNum" value="" />
       <div class="form-row">

@@ -7,113 +7,158 @@
     }
 
 </script> -->
-    
-<section class="probootstrap-cover overflow-hidden relative"  style="background-image: url('assets/images/bg_1.jpg');" data-stellar-background-ratio="0.5"  id="section-home">
-<div class="overlay"></div>
-	<div class="container">
-		<div class="row align-items-center justify-content-center">
-			<div class="col-md-8 probootstrap-animate">
-			<form id="frmLineInfo" name="frmLineInfo" action="" method="POST" class="probootstrap-form">
-				<input type="hidden" name="mode" id="mode" value="p" />
-				<input type="hidden" name="sDate1-1" id="sDate1-1" value="" />
-				<input type="hidden" name="sDate2-1" id="sDate2-1" value="" />
-				<input type="hidden" name="eDate1-1" id="eDate1-1" value="" />
-				<input type="hidden" name="sLineNum" id="sLineNum" value="" />
-				<input type="hidden" name="eLineNum" id="eLineNum" value="" />
-				
-		<div class="form-group">
-			<ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
-				<li class="nav-item" role="presentation">
-					<button class="nav-link active w-100" id="pills-home-tab" data-toggle="pill" data-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">편도</button>
-				</li>
-				<li class="nav-item" role="presentation">
-					<button class="nav-link w-100" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">왕복</button>
-				</li>
-			</ul>
-		<div class="tab-content" id="pills-tabContent">
-			<div class="row">
-			<div class="col-md">
-				<div class="form-check custom">
-					<input class="form-check-input" type="radio" name="busType" id="highBus" value="고속" checked>
-						<label class="form-check-label" for="highBus">고속</label>
-				</div>
-				<div class="form-check custom">
-					<input class="form-check-input" type="radio" name="busType" id="slowBus" value="시외">
-						<label class="form-check-label" for="slowBus">시외</label>
-				</div>
-			</div>
-			</div>
-			<div class="tab-content" id="pills-tabContent">
-			<div class="tab-pane active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" aria-expanded="false">
-              <div class="row mb-3">
-                <div class="col-md">
-                  <div class="form-group">
-                    <label for="sDate1-2">가는날</label>
-                    <div class="probootstrap-date-wrap">
-                      <span class="icon ion-calendar"></span> 
-                      <input type="text" id="sDate1-2" class="form-control" value="" readonly>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" aria-expanded="true">
-              <div class="row mb-3">
-                <div class="col-md">
-                  <div class="form-group">
-                    <label for="sDate2-2">가는날</label>
-                    <div class="probootstrap-date-wrap">
-                      <span class="icon ion-calendar"></span> 
-                      <input type="text" id="sDate2-2" class="form-control" placeholder="" readonly>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md">
-                  <div class="form-group">
-                    <label for="eDate1-2">오는날</label>
-                    <div class="probootstrap-date-wrap">
-                      <span class="icon ion-calendar"></span> 
-                      <input type="text" id="eDate1-2" class="form-control" placeholder="" readonly>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-		
-		
-		</div>
-			<div class="row mb-3">
-			<div class="col-md">
-				<div class="form-group">
-					<label for="sPoint">출발지</label>
-						<input type="text" class="form-control" id="sPoint" name="sPoint" readonly data-toggle="modal" data-target="#ViewModal" role="button" onclick="openModal();">
-				</div>
-			</div>
-			<div class="col-md">
-				<div class="form-group">
-					<label for="ePoint">도착지</label>
-						<input type="text" class="form-control" id="ePoint" name="ePoint"  readonly>
-				</div>
-			</div>
-			</div>
-			<div class="row mb-3">
-			<div class="col-md">
-				<input type="button" id="schBtn" value="조회하기" class="btn btn-primary btn-block">
-			</div>
-			</div>
-		</div>
-			</form>	
-			</div>  
-		</div>
-  <!-- Modal -->
-<div class="modal fade" id="ViewModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-        </div>
+<section class="probootstrap_section index">
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="${pageContext.request.contextPath}/resources/images/bg_1.jpg" class="d-block w-100" alt="...">
     </div>
+    <div class="carousel-item">
+      <img src="${pageContext.request.contextPath}/resources/images/bg_2.jpg" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="${pageContext.request.contextPath}/resources/images/bg_3.jpg" class="d-block w-100" alt="...">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-target="#carouselExampleIndicators" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </button>
+</div>
+<div id="indexBox">
+<div class="d-flex justify-content-between">
+<h3>버스자바와 함께<br/>국내여행 떠나요</h3>
+<div>
+<a class="btn" href="hTicketingStep01">고속버스 예매 바로가기
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+</svg>
+</a>
+<a class="btn" href="sTicketingStep01">시외버스 예매 바로가기
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+</svg>
+</a>
+</div>
+</div>
+
 </div>
 </section>
+<!-- <section class="probootstrap-cover overflow-hidden relative"  style="background-image: url('assets/images/bg_1.jpg');" data-stellar-background-ratio="0.5"  id="section-home"> -->
+<!-- <div class="overlay"></div> -->
+<!-- 	<div class="container"> -->
+<!-- 		<div class="row align-items-center justify-content-center"> -->
+<!-- 			<div class="col-md-8 probootstrap-animate"> -->
+<!-- 			<form id="frmLineInfo" name="frmLineInfo" action="" method="POST" class="probootstrap-form"> -->
+<!-- 				<input type="hidden" name="mode" id="mode" value="p" /> -->
+<!-- 				<input type="hidden" name="sDate1-1" id="sDate1-1" value="" /> -->
+<!-- 				<input type="hidden" name="sDate2-1" id="sDate2-1" value="" /> -->
+<!-- 				<input type="hidden" name="eDate1-1" id="eDate1-1" value="" /> -->
+<!-- 				<input type="hidden" name="sLineNum" id="sLineNum" value="" /> -->
+<!-- 				<input type="hidden" name="eLineNum" id="eLineNum" value="" /> -->
+				
+<!-- 		<div class="form-group"> -->
+<!-- 			<ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist"> -->
+<!-- 				<li class="nav-item" role="presentation"> -->
+<!-- 					<button class="nav-link active w-100" id="pills-home-tab" data-toggle="pill" data-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">편도</button> -->
+<!-- 				</li> -->
+<!-- 				<li class="nav-item" role="presentation"> -->
+<!-- 					<button class="nav-link w-100" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">왕복</button> -->
+<!-- 				</li> -->
+<!-- 			</ul> -->
+<!-- 		<div class="tab-content" id="pills-tabContent"> -->
+<!-- 			<div class="row"> -->
+<!-- 			<div class="col-md"> -->
+<!-- 				<div class="form-check custom"> -->
+<!-- 					<input class="form-check-input" type="radio" name="busType" id="highBus" value="고속" checked> -->
+<!-- 						<label class="form-check-label" for="highBus">고속</label> -->
+<!-- 				</div> -->
+<!-- 				<div class="form-check custom"> -->
+<!-- 					<input class="form-check-input" type="radio" name="busType" id="slowBus" value="시외"> -->
+<!-- 						<label class="form-check-label" for="slowBus">시외</label> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 			</div> -->
+<!-- 			<div class="tab-content" id="pills-tabContent"> -->
+<!-- 			<div class="tab-pane active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" aria-expanded="false"> -->
+<!--               <div class="row mb-3"> -->
+<!--                 <div class="col-md"> -->
+<!--                   <div class="form-group"> -->
+<!--                     <label for="sDate1-2">가는날</label> -->
+<!--                     <div class="probootstrap-date-wrap"> -->
+<!--                       <span class="icon ion-calendar"></span>  -->
+<!--                       <input type="text" id="sDate1-2" class="form-control" value="" readonly> -->
+<!--                     </div> -->
+<!--                   </div> -->
+<!--                 </div> -->
+<!--               </div> -->
+<!--             </div> -->
+<!--             <div class="tab-pane" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" aria-expanded="true"> -->
+<!--               <div class="row mb-3"> -->
+<!--                 <div class="col-md"> -->
+<!--                   <div class="form-group"> -->
+<!--                     <label for="sDate2-2">가는날</label> -->
+<!--                     <div class="probootstrap-date-wrap"> -->
+<!--                       <span class="icon ion-calendar"></span>  -->
+<!--                       <input type="text" id="sDate2-2" class="form-control" placeholder="" readonly> -->
+<!--                     </div> -->
+<!--                   </div> -->
+<!--                 </div> -->
+<!--                 <div class="col-md"> -->
+<!--                   <div class="form-group"> -->
+<!--                     <label for="eDate1-2">오는날</label> -->
+<!--                     <div class="probootstrap-date-wrap"> -->
+<!--                       <span class="icon ion-calendar"></span>  -->
+<!--                       <input type="text" id="eDate1-2" class="form-control" placeholder="" readonly> -->
+<!--                     </div> -->
+<!--                   </div> -->
+<!--                 </div> -->
+<!--               </div> -->
+<!--             </div> -->
+<!--           </div> -->
+		
+		
+<!-- 		</div> -->
+<!-- 			<div class="row mb-3"> -->
+<!-- 			<div class="col-md"> -->
+<!-- 				<div class="form-group"> -->
+<!-- 					<label for="sPoint">출발지</label> -->
+<!-- 						<input type="text" class="form-control" id="sPoint" name="sPoint" readonly data-toggle="modal" data-target="#ViewModal" role="button" onclick="openModal();"> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 			<div class="col-md"> -->
+<!-- 				<div class="form-group"> -->
+<!-- 					<label for="ePoint">도착지</label> -->
+<!-- 						<input type="text" class="form-control" id="ePoint" name="ePoint"  readonly> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 			</div> -->
+<!-- 			<div class="row mb-3"> -->
+<!-- 			<div class="col-md"> -->
+<!-- 				<input type="button" id="schBtn" value="조회하기" class="btn btn-primary btn-block"> -->
+<!-- 			</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 			</form>	 -->
+<!-- 			</div>   -->
+<!-- 		</div> -->
+<!--   <!-- Modal -->
+<!-- <div class="modal fade" id="ViewModal" tabindex="-1" role="dialog"> -->
+<!--     <div class="modal-dialog modal-lg" role="document"> -->
+<!--         <div class="modal-content"> -->
+<!--         </div> -->
+<!--     </div> -->
+<!-- </div> -->
+<!-- </section> -->
 
 
   <%@ include file="_inc/foot.jsp" %>

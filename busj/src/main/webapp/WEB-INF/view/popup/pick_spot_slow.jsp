@@ -44,18 +44,18 @@ if (schTField == null || schTField.equals(""))	schTField = "";		// 검색을 하
 </div>
 <div class="modal-body">
 <form name="schTname">
-	<div class="input-group mb-3">
-		<input type="text" name="schTField" value="<%=schTField %>" class="form-control focus-none"  placeholder="터미널 이름을 검색하세요.">
-		<div class="input-group-append">
-			<button class="btn btn-outline-success" type="submit" id="schBtn">검색</button>
-		</div>
-	</div>
-	<hr />
-	<div>
-		<button type="button" class="btn-success btn-sm">동서울</button>
-	</div>	
-</form>	
-	<hr />
+<!-- 	<div class="input-group mb-3"> -->
+<%-- 		<input type="text" name="schTField" value="<%=schTField %>" class="form-control focus-none"  placeholder="터미널 이름을 검색하세요."> --%>
+<!-- 		<div class="input-group-append"> -->
+<!-- 			<button class="btn btn-outline-success" type="submit" id="schBtn">검색</button> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- 	<hr /> -->
+<!-- 	<div> -->
+<!-- 		<button type="button" class="btn-success btn-sm">동서울</button> -->
+<!-- 	</div>	 -->
+<!-- </form>	 -->
+<!-- 	<hr /> -->
 <form name="frmPoint" method="post">	
 	<div class="form-row">
 	<div class="col-md-6 mb-3">

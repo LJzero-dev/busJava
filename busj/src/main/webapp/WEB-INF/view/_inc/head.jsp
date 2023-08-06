@@ -51,14 +51,14 @@ if (loginInfo != null)	isLogin = true;
 			</li>
 			<li class="nav-item"><a class="nav-link" href="travelList">추천 여행지</a></li>
 			<li class="nav-item"><a class="nav-link" href="pmoneyInfo">페이머니 구매</a></li>
-			<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">고객지원</a>
-        	<div class="dropdown-menu">
-				<a class="dropdown-item" href="noticeList">공지사항</a>
-				<a class="dropdown-item" href="csList">자주하는질문</a>
-				<a class="dropdown-item" href="lostList">유실물 안내</a>
-			</div>
-			</li>
+<!-- 			<li class="nav-item dropdown"> -->
+<!-- 			<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">고객지원</a> -->
+<!--         	<div class="dropdown-menu"> -->
+<!-- 				<a class="dropdown-item" href="noticeList">공지사항</a> -->
+<!-- 				<a class="dropdown-item" href="csList">자주하는질문</a> -->
+<!-- 				<a class="dropdown-item" href="lostList">유실물 안내</a> -->
+<!-- 			</div> -->
+<!-- 			</li> -->
 		</ul>
         <div class="d-flex align-items-center">
 <% if (isLogin) { %> <!-- 로그인 상태 -->
