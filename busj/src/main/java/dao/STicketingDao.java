@@ -73,9 +73,11 @@ public class STicketingDao {
 				+ "WHEN '프리미엄' THEN 18 "
 				+ "END AS total_seat "
 				+ "FROM t_bus_schedule a, t_bus_line b, t_bus_info c, t_bus_company d "
-				+ "WHERE a.bl_idx = b.bl_idx and a.bi_idx = c.bi_idx and c.bc_idx = d.bc_idx and a.bl_idx = " + blidx + " ) tt";
+				+ "WHERE a.bl_idx = b.bl_idx and a.bi_idx = c.bi_idx and c.bc_idx = d.bc_idx and a.bl_idx = " + blidx + " ) tt"; 
+				
 		
 		List<ReservationStep2> scheduleList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
+			
 			ReservationStep2 sl = new ReservationStep2();
 			sl.setBs_idx(rs.getInt("bs_idx"));
 			sl.setBi_idx(rs.getInt("bi_idx"));
@@ -87,6 +89,7 @@ public class STicketingDao {
 			sl.setBl_adult(rs.getInt("bl_adult"));
 			sl.setTotal_seat(rs.getInt("total_seat"));
 			sl.setLeft_seat(rs.getInt("left_seat"));
+
 			return sl;
 		});
 		return scheduleList;
@@ -119,14 +122,6 @@ public class STicketingDao {
 		});
 		return seatList;
 	}
-
-	/*
-	 * public int chargeAmountIn(String uid, String payment, int chargePmoney, int
-	 * totalPmoney) { String sql =
-	 * "INSERT INTO T_MEMBER_PMONEY_HISTORY(mi_id, mph_payment, mph_real_price, mph_pmoney) values "
-	 * + "('" + uid + "', '" + payment + "', " + chargePmoney + ", " + totalPmoney +
-	 * ") "; int result = jdbc.update(sql); return result; }
-	 */
 
 	private String getReservationId() {
 		// 예약번호를 만드는 메서드. 다른곳에서 쓰지 않으므로 private로 선언

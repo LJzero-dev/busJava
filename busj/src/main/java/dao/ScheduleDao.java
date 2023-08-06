@@ -32,7 +32,7 @@ public class ScheduleDao {
 				+ "total_seat - IFNULL((SELECT sum(ri_acnt + ri_scnt + ri_ccnt) FROM t_reservation_info ri WHERE ri.bs_idx = tt.bs_idx and ri.ri_sday = '" + risday.replace(".", "-") + "'), 0) "
 				+ "as left_seat "
 				+ "from ( "
-				+ "SELECT a.bs_idx, a.bl_idx, a.bi_idx, d.bc_name, b.bl_adult, c.bi_level, a.bs_stime, a.bs_etime, "
+				+ "SELECT a.bs_idx, a.bl_idx, a.bi_idx, d.bc_name, b.bl_adult, c.bi_level, a.bs_stime, a.bs_etime, b.bl_type, "
 				+ "CASE c.bi_level "
 				+ "WHEN '일반' THEN 36 "
 				+ "WHEN '우등' THEN 28 "
@@ -44,6 +44,14 @@ public class ScheduleDao {
 		
 		List<ReservationStep2> scheduleList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
 			ReservationStep2 sl = new ReservationStep2();
+			
+			int blAdult = rs.getInt("bl_adult");
+			
+			if (rs.getString("bl_type").equals("고속") && rs.getString("bi_level").equals("프리미엄"))	
+				blAdult = (int) (rs.getInt("bl_adult") * 1.5);
+			else if (rs.getString("bl_type").equals("시외") && rs.getString("bi_level").equals("우등")) 
+				blAdult = (int) (rs.getInt("bl_adult") * 1.5);
+
 			sl.setBs_idx(rs.getInt("bs_idx"));
 			sl.setBi_idx(rs.getInt("bi_idx"));
 			sl.setBl_idx(rs.getInt("bl_idx"));
@@ -51,7 +59,7 @@ public class ScheduleDao {
 			sl.setBs_etime(rs.getString("bs_etime"));
 			sl.setBc_name(rs.getString("bc_name"));
 			sl.setBi_level(rs.getString("bi_level"));
-			sl.setBl_adult(rs.getInt("bl_adult"));
+			sl.setBl_adult(blAdult);
 			sl.setTotal_seat(rs.getInt("total_seat"));
 			sl.setLeft_seat(rs.getInt("left_seat"));
 			return sl;
@@ -129,7 +137,7 @@ public class ScheduleDao {
 				+ "        (bs.bs_etime >= curtime() AND TIME_TO_SEC(TIMEDIFF(bs.bs_etime, curtime())) <= 2*60*60) "
 				+ "        OR (bs.bs_etime <= curtime() AND TIME_TO_SEC(TIMEDIFF(curtime(), bs.bs_etime)) <= 30*60) "
 				+ " )";
-		System.out.println(sql);
+//		System.out.println(sql);
 		List<ArriveInfo> timeList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
 			ArriveInfo ai = new ArriveInfo();
 			String leftTime = rs.getString("leftTime");
