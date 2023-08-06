@@ -112,6 +112,8 @@ tr:hover {
 	for (ReservationStep2 sl : scheduleList) {
 		bsidx = sl.getBs_idx();		etime = sl.getBs_etime();
 		int adultPrice = sl.getBl_adult();
+		if (sl.getBi_level().equals("일반"))	adultPrice = sl.getBl_adult();
+		else	adultPrice = (int)(sl.getBl_adult() * 1.5);
 %>
 			<tr onclick="rowClicked('<%=sl.getBs_idx() %>', '<%=sl.getBs_etime() %>', '<%=sl.getBs_stime() %>', '<%=sl.getBc_name() %>', 
 			'<%=sl.getBi_level() %>', '<%=sl.getBl_adult() %>', '<%=sl.getTotal_seat() %>', '<%=sl.getLeft_seat() %>');">

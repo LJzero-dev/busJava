@@ -126,6 +126,10 @@ function getToday(){
     return YEAR + "." + MONTH + "." + DAY;
 }
 
+function number_format(num){
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
+}
+
 $(document).ready(function() {
 	// 모달을 열 때 버튼 클릭 이벤트에 따라 다른 URL을 전달
 	$("#sPoint").click(function() {
@@ -187,9 +191,9 @@ $(document).ready(function() {
 	                    tableHTML += "<td>" + table.bs_stime + "</td>";
 	                    tableHTML += "<td>" + table.bc_name + "</td>";
 	                    tableHTML += "<td>" + table.bi_level + "</td>";
-	                    tableHTML += "<td>" + table.bl_adult + "</td>";
-	                    tableHTML += "<td>" + (table.bl_adult * 0.8) + "</td>";
-	                    tableHTML += "<td>" + (table.bl_adult * 0.5) + "</td>";
+	                    tableHTML += "<td>" + number_format(table.bl_adult); + "</td>";
+	                    tableHTML += "<td>" + number_format((table.bl_adult * 0.8)); + "</td>";
+	                    tableHTML += "<td>" + number_format((table.bl_adult * 0.5)); + "</td>";
 	                    tableHTML += "<td>" + table.total_seat + "</td>";
 	                    tableHTML += "<td>" + table.left_seat + "</td>";
 	                    tableHTML += "</tr>";
