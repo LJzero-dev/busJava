@@ -72,7 +72,7 @@ public class ScheduleDao {
 	public List<TerminalInfo> getDepartureTerminal(String selectedArea) {
 	// 선택한 출발 지역에 있는 터미널 이름을 구하는 메서드
 		String sql = "select bt_name from t_bus_terminal where bt_area like '%" + selectedArea + "%'";
-		System.out.println(sql);
+//		System.out.println(sql);
 		List<TerminalInfo> departureTerminal = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
 			TerminalInfo ti = new TerminalInfo();
 			ti.setBt_name(rs.getString("bt_name"));
@@ -127,7 +127,7 @@ public class ScheduleDao {
 				+ 			busCompany 
 				+ " AND ("
 				+ "        (bs.bs_etime >= curtime() AND TIME_TO_SEC(TIMEDIFF(bs.bs_etime, curtime())) <= 2*60*60) "
-				+ "        OR (bs.bs_etime <= NOW() AND TIME_TO_SEC(TIMEDIFF(NOW(), bs.bs_etime)) <= 30*60) "
+				+ "        OR (bs.bs_etime <= curtime() AND TIME_TO_SEC(TIMEDIFF(curtime(), bs.bs_etime)) <= 30*60) "
 				+ " )";
 		System.out.println(sql);
 		List<ArriveInfo> timeList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
