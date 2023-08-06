@@ -29,8 +29,7 @@ function showFileName() {
 			<h3 class="page-title text-truncate text-dark font-weight-medium mb-1">추천여행지 등록</h3>
 		</div>
 	</div>
-</div>
-<div class="row">
+	<div class="row">
     <div class="col-lg-12">
         <div class="card">
         <form name="frmIn" action="travelIn" method="post" enctype="multipart/form-data">
@@ -129,6 +128,8 @@ function showFileName() {
         </div> 
     </div>
 </div>
+</div>
+
 </div>
 </section>
 
