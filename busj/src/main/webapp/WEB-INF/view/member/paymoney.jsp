@@ -2,11 +2,21 @@
 <%@ include file="../_inc/head.jsp"%>
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
+<%@ page import="java.text.*" %>
 <%
 request.setCharacterEncoding("utf-8");
 MemberInfo mi = (MemberInfo)session.getAttribute("loginInfo");  
 List<paymoneyInfo> pList = (List<paymoneyInfo>)request.getAttribute("pList");
 List<paymoneyInfo> mphList = (List<paymoneyInfo>)request.getAttribute("mphList");
+NumberFormat nf = NumberFormat.getInstance();
+
+
+String mi_pmoney = "";
+if (mi.getMi_pmoney() > 0) {
+    nf = NumberFormat.getInstance();
+    mi_pmoney = nf.format(mi.getMi_pmoney());
+    // 이제 formattedNumber는 세 자리마다 쉼표가 찍힌 숫자를 문자열 형태로 저장합니다.
+}
 %>
 <section class="probootstrap_section">
       <div class="container">
@@ -34,7 +44,7 @@ List<paymoneyInfo> mphList = (List<paymoneyInfo>)request.getAttribute("mphList")
 <% } else { %>	           	
 	            <tr>
                   <td class="text-left">
-                    <p class="h2 mb-0"><%=mi.getMi_pmoney() %> 원</p>
+                    <p class="h2 mb-0"><%=mi_pmoney %> 원</p>
                   </td>
                   <td colspan="2" class="text-right"><button type="button" class="btn btn-primary" onclick="location.href='pmoneyInfo'" />충전하기</td>
                 </tr>
@@ -55,9 +65,15 @@ List<paymoneyInfo> mphList = (List<paymoneyInfo>)request.getAttribute("mphList")
                 <col width="*">
               </colgroup>
               <tbody>
-<% for (paymoneyInfo pl : pList) {  %>
+<% for (paymoneyInfo pl : pList) { 
+	String Total_cr_pmoney = "";
+	if (pl.getTotal_cr_pmoney() > 0) {
+	    nf = NumberFormat.getInstance();
+	    Total_cr_pmoney = nf.format(pl.getTotal_cr_pmoney());
+	    // 이제 formattedNumber는 세 자리마다 쉼표가 찍힌 숫자를 문자열 형태로 저장합니다.
+	}	%>
                 <tr>
-                  <td class="align-middle"><p class="h2 mb-0">-<%=pl.getTotal_cr_pmoney() %></p></td>
+                  <td class="align-middle"><p class="h2 mb-0">-<%=Total_cr_pmoney %></p></td>
                   <td class="text-left">
                     <p class="mb-0"><%=pl.getBl_type() %>버스 예매</p>
                     <p class="mb-0"><%=pl.getBt_sidx() %> -> <%=pl.getBt_eidx() %></p>
@@ -83,11 +99,17 @@ List<paymoneyInfo> mphList = (List<paymoneyInfo>)request.getAttribute("mphList")
               </colgroup>
               <tbody>
 <!-- 페이머니 내역 for문 동려서 출력  -->
-<% for (paymoneyInfo mpl : mphList) {  %>
+<% for (paymoneyInfo mpl : mphList) { 
+	String Mph_pmoney = "";
+	if (mpl.getMph_pmoney() > 0) {
+	    nf = NumberFormat.getInstance();
+	    Mph_pmoney = nf.format(mpl.getMph_pmoney());
+	    // 이제 formattedNumber는 세 자리마다 쉼표가 찍힌 숫자를 문자열 형태로 저장합니다.
+	}	%>
                 <tr>
-                  <td class="align-middle"><p class="h2 mb-0">+<%=mpl.getMph_pmoney() %></p></td>
+                  <td class="align-middle"><p class="h2 mb-0">+<%=Mph_pmoney %></p></td>
                   <td class="text-left">
-                    <p class="mb-0"><%=mpl.getMph_pmoney() %>원권 충전</p>
+                    <p class="mb-0"><%=Mph_pmoney %>원권 충전</p>
                     <p class="mb-0">10% 추가 적립</p>
                   </td>
                   <td class="text-right"><span class="font-weight-bold mr-1">충전일시</span> <%=mpl.getMph_date() %></td>
