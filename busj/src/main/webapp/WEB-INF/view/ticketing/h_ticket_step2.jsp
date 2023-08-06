@@ -92,13 +92,13 @@ ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
 		                <td class="align-middle"><span class="badge badge-primary">도착지</span></td>
 		                <td class="align-middle"><%=ri1.getEspot() %></td>
 		                <td class="align-middle">탑승일</td>
-		                <td class="text-left">
-		                  <div class="w-50">
-		                  <div class="probootstrap-date-wrap">
-		                        <span class="icon ion-calendar"></span> 
-		                        <input type="text" id="sDate" class="form-control" value="<%=ri1.getSdate()%>" readonly>
-		                      </div></td>
-		                  </div>
+		                <td class="text-left"><%=ri1.getSdate()%>
+<!-- 		                  <div class="w-50"> -->
+<!-- 		                  <div class="probootstrap-date-wrap"> -->
+<!-- 		                        <span class="icon ion-calendar"></span>  -->
+<%-- 		                        <input type="text" id="sDate" class="form-control" value="<%=ri1.getSdate()%>" readonly> --%>
+<!-- 		                      </div></td> -->
+<!-- 		                  </div> -->
 		              </tr>
 		            </tbody>
 	            </table>
