@@ -59,22 +59,28 @@ public class HTicketingDao {
 
 	public List<ScheduleInfo> getSList(String sDate, int lineNum) {
 		// 출발일, 노선번호에 따라 시간표 리턴.
-		String sql = 
-				"select " + 
-				"	tt.*" + 
-				"	, total_seat - IFNULL((SELECT sum(ri_acnt + ri_scnt + ri_ccnt) FROM t_reservation_info ri WHERE ri.bs_idx = tt.bs_idx and ri.ri_sday = '" + sDate + "'), 0)" + 
-				"	as left_seat " + 
-				"from ( " + 
-				"	SELECT " +
-				"		a.bl_idx, a.bi_idx, if(c.bc_idx = 1, '중앙', if(c.bc_idx = 2, '동부', if(c.bc_idx = 3, '금호', '동양'))) comname, b.bl_adult, c.bi_level, a.bs_stime, a.bs_etime, " + 
-				"			CASE c.bi_level " + 
-				"			WHEN '일반' THEN 36 " + 
-				"			WHEN '우등' THEN 28 " + 
-				"			WHEN '프리미엄' THEN 18 " + 
-				"		END AS total_seat, " +
-				"		a.bs_idx " + 
-				"	FROM t_bus_schedule a, t_bus_line b, t_bus_info c " + 
-				"	WHERE a.bl_idx = b.bl_idx and a.bi_idx = c.bi_idx and a.bl_idx = " + lineNum + ") tt ";
+		String sql = "SELECT BS.bl_idx, BS.bi_idx, BL.bl_adult, " + 
+				"    IF(BI.bc_idx = 1, '중앙', IF(BI.bc_idx = 2, '동부', IF(BI.bc_idx = 3, '금호', '동양'))) comname, " + 
+				"    BI.bi_level, BS.bs_stime, BS.bs_etime, " + 
+				"    CASE BI.bi_level " + 
+				"        WHEN '일반' THEN 36 " + 
+				"        WHEN '우등' THEN 28 " + 
+				"        WHEN '프리미엄' THEN 18 " + 
+				"    END AS total_seats, " + 
+				"    BS.bs_idx, " + 
+				"    (CASE BI.bi_level " + 
+				"        WHEN '일반' THEN 36 " + 
+				"        WHEN '우등' THEN 28 " + 
+				"        WHEN '프리미엄' THEN 18 " + 
+				"    END - COUNT(RD.rd_idx)) AS left_seat " + 
+				"FROM T_BUS_SCHEDULE BS " + 
+				"JOIN T_BUS_LINE BL ON BS.bl_idx = BL.bl_idx " + 
+				"JOIN T_BUS_INFO BI ON BS.bi_idx = BI.bi_idx " + 
+				"LEFT JOIN T_RESERVATION_INFO RI ON BS.bs_idx = RI.bs_idx AND RI.ri_sday = '" + sDate + "' " + 
+				"LEFT JOIN T_RESERVATION_DETAIL RD ON RI.ri_idx = RD.ri_idx " + 
+				"WHERE BS.bl_idx = " + lineNum + " " + 
+				"GROUP BY BS.bl_idx, BS.bi_idx, BI.bc_idx, BI.bi_level, BS.bs_stime, BI.bi_level, BS.bs_idx";
+		System.out.println(sql);
 		
 		List<ScheduleInfo> scheduleList = jdbc.query(
 				sql, new RowMapper<ScheduleInfo>() {
@@ -89,7 +95,7 @@ public class HTicketingDao {
 						sl.setBi_level(rs.getString("bi_level"));
 						sl.setComname(rs.getString("comname"));
 						sl.setBl_adult(rs.getInt("bl_adult"));
-						sl.setTotal_seat(rs.getInt("total_seat"));
+						sl.setTotal_seat(rs.getInt("total_seats"));
 						sl.setLeft_seat(rs.getInt("left_seat"));
 						return sl;
 					}
