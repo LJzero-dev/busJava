@@ -111,13 +111,14 @@ tr:hover {
 <%if (scheduleList.size() > 0) {	// 해당 노선의 시간표가 있는 경우
 	for (ReservationStep2 sl : scheduleList) {
 		bsidx = sl.getBs_idx();		etime = sl.getBs_etime();
+		int adultPrice = sl.getBl_adult();
 %>
 			<tr onclick="rowClicked('<%=sl.getBs_idx() %>', '<%=sl.getBs_etime() %>', '<%=sl.getBs_stime() %>', '<%=sl.getBc_name() %>', 
 			'<%=sl.getBi_level() %>', '<%=sl.getBl_adult() %>', '<%=sl.getTotal_seat() %>', '<%=sl.getLeft_seat() %>');">
-				<td><%=sl.getBs_stime() %></td>		<!-- 출발시간 si.getBs_stime -->
-				<td><%=sl.getBc_name() %></td>		<!-- 버스회사이름 bc_name -->
-				<td><%=sl.getBi_level() %></td>		<!-- 버스등급 bi_level -->
-				<td><%=sl.getBl_adult() %></td>		<!-- 성인요금 bl_adult -->
+				<td><%=sl.getBs_stime() %></td>		
+				<td><%=sl.getBc_name() %></td>		
+				<td><%=sl.getBi_level() %></td>		
+				<td><%= String.format("%,d", adultPrice) %></td>		
 				<td><%=sl.getTotal_seat()%></td>	<!-- 전체좌석 int seat		if(bi_level.equals("우등")) seat = 28 else seat = 36 -->
 				<td><%=sl.getLeft_seat() %></td>	<!-- 잔여(예매가능)좌석 si.getLseat -->
 			</tr>

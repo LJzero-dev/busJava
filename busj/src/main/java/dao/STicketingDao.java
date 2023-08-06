@@ -2,6 +2,7 @@ package dao;
 
 import java.util.*;
 import java.sql.*;
+import java.time.*;
 import javax.sql.*;
 import config.*;
 import org.apache.tomcat.jdbc.pool.DataSource.*;
@@ -118,5 +119,89 @@ public class STicketingDao {
 		});
 		return seatList;
 	}
+
+	/*
+	 * public int chargeAmountIn(String uid, String payment, int chargePmoney, int
+	 * totalPmoney) { String sql =
+	 * "INSERT INTO T_MEMBER_PMONEY_HISTORY(mi_id, mph_payment, mph_real_price, mph_pmoney) values "
+	 * + "('" + uid + "', '" + payment + "', " + chargePmoney + ", " + totalPmoney +
+	 * ") "; int result = jdbc.update(sql); return result; }
+	 */
+
+	private String getReservationId() {
+		// 예약번호를 만드는 메서드. 다른곳에서 쓰지 않으므로 private로 선언
+			String ri_idx = "";
+			LocalDate today = LocalDate.now();	// yyyy-mm-dd
+			String td = (today + "").substring(2).replace("-", "");	// yymmdd
+			
+			String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			Random rnd = new Random();
+			String eng = alpha.charAt(rnd.nextInt(26)) + "" + alpha.charAt(rnd.nextInt(26));
+			
+			String sql = "SELECT MAX(RIGHT(ri_idx, 4)) seq FROM T_RESERVATION_INFO WHERE LEFT(ri_idx, 6) = '" + td + "' ";
+			
+			Integer maxIdx = jdbc.queryForObject(sql, Integer.class);
+			int nextIdx = (maxIdx != null) ? maxIdx + 1 : 1001; 
+			
+			ri_idx = td + eng + nextIdx;
+			
+			return ri_idx;
+		}
+	
+	public String reservationIn(MemberInfo loginInfo, ReservationInfo ri) {
+	// 
+		String ri_idx = getReservationId();
+		int bs_idx = ri.getBs_idx();
+
+		String sql = "INSERT INTO T_RESERVATION_INFO (ri_idx, bs_idx, mi_id, ri_sday, ri_acnt, ri_scnt, ri_ccnt, ri_status) VALUES ('" +
+			ri_idx + "', " + bs_idx + ", '" + loginInfo.getMi_id() + "', '" + ri.getSdate() + "', " + ri.getRi_acnt() + ", " + ri.getRi_scnt() + ", " + ri.getRi_ccnt() + ", '예매')";
+		jdbc.update(sql);
+		
+		return ri_idx;
+	}
+
+	public List<String> getSeat(String seatWhere) {
+		String sql = "SELECT SI.si_idx " + 
+				"FROM T_BUS_SCHEDULE BS, T_SEAT_INFO SI " + seatWhere;
+		List<String> seatArr = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
+			return Integer.toString(rs.getInt("si_idx"));
+		});
+
+		return seatArr;
+	}
+
+	public void reservationSeatIn(String result, List<String> seatArr) {
+		for (String seat : seatArr) {
+			String sql = "INSERT INTO T_RESERVATION_DETAIL (ri_idx, si_idx) VALUES ('" + result + "', '" + seat + "')";
+			jdbc.update(sql);
+		}
+	}
+
+	public void reservationUserUp(MemberInfo loginInfo, ReservationInfo ri, int totalP) {
+		String sql = "UPDATE T_MEMBER_INFO SET MI_PMONEY = MI_PMONEY - " + totalP + " WHERE MI_ID = '" + loginInfo.getMi_id() + "'";
+		jdbc.update(sql);
+		
+	}
+
+	public void reservationPayIn(String result, MemberInfo loginInfo, ReservationInfo ri, int totalP) {
+		// 회원 결제내역 테이블 insert
+		String sql = "INSERT INTO T_PAYMENT_DETAIL (ri_idx, mi_id, pd_payment, pd_total_price, pd_real_price) VALUES ('" +
+				result + "', '" + loginInfo.getMi_id() + "', '"+ ri.getPayment() + "', " + totalP + ", " + totalP + ")";
+		jdbc.update(sql);
+		
+	}
+
+	public void reservationCntIn(String result, ReservationInfo ri, int totalP) {
+		String sql;
+		if (ri.getPayment().equals("페이머니")) {
+			sql = "INSERT INTO T_COUNT_RINFO (ri_idx, cr_payment, cr_pmoney) VALUES ('" + result + "', '" + ri.getPayment() + "', " + totalP + ")";
+		} else {
+			sql = "INSERT INTO T_COUNT_RINFO (ri_idx, cr_payment, cr_pay) VALUES ('" + result + "', '" + ri.getPayment() + "', " + totalP + ")";
+		}
+		
+		jdbc.update(sql);
+		
+	}
+
 	
 }

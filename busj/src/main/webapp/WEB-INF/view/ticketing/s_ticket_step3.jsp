@@ -117,7 +117,7 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 	<form name="frmSeat" action="<%=action %>" method="post">
 		<input type="hidden" name="selectedSeats" id="selectedSeats" value="">
 		<input type="hidden" name="selectedSeatsIndexes" id="selectedSeatsIndexes" value="">
-		<input type="hidden" name="totalPrice" id="totalP" value="">
+		<input type="hidden" name="basePrice" id="baseP" value="" />
 	<div class="row justify-content-center">
 		<div class="col-md-6 text-center">
 			<p>좌석선택 <%=leftseat %> / <%=totalseat %></p>
@@ -217,7 +217,7 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 				<span id="priceC"></span>
 			</div>
 		<hr />
-			<p class="h5 text-right mb-5">총 <span id="totalPrice">0</span> 원</p>
+			<p class="h5 text-right mb-5">총 <span id="basePrice">0</span> 원</p>
 				<button type="button" id="submitBtn" class="btn btn-primary btn-block">선택완료</button>
 		</div>
 		</div>
@@ -237,7 +237,6 @@ const selectedSeatsInput = document.getElementById("selectedSeats");
 const selectedIndexesInput = document.getElementById("selectedSeatsIndexes");
 
 function setCnt(op) {	// 매수 선택필드의 [-] / [+] 버튼 클릭 시 
-	let totalCnt = 0;
 	if ( $("#totalCnt").text() == 10 && (op == 'plusA' || op == 'plusT' || op == 'plusC')) {
 		alert("최대 예약 가능 인원은 10명입니다.");
 		return;
@@ -246,6 +245,7 @@ function setCnt(op) {	// 매수 선택필드의 [-] / [+] 버튼 클릭 시
 	let riacnt = parseInt($("#riacnt").val());	// 성인인원
 	let riscnt = parseInt($("#riscnt").val());	// 청소년인원
 	let riccnt = parseInt($("#riccnt").val());	// 아동인원
+	let totalCnt = parseInt($("#totalCnt").text());
 	
 	// 연산자가 마이너스이고 해당 필드가 0인경우 미리 return하여 아래 배열에 영향을 주지않도록 함 (어른은 기본 1선택)
 	if ((op == 'minusA' && riacnt === 0) || (op == 'minusT' && riscnt === 0) || (op == 'minusC' && riccnt === 0)) {
@@ -286,8 +286,8 @@ function setCnt(op) {	// 매수 선택필드의 [-] / [+] 버튼 클릭 시
 	$("#priceC").text(formatNumber(riccnt * <%=ri1.getPrice()%> * 0.5));
 	  
 	$("#totalCnt").text(riacnt + riscnt + riccnt);
-	$("#totalPrice").text(formatNumber(riacnt * <%=ri1.getPrice()%> + riscnt * <%=ri1.getPrice()%> * 0.8 + riccnt * <%=ri1.getPrice()%> * 0.5));
-	$("#totalP").val((riacnt * <%=ri1.getPrice()%> + riscnt * <%=ri1.getPrice()%> * 0.8 + riccnt * <%=ri1.getPrice()%> * 0.5));
+	$("#basePrice").text(formatNumber(riacnt * <%=ri1.getPrice()%> + riscnt * <%=ri1.getPrice()%> * 0.8 + riccnt * <%=ri1.getPrice()%> * 0.5));
+	$("#baseP").val((riacnt * <%=ri1.getPrice()%> + riscnt * <%=ri1.getPrice()%> * 0.8 + riccnt * <%=ri1.getPrice()%> * 0.5));
 
 	let seatsCnt = 0;
 	for (let i = 0; i < seats.length; i++) {
@@ -374,7 +374,6 @@ $(document).ready(function() {
 	$("#submitBtn").click(function() {
 		// 총 인원이 선택이 0이고 좌석이 선택되지 않은 경우
 		let totalHeadcount = parseInt($("#totalCnt").text());
-		document.getElementById("totalPrice").value = parseInt($("#totalPrice").text().replace(/,/g, ""));
 		
 		if (totalHeadcount === 0 && selectedValues.length === 0) {
 			alert("인원이 선택되지 않았습니다.\n인원 선택 후 좌석을 선택해주세요.");

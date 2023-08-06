@@ -99,7 +99,7 @@ public class STicketingCtrl {
 		}
 		
 		ri1.setBs_idx(bsidx);		ri1.setComname(bcname);		ri1.setLevel(bilevel);	ri1.setPrice(bladult);
-		ri1.setStime(stime);		ri1.setEtime(etime);		
+		ri1.setStime(stime);		ri1.setEtime(etime);		ri1.setBs_idx(bsidx);	
 
 		if (request.getParameter("ri_sday1") != null && !request.getParameter("ri_sday1").equals("")) 
 			ri1.setSdate(request.getParameter("ri_sday1"));	
@@ -123,33 +123,44 @@ public class STicketingCtrl {
 
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
-		
 		if (ri1 == null) {	// ri1 객체가 null인 경우에 대한 처리
 		    out.println("<script>");
 		    out.println("alert('시간이 경과되었습니다.\\예매를 다시 시도해주세요.')");
 		    out.println("location.href='sTicketingStep01';");
 		    out.println("</script>");
 		    out.close();
-		} else if (ri1.getMode().equals("p")) {	// 편도일 경우
-			ri1.setRi_acnt(Integer.parseInt(request.getParameter("riacnt")));
-			ri1.setRi_scnt(Integer.parseInt(request.getParameter("riscnt")));
-			ri1.setRi_ccnt(Integer.parseInt(request.getParameter("riccnt")));
+		} else {
+			if (ri1.getMode().equals("p")) {	// 편도일 경우
+				ri1.setRi_acnt(Integer.parseInt(request.getParameter("riacnt")));
+				ri1.setRi_scnt(Integer.parseInt(request.getParameter("riscnt")));
+				ri1.setRi_ccnt(Integer.parseInt(request.getParameter("riccnt")));
+				String[] seatsGo = request.getParameterValues("seatBoxDtl");
+				String seatListGo = "";
+				for (String seatGo : seatsGo) {
+					seatListGo += ", " + seatGo;
+				}
+				ri1.setSeat(request.getParameter("selectedSeats"));
+				ri1.setSi_idx(request.getParameter("selectedSeatsIndexes"));
+				ri1.setBasePrice(Integer.parseInt(request.getParameter("basePrice")));
+				
+				session.setAttribute("seatsGo", seatsGo);
 
-		} else if (ri1.getMode().equals("w") && ri2 != null) {
-			ri2.setRi_acnt(Integer.parseInt(request.getParameter("riacnt")));
-			ri2.setRi_scnt(Integer.parseInt(request.getParameter("riscnt")));
-			ri2.setRi_ccnt(Integer.parseInt(request.getParameter("riccnt")));
-		}
-		
-		
-		
-		System.out.println(request.getParameter("riacnt"));
-		System.out.println(request.getParameter("riscnt"));
-		System.out.println(request.getParameter("riccnt"));
-		System.out.println(request.getParameter("selectedSeats"));
-		System.out.println(request.getParameter("totalPrice"));
-		
-		
+			} else {
+				ri2.setRi_acnt(Integer.parseInt(request.getParameter("riacnt")));
+				ri2.setRi_scnt(Integer.parseInt(request.getParameter("riscnt")));
+				ri2.setRi_ccnt(Integer.parseInt(request.getParameter("riccnt")));
+				String[] seatsCome = request.getParameterValues("seatBoxDtl");
+				String seatListCome = "";
+				for (String seatCome : seatsCome) {
+					seatListCome += ", " + seatCome;
+				}
+				ri2.setSeat(request.getParameter("selectedSeats"));
+				ri2.setSi_idx(request.getParameter("selectedSeatsIndexes"));
+				ri2.setBasePrice(Integer.parseInt(request.getParameter("basePrice2")));
+				
+				session.setAttribute("seatsCome", seatsCome);
+			}
+		} 
 		return "ticketing/s_ticket_pay";
 	}
 	
@@ -159,6 +170,7 @@ public class STicketingCtrl {
 		HttpSession session = request.getSession();	
 		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
 		ReservationInfo ri2 = (ReservationInfo)session.getAttribute("ri2");
+
 		
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
@@ -173,6 +185,9 @@ public class STicketingCtrl {
 			ri1.setRi_acnt(Integer.parseInt(request.getParameter("riacnt")));
 			ri1.setRi_scnt(Integer.parseInt(request.getParameter("riscnt")));
 			ri1.setRi_ccnt(Integer.parseInt(request.getParameter("riccnt")));
+			ri1.setSeat(request.getParameter("selectedSeats"));
+			ri1.setSi_idx(request.getParameter("selectedSeatsIndexes"));
+			ri1.setBasePrice(Integer.parseInt(request.getParameter("basePrice")));
 		}
 		String btsname = ri2.getSspot();
 		String btename = ri2.getEspot();
@@ -215,7 +230,7 @@ public class STicketingCtrl {
 		}
 		
 		ri2.setBs_idx(bsidx);		ri2.setComname(bcname);		ri2.setLevel(bilevel);	ri2.setPrice(bladult);
-		ri2.setStime(stime);		ri2.setEtime(etime);		
+		ri2.setStime(stime);		ri2.setEtime(etime);		ri2.setBs_idx(bsidx);	
 
 		if (request.getParameter("ri_sday3") != null && !request.getParameter("ri_sday3").equals("")) 
 			ri2.setSdate(request.getParameter("ri_sday3"));	
@@ -226,6 +241,53 @@ public class STicketingCtrl {
 		request.setAttribute("seatList", seatList);
 		
 		return "ticketing/s_ticket_step5";
+	}
+	
+	@PostMapping("/sTicketingResult")
+	public String sTicketingResult(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	// 결제 완료된 예매 건을 db에 저장하여 예매확인 내역 형식으로 보여줌
+		request.getParameter("utf-8");
+		
+		String payment = request.getParameter("paymentOpt");
+		
+		HttpSession session = request.getSession();
+		MemberInfo loginInfo = (MemberInfo) session.getAttribute("loginInfo");
+		ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
+		ReservationInfo ri2 = null;
+		String[] seatsGo = (String[]) session.getAttribute("seatsGo");
+		
+		ri1.setPayment(payment);
+		
+		String seatWhereGo = " WHERE BS.bi_idx = SI.bi_idx AND BS.bl_idx = " + ri1.getLinenum() + " AND BS.bs_stime = '" + ri1.getStime() + "'";
+		for (int i = 0 ; i < seatsGo.length ; i++) {
+				if (i == 0) seatWhereGo += " and (SI.si_seat = " + seatsGo[i];
+				else		seatWhereGo += " or SI.si_seat = " + seatsGo[i];
+		}
+		seatWhereGo += ")";
+		
+		String seatWhereCome = "";
+		if (ri1.getMode().equals("w")) {
+			ri2 = (ReservationInfo) session.getAttribute("ri2");
+			String[] seatsCome = (String[]) session.getAttribute("seatsCome");
+			if (ri2 != null) {
+				seatWhereCome += " WHERE BS.bi_idx = SI.bi_idx AND BS.bl_idx = " + ri2.getLinenum() + " AND BS.bs_stime = '" + ri2.getStime() + "'";
+				for (int i = 0 ; i < seatsCome.length ; i++) {
+						if (i == 0) seatWhereCome += " and (SI.si_seat = " + seatsCome[i];
+						else		seatWhereCome += " or SI.si_seat = " + seatsCome[i];
+				}
+				seatWhereCome += ")";
+			}
+			
+			ri2.setPayment(payment);
+		}
+		
+		sTicketingSvc.reservationIn(loginInfo, ri1, seatWhereGo);
+		if (ri2 != null) {
+			sTicketingSvc.reservationIn(loginInfo, ri2, seatWhereCome);
+		}
+
+		
+		return "ticketing/s_ticket_result";
 	}
 
 }

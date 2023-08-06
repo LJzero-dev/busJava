@@ -4,23 +4,8 @@
 <%
 request.setCharacterEncoding("utf-8");
 ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
-ReservationInfo ri2 = (ReservationInfo) session.getAttribute("ri2");
-String selectedSeats = request.getParameter("selectedSeats");
-String adultCnt1 = "어른", teenCnt1 = "", childCnt1 = "", adultCnt2 = "", teenCnt2 = "", childCnt2 = "";
-if(ri1.getRi_acnt() > 0 && (ri1.getRi_scnt() > 0 || ri1.getRi_ccnt() > 0)) {
-	adultCnt1 = "어른 " + ri1.getRi_acnt() + "명, ";
-} else if (ri1.getRi_acnt() > 0) {
-	adultCnt1 = "어른 " + ri1.getRi_acnt() + "명";
-} else if (ri1.getRi_acnt() <= 0) adultCnt1 = "";
-
-if(ri1.getRi_scnt() > 0 && ri1.getRi_ccnt() > 0) {
-	teenCnt1 = "청소년 " + ri1.getRi_scnt() + "명, ";
-} else if (ri1.getRi_scnt() > 0) {
-	teenCnt1 = "청소년 " + ri1.getRi_scnt() + "명";
-}
-if(ri1.getRi_ccnt() > 0 ) {
-	childCnt1 = "아동 " + ri1.getRi_ccnt() + "명";
-}
+int base_price = ri1.getBasePrice();
+int base_price2 = 0;
 %>
 <section class="probootstrap_section">
 <div class="container">
@@ -115,14 +100,16 @@ if(ri1.getRi_ccnt() > 0 ) {
 				</tr>
 				<tr>
 					<td colspan="2">예매 매수</td>
-					<td colspan="2" class="text-left">
-					<%=adultCnt1 %><%=teenCnt1 %><%=childCnt1 %></td>
+					<td colspan="2" class="text-left">어른 <%=ri1.getRi_acnt() %>명, 청소년 <%=ri1.getRi_scnt() %>명, 아동 <%=ri1.getRi_ccnt() %>명
 					<td colspan="2">예매 좌석</td>
-					<td colspan="2" class="text-left"><%=selectedSeats %></td>
+					<td colspan="2" class="text-left"><%=ri1.getSeat() %></td>
 				</tr>
 				</tbody>
 			</table>
-<%if (ri1.getMode().equals("w")) {%>
+<%if (ri1.getMode().equals("w")) {
+	ReservationInfo ri2 = (ReservationInfo) session.getAttribute("ri2");
+	base_price2 = Integer.parseInt(request.getParameter("basePrice2"));
+%>
 		<h5 class="text-left">가는편</h5>
 			<table class="table">
 				<colgroup>
@@ -147,10 +134,9 @@ if(ri1.getRi_ccnt() > 0 ) {
 				</tr>
 				<tr>
 					<td colspan="2">예매 매수</td>
-					<td colspan="2" class="text-left">
-					<%=adultCnt2 %><%=teenCnt2 %><%=childCnt2 %></td>
+					<td colspan="2" class="text-left"><%=ri2.getRi_acnt() %>명, 청소년 <%=ri2.getRi_scnt() %>명, 아동 <%=ri2.getRi_ccnt() %>명</td>
 					<td colspan="2">예매 좌석</td>
-					<td colspan="2" class="text-left"><%=selectedSeats %></td>
+					<td colspan="2" class="text-left"><%=ri2.getSeat() %></td>
 				</tr>
 				</tbody>
 			</table>
@@ -260,8 +246,8 @@ if(ri1.getRi_ccnt() > 0 ) {
 				      본 약관은 2019년 10월 1일부터 시행합니다.
 			</div>
 		<div class="form-check custom ml-0 mt-2">
-			<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-				<label class="form-check-label" for="defaultCheck1">동의합니다</label>
+			<input class="form-check-input" type="checkbox" name="agree" id="agree1">
+				<label class="form-check-label" for="agree1">동의합니다</label>
 		</div>
 		</div>
 		<div class="col-md-12 mb-3">
@@ -294,8 +280,8 @@ if(ri1.getRi_ccnt() > 0 ) {
 				3. 동물(단, 장애인 보조견 및 전용운반상자에 넣은 애완동물 제외)<br />
 		        </div>
 				<div class="form-check custom ml-0 mt-2">
-		            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-		            <label class="form-check-label" for="defaultCheck1">동의합니다</label>
+		            <input class="form-check-input" type="checkbox" name="agree" id="agree2">
+		            <label class="form-check-label" for="agree2">동의합니다</label>
 		        </div>
 			</div>
 		<div class="col-md-12 mb-3">
@@ -315,8 +301,8 @@ if(ri1.getRi_ccnt() > 0 ) {
 					시행일자 : 2017년 5월 18일
 			</div>
 				<div class="form-check custom ml-0 mt-2">
-					<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-						<label class="form-check-label" for="defaultCheck1">동의합니다</label>
+					<input class="form-check-input" type="checkbox" name="agree" id="agree3">
+						<label class="form-check-label" for="agree3">동의합니다</label>
 				</div>
 		</div>
 		<div class="col-md-12 mb-3">
@@ -334,102 +320,183 @@ if(ri1.getRi_ccnt() > 0 ) {
 					5. 개인정보 제3자 제공 동시 거부 시 승차원 예매 하실 수 없습니다.<br />
 			</div>
 				<div class="form-check custom ml-0 mt-2">
-					<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-						<label class="form-check-label" for="defaultCheck1">동의합니다</label>
+					<input class="form-check-input" type="checkbox" name="agree" id="agree4">
+						<label class="form-check-label" for="agree4">동의합니다</label>
 				</div>
 		</div>
 		<div class="col-md-12">
 			<div class="allchkbox">
-				<input type="checkbox" id="chkAll"><label for="chkAll">
+				<input type="checkbox" id="chkAll"><label for="chkAll" id="chkAllL">
 					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
 					<path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
 					</svg>전체 약관에 동의합니다.</label>
 			</div>
 		</div>
 	</div>
+	<form name="frmPayInfo" action="sTicketingResult" method="post">
 	<div class="row">
-		<div class="col-md-4 text-center mb-5 mt-5">
+<!--  <div class="col-md-4 text-center mb-5 mt-5">
 		<h4 class="text-left text-primary">쿠폰 적용</h4>
 			<div class="d-flex justify-content-between">
 				<p class="h5">쿠폰</p>
 			<div>
-			<!-- 쿠폰 없을경우 -->
+			쿠폰 없을경우
 				<p class="h6">-</p>
-			<!-- 쿠폰 있을경우 -->
+			쿠폰 있을경우
 			<div class="d-flex align-items-center">
 				<p class="h6 mb-0 mr-3">1개</p>
 				<button type="button" class="btn btn-primary btn-sm">쿠폰 적용</button>
 			</div>
-			<!-- 쿠폰 적용 후-->
+			쿠폰 적용 후
 			<div class="d-flex align-items-center">
 				<p class="h6 mb-0 mr-3">버스 무료 탑승권</p>
 				<p class="h5 mb-0 mr-3">-30,000</p>
 			</div>
 			</div>
 			</div>
-		</div>
-		<div class="col-md-5 text-center mb-5 mt-5">
+		</div> -->
+		<div class="col-md-6 text-center mb-5 mt-5">
 		<h4 class="text-left text-primary">결제 방법</h4>
 			<div class="d-flex">
 				<div class="form-check custom">
-					<input class="form-check-input" type="radio" name="payment" id="payment1" value="카드" checked>
+					<input class="form-check-input" type="radio" name="paymentOpt" id="payment1" value="카드" checked>
 					<label class="form-check-label" for="payment1">카드</label>
 				</div>
 				<div class="form-check custom">
-					<input class="form-check-input" type="radio" name="payment" id="payment2" value="무통장입금">
+					<input class="form-check-input" type="radio" name="paymentOpt" id="payment2" value="무통장입금">
 					<label class="form-check-label" for="payment2">무통장입금</label>
 				</div>
 				<div class="form-check custom">
-					<input class="form-check-input" type="radio" name="payment" id="payment3" value="간편결제">
+					<input class="form-check-input" type="radio" name="paymentOpt" id="payment3" value="간편결제">
 					<label class="form-check-label" for="payment3">간편결제</label>
 				</div>
 				<div class="form-check custom">
-					<input class="form-check-input" type="radio" name="payment" id="payment4" value="페이머니">
+					<input class="form-check-input" type="radio" name="paymentOpt" id="payment4" value="페이머니">
 					<label class="form-check-label" for="payment4">페이머니</label>
 				</div>
 				<div class="form-check custom">
-					<input class="form-check-input" type="radio" name="payment" id="payment5" value="쿠폰" hidden>
+					<input class="form-check-input" type="radio" name="paymentOpt" id="payment5" value="쿠폰" hidden>
 					<label class="form-check-label" for="payment5" hidden>쿠폰</label>
 				</div>
 			</div>
 			<div id="pmoney_view" style="display: none;">
-			<div>
-				<p class="h5 text-left">잔액 270,000</p>
-				<p class="text-danger text-left">잔액이 부족합니다. 충전 후 이용해 주세요.</p>
+			<div style="height:76px">
+<% if (loginInfo.getMi_pmoney() > (base_price + base_price2)) {	// 회원의 보유 페이머니가 결제금액보다 큰 경우 %>
+				<p class="h5 text-left">잔액 <span id="myPmoney"></span></p>
+<% } else {	// 회원의 보유 페이머니가 결제금액보다 작은 경우%>
+				<p class="text-danger text-left">잔액 <span id="myPmoney"></p>
+				<p id="pMoneyInfo" class="text-left">잔액이 부족합니다. 충전 후 이용해 주세요.</p>
+<% } %>
 			</div>
 			<div class="justify-content-end d-flex">
-				<button type="button" class="btn btn-primary align-self-end">충전</button>
+				<button type="button" class="btn btn-primary align-self-end" data-toggle="modal" data-target="#ViewModal" onclick="openModal();">충전</button>
 			</div>
 			</div>
 		</div>
-		<div class="col-md-3 mb-5 mt-5">
+		<div class="col-md-6 mb-5 mt-5">
 		<div class="total">
  			<div class="d-flex justify-content-between">
 				<p class="h6">예매금액</p>
-				<p class="h5">30,000</p>
+           		<p id="basePrice" class="h5"></p>
 			</div>
 			<div class="d-flex justify-content-between">
-				<p class="h6">쿠폰사용</p>
+				<p class="h6">결제금액</p>
 				<p class="h5">-</p>
 			</div>
 		<hr />
 			<div class="d-flex justify-content-between">
 				<p class="h6">총 결제금액</p>
-				<p class="h5">30,000</p>
+				<p id="realPrice" class="h5"></p>
 			</div>
-				<button type="button" class="btn btn-primary btn-block mt-4">결제하기</button>
+				<button type="button" id="paySubmitBtn" class="btn btn-primary btn-block mt-4">결제하기</button>
 		</div>
 		</div>
 	</div>
+	</form>
+</div>
+<div class="modal fade" id="ViewModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
 </div>
 </section>
 <%@ include file="../_inc/foot.jsp" %>
 <script>
+function openModal() {
+	$('#ViewModal .modal-content').load("/busj/pmoneyCharge1");
+	$('#ViewModal').modal();
+  }
 
-$(document).ready(function() {
+const pmoneybox = document.getElementById('pmoney_view');
+const paymentChks = document.getElementsByName('paymentOpt');
+const myPmoney = <%=loginInfo.getMi_pmoney() %>;
+const basePrice = <%=base_price + base_price2%>;
 
+
+for (let i = 0; i < paymentChks.length; i++) {
+	paymentChks[i].onclick = function() {
+    const chkValue = document.querySelector('input[type=radio][name=paymentOpt]:checked');
+    if (chkValue.value === '페이머니') {
+      pmoneybox.style.display = 'block';
+    } else {
+      pmoneybox.style.display = 'none';
+    }
+  };
+}
+
+const agreeChks = document.getElementsByName("agree");
+$("#chkAllL").on('click', function() {
+	$(".allchkbox").toggleClass("active");
+	if ($(".allchkbox").hasClass("active")) {
+		for (let i = 0; i < agreeChks.length ; i++) {
+			agreeChks[i].checked = true;
+		}
+	} else {
+		for (let i = 0; i < agreeChks.length ; i++) {
+			agreeChks[i].checked = false;
+		}
+	}
+})
+
+document.addEventListener("click", function(e) {
+if (e.target && e.target.name === "agree") {
+	var chksChecked = 0;
+	for (let i = 0; i < agreeChks.length; i++) {
+    	var checkbox = agreeChks[i];
+    	if (checkbox.checked) {
+        	chksChecked++;
+     	}
+  	}
+
+  	if (agreeChks.length === chksChecked) {
+  		$(".allchkbox").addClass("active");
+  	} else {
+  		$(".allchkbox").removeClass("active");
+  	}
+	}
 });
 
+
+$("#basePrice").text(basePrice.toLocaleString());
+$("#realPrice").text(basePrice.toLocaleString());
+$("#myPmoney").text(myPmoney.toLocaleString());
+
+$("#paySubmitBtn").on('click', function() {
+	const paymentOpt = $("input[type=radio][name=paymentOpt]:checked").val();	// 결제방식
+	
+	if (!$(".allchkbox").hasClass("active")) {
+		alert("약관에 동의해주세요.");
+		return;
+	}
+	
+	if (paymentOpt == '페이머니' && myPmoney < basePrice) {
+		alert("페이머니의 잔액이 부족합니다. \n충전 후 이용해 주세요.");
+		return;
+	}
+	
+	document.frmPayInfo.submit();
+});
 </script>
 
 

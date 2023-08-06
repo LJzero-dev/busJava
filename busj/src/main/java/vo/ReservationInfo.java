@@ -1,10 +1,10 @@
 package vo;
 
 public class ReservationInfo {
-	private int	ri_idx,	bs_idx,	ri_acnt, ri_scnt, ri_ccnt, si_idx;
-	private String mi_id, ri_sday, ri_status, ri_date, ri_type;
+	private int	ri_idx,	bs_idx,	ri_acnt, ri_scnt, ri_ccnt;
+	private String mi_id, ri_sday, ri_status, ri_date, ri_type, si_idx;
 	private String mode, sdate, sspot, espot, stime, etime, comname, level, seat, payment;	// 왕복편도 구분, 탑승일, 출발장소, 도착장소, 출발, 도착시간, 버스회사, 버스등급, seat 목록, 결제방식
-	private int linenum, price;	// 노선번호, 어른가격
+	private int linenum, price, basePrice;	// 노선번호, 어른가격, 가는 날 총금액
 	public int getRi_idx() {
 		return ri_idx;
 	}
@@ -35,10 +35,10 @@ public class ReservationInfo {
 	public void setRi_ccnt(int ri_ccnt) {
 		this.ri_ccnt = ri_ccnt;
 	}
-	public int getSi_idx() {
+	public String getSi_idx() {
 		return si_idx;
 	}
-	public void setSi_idx(int si_idx) {
+	public void setSi_idx(String si_idx) {
 		this.si_idx = si_idx;
 	}
 	public String getMi_id() {
@@ -143,6 +143,12 @@ public class ReservationInfo {
 	public void setPayment(String payment) {
 		this.payment = payment;
 	}
-	
+	public int getBasePrice() {
+		return basePrice;
+	}
+	public void setBasePrice(int basePrice) {
+		this.basePrice = basePrice;
+	}
+
 	
 }

@@ -86,7 +86,7 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 	<form name="frmSeat" action="sTicketingPay" method="post">
 		<input type="hidden" name="selectedSeats" id="selectedSeats" value="">
 		<input type="hidden" name="selectedSeatsIndexes" id="selectedSeatsIndexes" value="">
-		<input type="hidden" name="totalPrice" id="totalP" value="">
+		<input type="hidden" name="basePrice2" id="baseP" value="" />
 	<div class="row justify-content-center">
 		<div class="col-md-6 text-center">
 			<p>좌석선택 <%=leftseat %> / <%=totalseat %></p>
@@ -123,7 +123,7 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 						<path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>	<!-- 좌표값 -->
 						</svg>
 					</button>
-					<input class="form-control text-center" type="text" name="riacnt" id="riacnt" value="<%=ri1.getRi_acnt() %>" size="5" readonly>	<!-- 성인티켓량 -->
+					<input class="form-control text-center" type="text" name="riacnt" id="riacnt" value="0" size="5" readonly>	<!-- 성인티켓량 -->
 					<button type="button" id="plusA" class="btn btn-primary p-1" onclick="setCnt(this.id);">	<!-- [+] 버튼 -->
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
 						<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -139,7 +139,7 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 						<path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>
 						</svg>
 					</button>
-					<input class="form-control text-center" type="text" name="riscnt" id="riscnt" value="<%=ri1.getRi_scnt() %>" size="5" readonly>
+					<input class="form-control text-center" type="text" name="riscnt" id="riscnt" value="0" size="5" readonly>
 					<button type="button" id="plusT" class="btn btn-primary p-1" onclick="setCnt(this.id);">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
 						<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -155,7 +155,7 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 						<path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>	
 						</svg>
 					</button>
-					<input class="form-control text-center" type="text" name="riccnt" id="riccnt" value="<%=ri1.getRi_ccnt() %>" size="5" readonly>
+					<input class="form-control text-center" type="text" name="riccnt" id="riccnt" value="0" size="5" readonly>
 					<button type="button" id="plusC" class="btn btn-primary p-1" onclick="setCnt(this.id);">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
 						<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -186,7 +186,7 @@ List<SeatInfo> seatList = (List<SeatInfo>)request.getAttribute("seatList");
 				<span id="priceC"></span>
 			</div>
 		<hr />
-			<p class="h5 text-right mb-5">총 <span id="totalPrice">0</span> 원</p>
+			<p class="h5 text-right mb-5">총 <span id="basePrice2">0</span> 원</p>
 				<button type="button" id="submitBtn" class="btn btn-primary btn-block">선택완료</button>
 		</div>
 		</div>
@@ -206,7 +206,6 @@ const selectedSeatsInput = document.getElementById("selectedSeats");
 const selectedIndexesInput = document.getElementById("selectedSeatsIndexes");
 
 function setCnt(op) {	// 매수 선택필드의 [-] / [+] 버튼 클릭 시 
-	let totalCnt = 0;
 	if ( $("#totalCnt").text() == 10 && (op == 'plusA' || op == 'plusT' || op == 'plusC')) {
 		alert("최대 예약 가능 인원은 10명입니다.");
 		return;
@@ -255,8 +254,8 @@ function setCnt(op) {	// 매수 선택필드의 [-] / [+] 버튼 클릭 시
 	$("#priceC").text(formatNumber(riccnt * <%=ri2.getPrice()%> * 0.5));
 	  
 	$("#totalCnt").text(riacnt + riscnt + riccnt);
-	$("#totalPrice").text(formatNumber(riacnt * <%=ri2.getPrice()%> + riscnt * <%=ri2.getPrice()%> * 0.8 + riccnt * <%=ri2.getPrice()%> * 0.5));
-	$("#totalP").val((riacnt * <%=ri2.getPrice()%> + riscnt * <%=ri2.getPrice()%> * 0.8 + riccnt * <%=ri2.getPrice()%> * 0.5));
+	$("#basePrice2").text(formatNumber(riacnt * <%=ri2.getPrice()%> + riscnt * <%=ri2.getPrice()%> * 0.8 + riccnt * <%=ri2.getPrice()%> * 0.5));
+	$("#baseP").val((riacnt * <%=ri2.getPrice()%> + riscnt * <%=ri2.getPrice()%> * 0.8 + riccnt * <%=ri2.getPrice()%> * 0.5));
 
 	let seatsCnt = 0;
 	for (let i = 0; i < seats.length; i++) {
@@ -343,7 +342,6 @@ $(document).ready(function() {
 	$("#submitBtn").click(function() {
 		// 총 인원이 선택이 0이고 좌석이 선택되지 않은 경우
 		let totalHeadcount = parseInt($("#totalCnt").text());
-		document.getElementById("totalPrice").value = parseInt($("#totalPrice").text().replace(/,/g, ""));
 		
 		if (totalHeadcount === 0 && selectedValues.length === 0) {
 			alert("인원이 선택되지 않았습니다.\n인원 선택 후 좌석을 선택해주세요.");
