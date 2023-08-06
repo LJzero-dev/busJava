@@ -2,10 +2,15 @@
 <%@ include file="../_inc/head.jsp" %>
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
+<%@ page import="java.time.*" %>
+<%@ page import="java.time.format.*" %>
 <%
 request.setCharacterEncoding("utf-8");
 List<TerminalInfo> terminalList = (List<TerminalInfo>)request.getAttribute("terminalList");
 List<BusCompanyInfo> busCompany = (List<BusCompanyInfo>)request.getAttribute("busCompany");
+LocalTime now = LocalTime.now();
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+String time = now.format(formatter);
 %>
 <section class="probootstrap_section">
 <div class="container">
@@ -30,23 +35,23 @@ List<BusCompanyInfo> busCompany = (List<BusCompanyInfo>)request.getAttribute("bu
 				</div>
 				<div class="form-group col-md-3">
 					<label for="departureTerminal">출발 터미널</label>
-					<select id="departureTerminal" class="form-control">
-						<option selected disabled>터미널 선택</option>
-					</select>
-				</div>
-				<div class="form-group col-md-3">
-					<label for="inputState">도착 터미널</label>
-					<select id="inputState" class="form-control">
+					<select id="departureTerminal" name="departureTerminal" class="form-control">
 						<option selected>터미널 선택</option>
-						<option>...</option>
 					</select>
 				</div>
 				<div class="form-group col-md-3">
-					<label for="inputState">고속사</label>
-					<select id="inputState" class="form-control">
+					<label for="arrivalTerminal" name="arrivalTerminal">도착 터미널</label>
+					<select id="arrivalTerminal" class="form-control">
+						<option selected>터미널 선택</option>
+						<option></option>
+					</select>
+				</div>
+				<div class="form-group col-md-3">
+					<label for="busCompany">고속사</label>
+					<select id="busCompany" class="form-control">
 						<option selected>전체</option>
 <%for(BusCompanyInfo bc : busCompany) {%>
-						<option><%=bc.getBc_name() %></option>
+						<option value="<%=bc.getBc_name() %>"><%=bc.getBc_name() %></option>
 <%} %>						
 					</select>
 				</div>
@@ -102,16 +107,20 @@ $(document).ready(function() {
 	$("#departureArea").change(function() {
         // 선택된 출발 지역 값을 가져옴
         const selectedArea = $(this).val();
-//		alert(selectedArea);
         $.ajax({
             type: "POST",
             url: "./getDepartureTerminal",
             data: { selectedArea : selectedArea },
             dataType: "json",
             success: function(data) {
-                data.forEach(function(terminal) {
-                	console.log(terminal.bt_name);
-                });
+            	if (data.length > 0 ) {
+					$("#departureTerminal").children('option:not(:first)').remove();
+					data.forEach(function(terminal) {
+						$("#departureTerminal").append("<option value='" + terminal.bt_name + "'>" + terminal.bt_name + "</option>");
+            		});
+            	} else {
+					alert("조회된 시간표가 없습니다.");
+            	}
             },
             error: function(xhr, status, error) {
                 console.error("AJAX Error:", error);
@@ -119,5 +128,89 @@ $(document).ready(function() {
             }
         });
     });
+    
+	// 출발 터미널 선택 셀렉트 박스에 onchange 이벤트 핸들러 추가
+	$("#departureTerminal").change(function() {
+        // 선택된 출발 터미널 값을 가져옴
+        const selectedTerminal = $(this).val();
+        if (selectedTerminal == "터미널 선택") return;
+        
+        $.ajax({
+            type: "POST",
+            url: "./getArrivalTerminal",
+            data: { selectedTerminal : selectedTerminal },
+            dataType: "json",
+            success: function(data) {
+            	if (data.length > 0 ) {
+					$("#arrivalTerminal").children('option:not(:first)').remove();
+					data.forEach(function(line) {
+						$("#arrivalTerminal").append("<option value='" + line.bl_idx + "'>" + line.ename + "</option>");
+            		});
+            	} else {
+					alert("조회된 시간표가 없습니다.");
+            	}
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error);
+                // 오류 처리 로직을 추가할 수도 있음
+            }
+        });
+    });
+	
+	$("#schBtn").click(function() {
+	    if ($("#departureArea").val() == "지역 선택" || $("#departureTerminal").val() == "터미널 선택" || $("#arrivalTerminal").val() == "터미널 선택") {
+	        alert("터미널을 선택해주세요.");
+	        return false;
+	    }
+
+	    const arrivalTerminal = $("#arrivalTerminal").val();	// 노선 인덱스 (bl_idx)
+	    const busCompany = $("#busCompany").val();				// 버스회사 인덱스 (bc_idx)
+	    const time = "<%=time %>";								// 현재시간 (hh:mm)
+
+	    $.ajax({
+	        type: "POST", 
+	        url: "./getArrivalTime",
+	        data: { arrivalTerminal: arrivalTerminal, busCompany: busCompany, time: time },
+	        dataType: "json",
+	        success: function(data) {
+
+	            if (data.length > 0) {
+	                let tableHTML = "<table class='table table-hover'>" + 
+	               					"<colgroup><col width='15%'><col width='10%'><col width='15%'><col width='15%'>" +
+									"<col width='15%'><col width='15%'><col width='15%'></colgroup>" + 
+		            				"<thead class='bg-primary'><tr>" + 
+		            				"<th scope='col' class='text-center'>출발시간</th><th scope='col' class='text-center'>고속사</th>" + 
+		            				"<th scope='col' class='text-center'>등급</th><th scope='col' class='text-center'>차량번호</th>" + 
+		            				"<th scope='col' class='text-center'>도착예정시간</th><th scope='col' class='text-center'>남은시간</th>" + 
+		            				"<th scope='col' class='text-center'>상태</th></tr></thead><tbody>";
+	                data.forEach(function(table) {
+	                    tableHTML += "<tr>";
+	                    tableHTML += "<td>" + table.bs_stime + "</td>";
+	                    tableHTML += "<td>" + table.bc_company + "고속</td>";
+	                    tableHTML += "<td>" + table.bi_level + "</td>";
+	                    tableHTML += "<td>" + table.bi_num + "</td>";
+	                    tableHTML += "<td>" + table.bs_etime + "</td>";
+	                    tableHTML += "<td>" + table.leftTime + "</td>";
+	                    tableHTML += "<td>" + table.status + "</td>";
+	                    tableHTML += "</tr>";
+	                });
+	                tableHTML += "</tbody></table>";
+
+	                // 테이블을 보여줌
+	                $("#timetable").html(tableHTML);
+	                $("#timetable-container").show();
+	            } else {
+	                // 데이터가 없는 경우
+	                alert("조회 결과가 없습니다.");
+	                $("#timetable").empty();
+	                $("#timetable-container").hide();
+	            }
+	        },
+	        error: function(xhr, status, error) {
+	            console.error("AJAX Error:", error);
+	            // 오류 처리 로직을 추가할 수도 있음
+	        }
+	    });
+	});
 });
 </script>

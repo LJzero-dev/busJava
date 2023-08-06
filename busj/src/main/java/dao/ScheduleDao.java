@@ -60,7 +60,7 @@ public class ScheduleDao {
 	}
 
 	public List<BusCompanyInfo> getBusCompany() {
-	// 
+	// 버스 회사 이름을 select 하는 메서드
 		String sql = "select * from t_bus_company";
 		List<BusCompanyInfo> busCompany = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
 			BusCompanyInfo bc = new BusCompanyInfo(rs.getInt("bc_idx"), rs.getString("bc_name"));
@@ -70,7 +70,7 @@ public class ScheduleDao {
 	}
 
 	public List<TerminalInfo> getDepartureTerminal(String selectedArea) {
-	// 
+	// 선택한 출발 지역에 있는 터미널 이름을 구하는 메서드
 		String sql = "select bt_name from t_bus_terminal where bt_area like '%" + selectedArea + "%'";
 		System.out.println(sql);
 		List<TerminalInfo> departureTerminal = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
@@ -78,6 +78,74 @@ public class ScheduleDao {
 			ti.setBt_name(rs.getString("bt_name"));
 			return ti;
 		});
-		return null;
+		return departureTerminal;
+	}
+
+	public List<LineInfo> getArrivalTerminal(String selectedTerminal) {
+	// 선택한 터미널을 출발 터미널로 하는 버스 노선과 도착 터미널을 구하는 메서드
+		String sql = "SELECT bl_idx, bt_eidx AS bt_departure, t2.bt_name AS bt_destination "
+				   + "FROM t_bus_line\r\n"
+				   + "JOIN t_bus_terminal t1 ON t_bus_line.bt_sidx = t1.bt_idx "
+				   + "JOIN t_bus_terminal t2 ON t_bus_line.bt_eidx = t2.bt_idx "
+				   + "WHERE t1.bt_name = '" + selectedTerminal + "' AND t1.bt_status = 'y' AND t2.bt_status = 'y'";
+//		System.out.println(sql);
+		List<LineInfo> lineList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
+			LineInfo li = new LineInfo();
+			li.setBl_idx(rs.getInt("bl_idx"));
+			li.setEname(rs.getString("bt_destination"));
+			return li;
+		});
+		return lineList;
+	}
+
+	public List<ArriveInfo> getArrivalTerminal(String arrivalTerminal, String busCompany, String time) {
+	// 
+		if (busCompany.equals("전체"))	busCompany = "";
+		else 							busCompany = " and bc.bc_name = '" + busCompany + "' ";
+		
+		String sql = "SELECT bs.bs_stime AS stime, bs.bs_etime AS etime, "
+				+ "   CASE "
+				+ "   		WHEN bs.bs_etime <= curtime() THEN '도착' "
+				+ "        	WHEN bs.bs_stime <= curtime() and bs.bs_etime >= curtime() THEN '운행중' "
+				+ "        	ELSE '출발전' "
+				+ "   END AS status, "
+				+ "   IF( "
+				+ "        TIMEDIFF(bs.bs_etime, curtime()) >= 0, "
+				+ "        TIMEDIFF(bs.bs_etime, curtime()), "
+				+ "        '-'"
+				+ "    ) AS leftTime, "
+				+ "			bc.bc_name AS bcname, "
+				+ "   	 	bi.bi_level AS bilevel, "
+				+ "    		bi.bi_num AS binum "
+				+ "	  FROM t_bus_schedule bs "
+				+ "   JOIN "
+				+ "			t_bus_info bi ON bs.bi_idx = bi.bi_idx "
+				+ "   JOIN "
+				+ "			t_bus_company bc ON bi.bc_idx = bc.bc_idx "
+				+ "   WHERE "
+				+ "			bs.bl_idx = " + arrivalTerminal 
+				+ 			busCompany 
+				+ " AND ("
+				+ "        (bs.bs_etime >= curtime() AND TIME_TO_SEC(TIMEDIFF(bs.bs_etime, curtime())) <= 2*60*60) "
+				+ "        OR (bs.bs_etime <= NOW() AND TIME_TO_SEC(TIMEDIFF(NOW(), bs.bs_etime)) <= 30*60) "
+				+ " )";
+		System.out.println(sql);
+		List<ArriveInfo> timeList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
+			ArriveInfo ai = new ArriveInfo();
+			String leftTime = rs.getString("leftTime");
+			if(rs.getString("leftTime") != null && !rs.getString("leftTime").equals("-"))
+				leftTime = rs.getString("leftTime").substring(0, 5);
+			ai.setBs_stime(rs.getString("stime"));
+			ai.setBs_etime(rs.getString("etime"));
+			ai.setLeftTime(leftTime);
+			ai.setBc_company(rs.getString("bcname"));
+			ai.setBi_num(rs.getString("binum"));
+			ai.setStatus(rs.getString("status"));
+			ai.setBi_level(rs.getString("bilevel"));
+			
+			return ai;
+		});
+	 
+		return timeList;
 	}
 }

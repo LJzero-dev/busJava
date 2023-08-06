@@ -88,9 +88,10 @@ public class STicketingCtrl {
 		PrintWriter out = response.getWriter();
 		
 		HttpSession session = request.getSession();	
+		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
 		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
 		
-		if (ri1 == null) {	// ri1 객체가 null인 경우에 대한 처리
+		if (loginInfo == null || ri1 == null) {	// ri1 객체가 null인 경우에 대한 처리
 		    out.println("<script>");
 		    out.println("alert('시간이 경과되었습니다.\\예매를 다시 시도해주세요.')");
 		    out.println("location.href='sTicketingStep01';");
@@ -118,12 +119,13 @@ public class STicketingCtrl {
 		request.setCharacterEncoding("utf-8");
 		
 		HttpSession session = request.getSession();	
+		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
 		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");	
 		ReservationInfo ri2 = (ReservationInfo)session.getAttribute("ri2");
 
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
-		if (ri1 == null) {	// ri1 객체가 null인 경우에 대한 처리
+		if (loginInfo == null || ri1 == null) {	// ri1 객체가 null인 경우에 대한 처리
 		    out.println("<script>");
 		    out.println("alert('시간이 경과되었습니다.\\예매를 다시 시도해주세요.')");
 		    out.println("location.href='sTicketingStep01';");
@@ -168,6 +170,7 @@ public class STicketingCtrl {
 	public String sTicketingStep04W(HttpServletRequest request, HttpServletResponse response) throws Exception {
 	// 
 		HttpSession session = request.getSession();	
+		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
 		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
 		ReservationInfo ri2 = (ReservationInfo)session.getAttribute("ri2");
 
@@ -175,7 +178,7 @@ public class STicketingCtrl {
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
 		
-		if (ri1 == null || ri2 == null) {	// ri1, ri2 객체가 null인 경우에 대한 처리
+		if (loginInfo == null || ri1 == null || ri2 == null) {	// ri1, ri2 객체가 null인 경우에 대한 처리
 		    out.println("<script>");
 		    out.println("alert('시간이 경과되었습니다.\\예매를 다시 시도해주세요.')");
 		    out.println("location.href='sTicketingStep01';");
@@ -218,10 +221,11 @@ public class STicketingCtrl {
 		PrintWriter out = response.getWriter();
 		
 		HttpSession session = request.getSession();	
+		MemberInfo loginInfo = (MemberInfo)session.getAttribute("loginInfo");
 		ReservationInfo ri1 = (ReservationInfo)session.getAttribute("ri1");
 		ReservationInfo ri2 = (ReservationInfo)session.getAttribute("ri2");
 		
-		if (ri1 == null || ri2 == null) {	// ri1 객체가 null인 경우에 대한 처리
+		if (loginInfo == null || ri1 == null || ri2 == null) {	// ri1 객체가 null인 경우에 대한 처리
 		    out.println("<script>");
 		    out.println("alert('시간이 경과되었습니다.\\예매를 다시 시도해주세요.')");
 		    out.println("location.href='sTicketingStep01';");
