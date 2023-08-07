@@ -26,6 +26,7 @@ function openModal() {
         </div>
       </div>
     <form name="frm">
+    <input type="hidden" id="type" name="type" value="" />
     <input type="hidden" id="hiddenArea" name="hiddenArea" value="${param.hiddenArea }" />
       <div class="row py-4">
         <div class="col-md-6">
@@ -60,7 +61,7 @@ function openModal() {
           	<c:if test="${travelList.size() > 0 }">
 				<c:forEach items="${travelList }" var="tl" varStatus="status">
 		            <div class="card">
-					 <img src="${pageContext.request.contextPath}/resources/images/travel/${tl.getTl_img() }" class="card-img-top" alt="..."> 
+					 <img src="${pageContext.request.contextPath}/resources/images/travel/${tl.getTl_img() }" style="width:250px; height:200px;" class="card-img-top" alt="..."> 
 		              <div class="card-body">
 		                <span class="badge badge-primary mb-2">${tl.getTl_ctgr() }</span>
 		                <h5 class="card-title">[${tl.getTl_area() }]${tl.getTl_title() }</h5>
