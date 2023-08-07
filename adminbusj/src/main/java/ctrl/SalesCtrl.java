@@ -21,8 +21,13 @@ public class SalesCtrl {
 	}
 	
 	@GetMapping("/salesList")
-	public String salesList(Model model, HttpServletRequest request) throws Exception {
+	public String salesList(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
+		List<SalesInfo> salesList = salesSvc.getSalesList();
+		
+		HttpSession session = request.getSession();
+		session.setAttribute("salesList", salesList);
+		
 		return "/stats/all_sales_list";
 		
 	}

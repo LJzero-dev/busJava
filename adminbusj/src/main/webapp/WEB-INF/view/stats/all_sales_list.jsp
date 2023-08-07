@@ -1,24 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="../_inc/head.jsp" %>
+<%@ page import = "java.util.*" %>
+<%@ page import = "java.time.*" %>
+<%
+request.setCharacterEncoding("utf-8");
+List<SalesInfo> salesList = (List<SalesInfo>)session.getAttribute("salesList");
+LocalDate nowDate = LocalDate.now();
+System.out.println(nowDate);
+System.out.println(nowDate.minusDays(7));
+
+int realTotal = 0;
+%>
 <style>
 .changePointer {
       cursor: pointer;
 }
+
+h4.sub_title {font-size: 20px; margin-top: 10px; margin-left: 10px;}
 </style>
 <script>
-$(document).ready(function(){
-	changePointer();
-})
- 
-function changePointer(){
-	$('.tr').mouseover(function(){
-	   $(this).addClass('changePointer');
-	}).mouseout(function() {
-	   $(this).removeClass('changePointer');
-	});
-}
+
 
 function makeCtgr() {
 // 검색폼의 조건들을 쿼리스트링 sch의 값으로 만듦
@@ -52,8 +53,10 @@ function makeCtgr() {
 	<div class="row">
     <div class="col-lg-12">
         <div class="card">
+        <h4 class="sub_title">총 매출 금액 : <span id="realTotal"></span></h4>
         <form name="frmSch">
         <input type="hidden" id="hiddenCtgr" name="hiddenCtgr" value="" />
+        <input type="hidden" id="sDate1-1" value="" />
             <table class="table table-sm custom">
                 <colgroup>
                     <col width="20%">
@@ -66,8 +69,8 @@ function makeCtgr() {
                             <div class="d-flex">
                                 <select class="form-control w-auto" name="isview" id="">
                                     <option value="">전체</option>
-                                    <option value="y" <c:if test="${pi.getIsview() == 'y' }">selected='selected'</c:if> >게시</option>
-                                    <option value="n" <c:if test="${pi.getIsview() == 'n' }">selected='selected'</c:if>>미게시</option>
+									<option value="">고속</option>
+									<option value="">시외</option>
                                 </select>
                             </div>
                         </td> 
@@ -77,11 +80,11 @@ function makeCtgr() {
                         <td class="text-left">
                             <div class="d-flex align-center">
                                 <div class="form-group mb-0 mr-1">
-                                	<input type="date" class="form-control" value="2018-05-13">
+                                	<input type="date" id="sDate1-2" class="form-control" value="<%=nowDate.minusDays(7) %>" onchange="handler(event)">
                                 </div>
                                 <span style="line-height: 2.2;"> ~ </span>
                                 <div class="form-group mb-0 ml-1">
-                                    <input type="date" class="form-control" value="2018-05-13">
+                                    <input type="date" id="eDate" class="form-control" value="<%=nowDate%>">
                                 </div>
                             </div>
                         </td> 
@@ -96,93 +99,61 @@ function makeCtgr() {
     </div>
 </div>
 <div class="row">
-<div class="col-lg-12 text-right mb-2">
-	<button type="button" class="btn waves-effect waves-light btn-primary btn-lg" onclick="location.href='travelForm?kind=in'">글등록</button>
-	<button type="button" class="btn waves-effect waves-light btn-secondary btn-lg ml-2" onclick="chkDel();" value="">미게시로변경</button>
-</div>
     <div class="col-lg-12">
         <div class="card">
         <form name="frm">
         <input type="hidden" name="chk" value="" />
             <table id="table" class="table text-center mb-0">
                 <colgroup>
-                    <col width="5%">
-					<col width="5%">
+                    <col width="10%">
 					<col width="10%">
 					<col width="10%">
-					<col width="*%">
-					<col width="10%">
-					<col width="10%">
+					<col width="8%">
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
+					<col width="*">
                 </colgroup>
                 <thead class="bg-primary text-white">
                 <tr>
-                    <th><input type="checkbox" name="chechkall" style="width:18px; height:18px;" onclick="chkAll(this);" /></th>
-                    <th>No</th>
-                    <th>지역</th>
-                    <th>분류</th>
-                    <th class="text-left">장소명</th>
-                    <th>작성일</th>
-                    <th>게시여부</th>
+                    <th>버스구분</th>
+                    <th>출발지</th>
+                    <th>도착지</th>
+                    <th>운영횟수</th>
+                    <th>카드</th>
+                    <th>무통장 입금</th>
+                    <th>간편 결제</th>
+                    <th>매출 합계</th>
                 </tr>
-            	</thead>  
-            	<c:if test="${travelList.size() > 0 }">
-					<c:forEach items="${travelList }" var="tl" varStatus="status">
-		                <tbody class="border border-primary">
-		                <tr class="tr">
-		                    <td><input type="checkbox" name="chk" value="${tl.getTl_idx() }" style="width:18px; height:18px;" onclick="chkOne(this);" /></td>
-		                    <td>${pi.getNum() - status.index}</td>
-		                    <td>${tl.getTl_area()}</td>
-		                    <td><span class="badge badge-pill badge-primary">${tl.getTl_ctgr() }</span></td>
-		                    <td class="text-left"><a href="travelView?tl_idx=${tl.getTl_idx() }">${tl.getTl_title()}</a></td>
-							<td>${tl.getTl_date() }</td>
-							<td>${tl.getTl_isview() }</td>
-		                </tr>
-		           		</tbody>
-		           	</c:forEach>
-				</c:if>
-           		<c:if test="${travelList.size() == 0 }">
-					<tbody class="border border-primary">
-		                <tr>
-		                    <td colspan="7">검색결과가 없습니다.</td>
-		                </tr>
-		           	</tbody>
-				</c:if>
+            	</thead>
+				<tbody class="border border-primary">
+<% if (salesList.size() > 0) {
+	for (SalesInfo si : salesList) {
+		int salesTotal = si.getCardP() + si.getBankP() + si.getEasyP();
+		realTotal += salesTotal; 
+%>	
+					<tr>
+	                    <td><%=si.getBl_type()%></td>
+	                    <td><%=si.getStart_spot()%></td>
+	                    <td><%=si.getEnd_spot() %></td>
+	                    <td><%=si.getCount_schedule() %></td>
+	                    <td><%=String.format("%,d",si.getCardP()) %></td>
+	                    <td><%=String.format("%,d",si.getBankP()) %></td>
+	                    <td><%=String.format("%,d",si.getEasyP()) %></td>
+	                    <td><%=String.format("%,d",salesTotal) %></td>
+	                </tr>
+
+<% } %>
+
+					
+<% } else { %>
+					<tr>
+	                    <td colspan="8">매출내역이 존재하지 않습니다.</td>
+	                </tr>
+<% } %>
+	           	</tbody>
             </table>
             
-            
-            <div class="d-flex justify-content-center mt-2">
-            <nav aria-label="Page navigation example m-auto">
-				<ul class="pagination m-auto">
-				<c:if test="${travelList.size() > 0 }">
-				    <li class="page-item">
-				    <c:choose>
-						<c:when test="${ pi.getCpage() == 1 }">
-						<a class="page-link" href="travelList?cpage=1${pi.getSchargs()}" aria-label="Previous"></c:when>
-						<c:when test="${ pi.getCpage() > 1 }">
-						<a class="page-link" href="travelList?cpage=${pi.getCpage() - 1}${pi.getSchargs()}" aria-label="Previous"></c:when>
-					</c:choose>
-				            <span aria-hidden="true">«</span>
-				            <span class="sr-only">Previous</span>
-				        </a>
-				    </li>
-				    <c:forEach var="i" begin="${pi.getSpage() }" end="${pi.getSpage() + pi.getBsize() - 1 <= pi.getPcnt() ? pi.getSpage() + pi.getBsize() - 1 : pi.getPcnt()}">
-							<li class="page-item"><a class="page-link" href="travelList?cpage=${i }${pi.getSchargs() }">${i }</a></li>
-					</c:forEach>
-				    <li class="page-item">
-				    <c:choose>
-						<c:when test="${pi.getCpage() == pi.getPcnt()}">
-						<a class="page-link" href="travelList?cpage=${pi.getCpage()}${pi.getSchargs() }" aria-label="Next"></c:when>
-						<c:when test="${pi.getCpage() <  pi.getPcnt()}">
-						<a class="page-link" href="travelList?cpage=${pi.getCpage() + 1 }${pi.getSchargs() }" aria-label="Next"></c:when>
-					</c:choose>
-				            <span aria-hidden="true">»</span>
-				            <span class="sr-only">Next</span>
-				        </a>
-				    </li>
-				</c:if>
-				</ul>
-			</nav>
-            </div>
         </form>
         </div> 
     </div>
@@ -198,3 +169,30 @@ function makeCtgr() {
     </div>
 </div>
 <%@ include file="../_inc/foot.jsp" %>
+<script>
+$(document).ready(function() {
+	let total_period = <%=realTotal%>
+	$("#realTotal").text(total_period.toLocaleString());
+	
+// 	$("#sDate1-2").datepicker({
+// 		autoclose: true,
+// 		startDate: "0d",
+		
+// 		endDate: "+30d",
+// 		language: "kr",
+// 		showMonthAfterYear: true,
+// 		weekStart: 1,
+// 		}).datepicker("setDate",'now')
+// 		.on('changeDate', function(e) {
+// 			console.log(1);
+//  			$("#sDate1-1").val($(this).val());
+
+// 	});
+	
+});
+
+function handler(e){
+	$("#sDate1-1").val(e.target.value);
+	console.log($("#sDate1-1").val());
+}
+</script>

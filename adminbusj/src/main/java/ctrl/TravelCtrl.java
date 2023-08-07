@@ -113,8 +113,8 @@ public class TravelCtrl {
 	      request.setCharacterEncoding("utf-8");
 	      response.setContentType("text/html; charset=utf-8");
 	      PrintWriter out = response.getWriter();
-	      String uploadPath = "E:/lsj/spring/busjava/adminbusj/src/main/webapp/resources/images/travel";
-	      String uploadPath2 = "E:/lsj/spring/busjava/busj/src/main/webapp/resources/images/travel";
+	      String uploadPath = "C:\\Users\\Administrator.User -2023WPNQB\\git\\busJava\\adminbusj\\src\\main\\webapp\\resources\\images\\travel";
+	      String uploadPath2 = "C:\\Users\\Administrator.User -2023WPNQB\\git\\busJava\\busj\\src\\main\\webapp\\resources\\images\\travel";
 	      String files = "";
 	      String kind = request.getParameter("kind");
 	      String fileSrc = request.getParameter("fileSrc");

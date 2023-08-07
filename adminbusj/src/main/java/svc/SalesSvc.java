@@ -10,6 +10,11 @@ public class SalesSvc {
 	public void setSalesDao(SalesDao salesDao) {
 		this.salesDao = salesDao;
 	}
+
+	public List<SalesInfo> getSalesList() {
+		List<SalesInfo> salesList = salesDao.getSalesList();
+		return salesList;
+	}
 	
 
 }
