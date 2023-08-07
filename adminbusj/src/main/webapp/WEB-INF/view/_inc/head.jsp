@@ -126,7 +126,7 @@ function onlyNum(obj) {
                                             class="hide-menu"> 전체 매출
                                         </span></a>
                                 </li>
-                                <li class="sidebar-item"><a href="table-dark-basic.html" class="sidebar-link"><span
+                                <li class="sidebar-item"><a href="paymoneyList" class="sidebar-link"><span
                                             class="hide-menu"> 페이머니 매출
                                         </span></a>
                                 </li>

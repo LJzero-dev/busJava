@@ -60,6 +60,7 @@ public class DbConfig {
 		return loginSvc;
 	}
 	
+	@Bean
 	public TravelDao travelDao() {
 		return new TravelDao(dataSource());
 	}

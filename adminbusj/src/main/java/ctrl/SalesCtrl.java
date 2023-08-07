@@ -32,4 +32,25 @@ public class SalesCtrl {
 		
 	}
 	
+	@GetMapping("/paymoneyList")
+	public String paymoneyList(Model model, HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		String where = "where 1 = 1 ";
+		String mi_id = request.getParameter("mi_id");
+		String sdate = request.getParameter("sDate2-1");
+		String edate = request.getParameter("eDate2-1");
+		
+		if (mi_id != null && !mi_id.equals("")) {
+			where += " and mi_id = '" + mi_id +"' ";
+		}
+		if (sdate != null && !sdate.equals("") ) {
+			where += " and mph_date > '" + sdate + "' ";
+		}
+		
+		List<PaymoneyInfo> paymoneyList = salesSvc.getPaymoneyList(where);
+		model.addAttribute("paymoneyList", paymoneyList);
+		
+		return "/sales/paymoney_list";
+	}
+	
 }	

@@ -43,6 +43,19 @@ public class SalesDao {
 		return salesList;
 		
 	}
+	
+	public List<PaymoneyInfo> getPaymoneyList(String where) {
+		String sql = "select mph_idx, mi_id, mph_payment, mph_real_price, mph_pmoney, replace(left(mph_date, 16), '-', '.') wdate " +
+				" from t_member_pmoney_history " + where;
+		
+		
+		List<PaymoneyInfo> paymoneyList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
+			PaymoneyInfo pi = new PaymoneyInfo(rs.getInt("mph_idx"), rs.getInt("mph_real_price"), rs.getInt("mph_pmoney"), 
+					rs.getString("mi_id"), rs.getString("mph_payment"), rs.getString("wdate"));
+			return pi;
+		});
+		return paymoneyList;
+	}
 
 	
 }

@@ -16,5 +16,9 @@ public class SalesSvc {
 		return salesList;
 	}
 	
+	public List<PaymoneyInfo> getPaymoneyList(String where) {
+		List<PaymoneyInfo> paymoneyList = salesDao.getPaymoneyList(where);
+		return paymoneyList;
+	}
 
 }
