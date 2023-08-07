@@ -206,9 +206,16 @@ const selectedSeatsInput = document.getElementById("selectedSeats");
 const selectedIndexesInput = document.getElementById("selectedSeatsIndexes");
 
 function setCnt(op) {	// 매수 선택필드의 [-] / [+] 버튼 클릭 시 
-	if ( $("#totalCnt").text() == 10 && (op == 'plusA' || op == 'plusT' || op == 'plusC')) {
-		alert("최대 예약 가능 인원은 10명입니다.");
-		return;
+	if (<%=leftseat %> >= 10) {
+		if ( $("#totalCnt").text() == 10 && (op == 'plusA' || op == 'plusT' || op == 'plusC')) {
+			alert("최대 예약 가능 인원은 10명입니다.");
+			return;
+		}
+	} else if (<%=leftseat %> < 10) {
+		if ( $("#totalCnt").text() == <%=leftseat %> && (op == 'plusA' || op == 'plusT' || op == 'plusC')) {
+			alert("예약 가능한 좌석을 모두 선택하셨습니다.");
+			return;
+		}
 	}
 	
 	let riacnt = parseInt($("#riacnt").val());	// 성인인원

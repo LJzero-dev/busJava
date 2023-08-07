@@ -107,7 +107,7 @@
 					<label for="sday2">가는날</label>
 					<div class="probootstrap-date-wrap">
 						<span class="icon ion-calendar"></span> 
-						<input type="text" id="sday2" class="form-control" value="" readonly>
+						<input type="text" id="sday2" class="form-control" placeholder="" readonly>
 					</div>
 					</div>
 				</div>
@@ -116,7 +116,7 @@
 					<label for="sday3">오는날</label>
 					<div class="probootstrap-date-wrap">
 						<span class="icon ion-calendar"></span> 
-						<input type="text" id="sday3" name="sday3" class="form-control" value="" readonly>
+						<input type="text" id="sday3" name="sday3" class="form-control" placeholder="" readonly>
 					</div>
 					</div>
 				</div>
@@ -245,29 +245,26 @@ $(document).ready(function() {
       , showMonthAfterYear: true
       , weekStart: 1
       , })
-      .datepicker("setDate",'now')
       .on('changeDate', function(e) {
-//        $("#ri_sday1").val($( "#sday1" ).datepicker("getDate"));	// 편도 가는 날 날짜 설정
-/* 		$("#ri_sday1").val($(this).val()); */
-        $("#sday2").datepicker("setEndDate", new Date($("#sday3").datepicker("getDate")));	// 왕복 가는 날의 종료값을 왕복 오는 날 값으로 설정
         $("#ri_sday3").val($(this).val());
+        $("#sday2").datepicker("setEndDate", new Date($("#sday3").datepicker("getDate")));	// 왕복 가는 날의 종료값을 왕복 오는 날 값으로 설정
       });
 
 	$("#schBtn").click(function() {
-		if ($("#sPoint").val() == "" || $("#ePoint").val() == "") {
-			alert("출발지와 도착지를 선택해주세요.");
-			return false;
-		}
-		
 		if ($("#mode").val() == 'w' ) {	// 왕복인경우
-			if (!($("#ri_sday1").val() == "") || !($("#sday3").val() == "")) {	// 편도 가는날이 비어있지 않고 왕복 오는날이 비어있지 않으면
+			if (!($("#ri_sday3").val() == "") || !($("#sday3").val() == "")) {	// 편도 가는날이 비어있지 않고 왕복 오는날이 비어있지 않으면
 				// 통과 로직
 			} else {
 				alert("오는날을 선택해주세요.");
 				return false;
 			}
 		}
-	
+		
+		if ($("#sPoint").val() == "" || $("#ePoint").val() == "") {
+			alert("출발지와 도착지를 선택해주세요.");
+			return false;
+		}
+		
 		document.frmLineInfo.submit();
 	}); 
 	

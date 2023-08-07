@@ -62,18 +62,28 @@ public class STicketingDao {
 	
 	public List<ReservationStep2> getScheduleList(int blidx, String ri_sday1) {
 	// 해당 노선의 시간표를 가져오는 메서드
-		String sql = "select tt.*, "
-				+ "total_seat - IFNULL((SELECT sum(ri_acnt + ri_scnt + ri_ccnt) FROM t_reservation_info ri WHERE ri.bs_idx = tt.bs_idx and ri.ri_sday = '" + ri_sday1.replace(".", "-") + "'), 0) "
-				+ "as left_seat "
-				+ "from ( "
-				+ "SELECT a.bs_idx, a.bl_idx, a.bi_idx, d.bc_name, b.bl_adult, c.bi_level, a.bs_stime, a.bs_etime, "
-				+ "CASE c.bi_level "
-				+ "WHEN '일반' THEN 36 "
-				+ "WHEN '우등' THEN 28 "
-				+ "WHEN '프리미엄' THEN 18 "
-				+ "END AS total_seat "
-				+ "FROM t_bus_schedule a, t_bus_line b, t_bus_info c, t_bus_company d "
-				+ "WHERE a.bl_idx = b.bl_idx and a.bi_idx = c.bi_idx and c.bc_idx = d.bc_idx and a.bl_idx = " + blidx + " ) tt"; 
+		String sql = "SELECT BS.bl_idx, BS.bi_idx, BL.bl_adult, "  
+				+ 	 " IF(BI.bc_idx = 1, '중앙', IF(BI.bc_idx = 2, '동부', IF(BI.bc_idx = 3, '금호', '동양'))) comname, " 
+				+	 " BI.bi_level, BS.bs_stime, BS.bs_etime, " 
+				+ 	 " CASE BI.bi_level " 
+				+    " WHEN '일반' THEN 36 " 
+				+    " WHEN '우등' THEN 28 " 
+				+    " WHEN '프리미엄' THEN 18 " 
+				+    " END AS total_seats, " 
+				+ 	 " BS.bs_idx, " 
+				+    " (CASE BI.bi_level " 
+				+    " WHEN '일반' THEN 36 " 
+				+    " WHEN '우등' THEN 28 " 
+				+    " WHEN '프리미엄' THEN 18 " 
+				+    " END - COUNT(RD.rd_idx)) AS left_seat " 
+				+    " FROM T_BUS_SCHEDULE BS " 
+				+    " JOIN T_BUS_LINE BL ON BS.bl_idx = BL.bl_idx " 
+				+    " JOIN T_BUS_INFO BI ON BS.bi_idx = BI.bi_idx " 
+				+    " LEFT JOIN T_RESERVATION_INFO RI ON BS.bs_idx = RI.bs_idx AND RI.ri_sday = '" + ri_sday1.replace(".", "-") + "' " 
+				+    " LEFT JOIN T_RESERVATION_DETAIL RD ON RI.ri_idx = RD.ri_idx " 
+				+    " WHERE BS.bl_idx = " + blidx + " " 
+				+ 	 " AND if(CURDATE() = '" + ri_sday1.replace(".", "-") + "', BS.bs_stime > CURTIME(), 1 = 1 )"
+				+    " GROUP BY BS.bl_idx, BS.bi_idx, BI.bc_idx, BI.bi_level, BS.bs_stime, BI.bi_level, BS.bs_idx"; 
 				
 		
 		List<ReservationStep2> scheduleList = jdbc.query(sql, (ResultSet rs, int rowNum) -> {
@@ -84,10 +94,10 @@ public class STicketingDao {
 			sl.setBl_idx(rs.getInt("bl_idx"));
 			sl.setBs_stime(rs.getString("bs_stime"));
 			sl.setBs_etime(rs.getString("bs_etime"));
-			sl.setBc_name(rs.getString("bc_name"));
+			sl.setBc_name(rs.getString("comname"));
 			sl.setBi_level(rs.getString("bi_level"));
 			sl.setBl_adult(rs.getInt("bl_adult"));
-			sl.setTotal_seat(rs.getInt("total_seat"));
+			sl.setTotal_seat(rs.getInt("total_seats"));
 			sl.setLeft_seat(rs.getInt("left_seat"));
 
 			return sl;
