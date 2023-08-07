@@ -22,6 +22,9 @@ public class CtrlConfig {
 	@Autowired
 	private TravelSvc travelSvc;
 	
+	@Autowired
+	private SalesSvc salesSvc;
+	
 	@Bean
 	public IndexCtrl indexCtrl() {
 		IndexCtrl indexCtrl = new IndexCtrl();
@@ -60,6 +63,13 @@ public class CtrlConfig {
 		MemberCtrl memberCtrl = new MemberCtrl();
 		memberCtrl.setMemberSvc(memberSvc);
 		return memberCtrl;
+	}
+	
+	@Bean
+	public SalesCtrl salesCtrl() {
+		SalesCtrl salesCtrl = new SalesCtrl();
+		salesCtrl.setSalesSvc(salesSvc);
+		return salesCtrl;
 	}
 }
 

@@ -125,7 +125,7 @@ function onlyNum(obj) {
                         aria-expanded="false"><i data-feather="bar-chart" class="feather-icon"></i><span
                             class="hide-menu">매출 현황 </span></a>
                             <ul aria-expanded="false" class="collapse  first-level base-level-line">
-                                <li class="sidebar-item"><a href="table-basic.html" class="sidebar-link"><span
+                                <li class="sidebar-item"><a href="salesList" class="sidebar-link"><span
                                             class="hide-menu"> 전체 매출
                                         </span></a>
                                 </li>

@@ -70,4 +70,16 @@ public class DbConfig {
 		travelSvc.setTravelDao(travelDao());
 		return travelSvc;
 	}
+	
+	@Bean
+	public SalesDao salesDao() {
+		return new SalesDao(dataSource());
+	}
+
+	@Bean
+	public SalesSvc salesSvc() {
+		SalesSvc salesSvc = new SalesSvc();
+		salesSvc.setSalesDao(salesDao());
+		return salesSvc;
+	}
 }
