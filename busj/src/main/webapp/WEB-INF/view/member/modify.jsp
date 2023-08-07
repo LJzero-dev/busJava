@@ -174,7 +174,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         	alert("비밀번호를 확인해주세요");
         	event.preventDefault();
         }
-        alert("회원정보가 수정되었습니다.\n다시 로그인해주세요.");
+        
     });
 });
 
@@ -185,7 +185,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         	alert("메일을 중복검사 확인해주세요");
         	event.preventDefault();
         }
-        alert("회원정보가 수정되었습니다.\n다시 로그인해주세요.");
+        
     });
 });
 
@@ -196,7 +196,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         	alert("전화번호를 중복검사 해주세요");
         	event.preventDefault();
         }
-        alert("회원정보가 수정되었습니다.\n다시 로그인해주세요.");
+        
     });
 });
 
