@@ -19,6 +19,9 @@ if (loginInfo != null)	isLogin = true;
     <link href="${pageContext.request.contextPath}/resources/css/style.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/css/common.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/js/jquery.timepicker.min.css">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.4.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/jquery.timepicker.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/jquery.timepicker.min.js"></script>
     
 </head>
 <script>
