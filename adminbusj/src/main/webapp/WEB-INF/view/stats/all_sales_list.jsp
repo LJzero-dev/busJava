@@ -6,8 +6,8 @@
 request.setCharacterEncoding("utf-8");
 List<SalesInfo> salesList = (List<SalesInfo>)session.getAttribute("salesList");
 LocalDate nowDate = LocalDate.now();
-System.out.println(nowDate);
-System.out.println(nowDate.minusDays(7));
+// System.out.println(nowDate);
+// System.out.println(nowDate.minusDays(7));
 
 int realTotal = 0;
 %>
@@ -18,31 +18,6 @@ int realTotal = 0;
 
 h4.sub_title {font-size: 20px; margin-top: 10px; margin-left: 10px;}
 </style>
-<script>
-
-
-function makeCtgr() {
-// 검색폼의 조건들을 쿼리스트링 sch의 값으로 만듦
-	var frm = document.frmSch;	var sch = "";
-	
-	// 브랜드 조건
-	var arr = frm.schctgr;	// brand라는 이름의 컨트롤들을 배열로 받아옴
-	var isFirst = true;		// brand 체크박스들 중 첫번째로 선택한 체크박스인지 여부를 저장
-	for (var i = 0; i < arr.length; i++) {
-		if (arr[i].checked) {
-			if(isFirst) {	// 첫번째로 선택한 체크박스 이면
-				isFirst = false;
-				sch += arr[i].value;
-			} else {
-				sch += ":" + arr[i].value;
-			}
-		}
-	}
-	
-	document.frmSch.hiddenCtgr.value = sch;
-	document.frmSch.submit();
-}
-</script>
 <div class="page-wrapper">
 <div class="page-breadcrumb">
 	<div class="row">
@@ -56,7 +31,8 @@ function makeCtgr() {
         <h4 class="sub_title">총 매출 금액 : <span id="realTotal"></span></h4>
         <form name="frmSch">
         <input type="hidden" id="hiddenCtgr" name="hiddenCtgr" value="" />
-        <input type="hidden" id="sDate1-1" value="" />
+        <input type="hidden" id="sDate1-1" value="<%=nowDate.minusDays(7) %>" />
+        <input type="hidden" id="eDate1-1" value="<%=nowDate%>" />
             <table class="table table-sm custom">
                 <colgroup>
                     <col width="20%">
@@ -64,13 +40,13 @@ function makeCtgr() {
                 </colgroup>
                 <tbody>
                 <tr>
-                        <th scope="row" class="text-center bg-gray align-middle">버스구분</th>
+                        <th scope="row" class="text-center bg-gray align-middle">노선구분</th>
                         <td class="text-left">
                             <div class="d-flex">
-                                <select class="form-control w-auto" name="isview" id="">
-                                    <option value="">전체</option>
-									<option value="">고속</option>
-									<option value="">시외</option>
+                                <select class="form-control w-auto" name="lineType">
+                                    <option value="all" selected='selected'>전체</option>
+									<option value="high">고속</option>
+									<option value="row">시외</option>
                                 </select>
                             </div>
                         </td> 
@@ -84,16 +60,16 @@ function makeCtgr() {
                                 </div>
                                 <span style="line-height: 2.2;"> ~ </span>
                                 <div class="form-group mb-0 ml-1">
-                                    <input type="date" id="eDate" class="form-control" value="<%=nowDate%>">
+                                    <input type="date" id="eDate1-2" class="form-control" value="<%=nowDate%>">
                                 </div>
                             </div>
                         </td> 
                     </tr>
                 </tbody>
             </table>
-            <div class="d-flex justify-content-center">
-            <button type="button" class="btn waves-effect waves-light btn-secondary mb-2" onclick="makeCtgr();">검색</button>
-            </div>
+	            <div class="d-flex justify-content-center">
+	            	<button type="button" id="schBtn" class="btn waves-effect waves-light btn-secondary mb-2">검색</button>
+	            </div>
             </form>
         </div> 
     </div>
@@ -116,7 +92,7 @@ function makeCtgr() {
                 </colgroup>
                 <thead class="bg-primary text-white">
                 <tr>
-                    <th>버스구분</th>
+                    <th>노선구분</th>
                     <th>출발지</th>
                     <th>도착지</th>
                     <th>운영횟수</th>
@@ -192,7 +168,17 @@ $(document).ready(function() {
 });
 
 function handler(e){
-	$("#sDate1-1").val(e.target.value);
+	if (e.target.id == 'sDate1-2') {
+		$("#sDate1-1").val(e.target.value);
+	} else if (e.target.id = 'eDate1-2') {
+		$("#eDate1-1").val(e.target.value);
+	}
+	
 	console.log($("#sDate1-1").val());
+	console.log($("#eDate1-1").val());
 }
+
+$("#schBtn").click(function() {
+	
+});
 </script>
