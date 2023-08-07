@@ -65,7 +65,7 @@ window.onload = function() {
                     break;
                 }
             }
-            if (!isChecked) {
+            /* if (!isChecked) {
                 alert("검색조건을 선택해주세요.");
                 return false;
             }
@@ -74,7 +74,7 @@ window.onload = function() {
                 alert("검색어를 입력하세요.");
                 frm.keyword.focus(); 
                 return false;
-            }
+            } */
             return true;
         }
 
