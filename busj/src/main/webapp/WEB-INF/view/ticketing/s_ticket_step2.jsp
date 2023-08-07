@@ -153,18 +153,25 @@ tr:hover {
 <%if (scheduleList.size() > 0) {	// 해당 노선의 시간표가 있는 경우
 	for (ReservationStep2 sl : scheduleList) {
 		bsidx = sl.getBs_idx();		etime = sl.getBs_etime();
+		
 		int adultPrice = sl.getBl_adult();
 		if (sl.getBi_level().equals("일반"))	adultPrice = sl.getBl_adult();
 		else	adultPrice = (int)(sl.getBl_adult() * 1.5);
+		
+		String data = "data";	String leftseat = sl.getLeft_seat() + "";
+		if (sl.getLeft_seat() == 0)	{
+			data = "sold-out";
+			leftseat = "매진";
+		}
 %>
-			<tr onclick="rowClicked('<%=sl.getBs_idx() %>', '<%=sl.getBs_etime() %>', '<%=sl.getBs_stime() %>', '<%=sl.getBc_name() %>', 
+			<tr class="<%=data %>" onclick="rowClicked('<%=sl.getBs_idx() %>', '<%=sl.getBs_etime() %>', '<%=sl.getBs_stime() %>', '<%=sl.getBc_name() %>', 
 			'<%=sl.getBi_level() %>', '<%=sl.getBl_adult() %>', '<%=sl.getTotal_seat() %>', '<%=sl.getLeft_seat() %>');">
 				<td><%=sl.getBs_stime() %></td>		
 				<td><%=sl.getBc_name() %></td>		
 				<td><%=sl.getBi_level() %></td>				
 				<td><%= String.format("%,d", adultPrice) %></td>		
 				<td><%=sl.getTotal_seat()%></td>	<!-- 전체좌석 int seat		if(bi_level.equals("우등")) seat = 28 else seat = 36 -->
-				<td><%=sl.getLeft_seat() %></td>	<!-- 잔여(예매가능)좌석 si.getLseat -->
+				<td><%=leftseat %></td>	<!-- 잔여(예매가능)좌석 si.getLseat -->
 			</tr>
 <% } 
 } else {%>
