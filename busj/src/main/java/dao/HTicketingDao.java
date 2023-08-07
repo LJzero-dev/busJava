@@ -78,7 +78,8 @@ public class HTicketingDao {
 				"JOIN T_BUS_INFO BI ON BS.bi_idx = BI.bi_idx " + 
 				"LEFT JOIN T_RESERVATION_INFO RI ON BS.bs_idx = RI.bs_idx AND RI.ri_sday = '" + sDate + "' " + 
 				"LEFT JOIN T_RESERVATION_DETAIL RD ON RI.ri_idx = RD.ri_idx " + 
-				"WHERE BS.bl_idx = " + lineNum + " " + 
+				"WHERE BS.bl_idx = " + lineNum + 
+				" AND IF(CURDATE() = '" + sDate + "', BS.bs_stime > CURTIME(), 1 = 1 ) " +
 				"GROUP BY BS.bl_idx, BS.bi_idx, BI.bc_idx, BI.bi_level, BS.bs_stime, BI.bi_level, BS.bs_idx";
 		System.out.println(sql);
 		

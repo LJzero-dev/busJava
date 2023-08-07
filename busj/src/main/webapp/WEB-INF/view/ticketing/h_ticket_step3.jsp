@@ -220,9 +220,16 @@ const selectedValues = [];
 const seats = document.getElementsByName("seatBoxDtl");
 
 function setCnt(op) {
-	if ( $("#totalCnt").text() == 10 && (op == 'plusA' || op == 'plusT' || op == 'plusC')) {
-		alert("최대 예약 가능 인원은 10명입니다.");
-		return;
+	if (<%=leftSeat %> >= 10) {
+		if ( $("#totalCnt").text() == 10 && (op == 'plusA' || op == 'plusT' || op == 'plusC')) {
+			alert("최대 예약 가능 인원은 10명입니다.");
+			return;
+		}
+	} else if (<%=leftSeat %> < 10) {
+		if ( $("#totalCnt").text() == <%=leftSeat %> && (op == 'plusA' || op == 'plusT' || op == 'plusC')) {
+			alert("예약 가능한 좌석을 모두 선택하셨습니다.");
+			return;
+		}
 	}
 	
 	let adult = parseInt($("#adult").val());

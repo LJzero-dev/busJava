@@ -6,7 +6,7 @@
 <%
 request.setCharacterEncoding("utf-8");
 ReservationInfo ri1 = (ReservationInfo) session.getAttribute("ri1");
-int realPrice = ri1.getPrice() * (ri1.getRi_acnt() + ri1.getRi_scnt()+ ri1.getRi_ccnt());
+int realPrice = ri1.getBasePrice();
 
 LocalDateTime nowDateTime = LocalDateTime.now();
 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd E요일 HH:mm");
@@ -120,7 +120,7 @@ String formattedDateTime = nowDateTime.format(formatter);
 			  </table>
 <% if (ri1.getMode().equals("w")) {
 	ReservationInfo ri2 = (ReservationInfo) session.getAttribute("ri2");
-	realPrice += ri2.getPrice() * (ri2.getRi_acnt() + ri2.getRi_scnt()+ ri2.getRi_ccnt());
+	realPrice += ri2.getPrice() * ri2.getRi_acnt() + ri2.getPrice() * 0.8 * ri2.getRi_scnt()+ ri2.getPrice() * 0.5 * ri2.getRi_ccnt();
 %>
 				<h5 class="text-left mt-5">오는편</h5>
 				<table class="table">
