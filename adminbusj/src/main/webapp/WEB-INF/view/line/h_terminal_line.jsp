@@ -5,7 +5,12 @@
 <%@ include file="../_inc/head.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
-
+if (!isLogin) {		// 로그인이 되어 있지 않다면
+	out.println("<script>");
+	out.println("alert('로그인 후 이용해 주세요.'); location.href='/adminbusj/login' ");
+	out.println("</script>");
+	out.close();
+}
 List<BusLineInfo> busLineList = (List<BusLineInfo>)request.getAttribute("busLineList");
 List<BusInfo> busInfo = (List<BusInfo>)request.getAttribute("busInfo");
 String kind = request.getParameter("kind");
