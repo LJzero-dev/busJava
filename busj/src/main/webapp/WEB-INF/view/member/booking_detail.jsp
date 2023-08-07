@@ -94,7 +94,8 @@ if (bi.getBusSeatList().size() > 0) {
 	String result = nft.format(returnCount);  // tmp 값을 세 자리마다 쉼표가 찍힌 문자열로 변환 %>
 	<td><%=result %></td>
 
-<% }%>
+<% 
+} %>
 	</tr>
 </table>
 <h5 class="text-left">결제정보</h5>
@@ -111,7 +112,17 @@ if (bi.getBusSeatList().size() > 0) {
 	</tr>
 	<tr>
 		<th scope="col" class="text-center">결제수단</th><td><%=bi.getCr_payment() %></td>
+<% if (!bi.getCr_payment().equals("페이머니")) { %>
 		<th scope="col" class="text-center">결제금액</th><td id="pay"><%=formattedNumber %>원</td>
+<% } else {
+String pd_real_price = "";
+if (bi.getPd_real_price() > 1000) {
+    nf = NumberFormat.getInstance();
+    pd_real_price = nf.format(bi.getPd_real_price());
+    // 이제 formattedNumber는 세 자리마다 쉼표가 찍힌 숫자를 문자열 형태로 저장합니다.
+}%>
+		<th scope="col" class="text-center">결제금액</th><td id="pay"><%=pd_real_price %>원</td>
+<% } %>
 	</tr>
 </table>
 <div class="btn-wrap">
